@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary : #FED700;
+    --color-tcolor : #333E48;
+    --font-inter: "inter", sans-serif;
+    --font-roboto: "roboto", sans-serif;
+}
+
+.topbarList{
+   @apply  relative font-inter flex items-center gap-2 text-tcolor after:absolute after:content-[""] after:h-4 after:w-[2px] after:bg-[#DDDDDD] after:-right-4 after:top-[2px]
+}
+.level0{
+    @apply pl-2 px-4 py-1 hover:bg-blue-600 hover:text-white cursor-pointer select-none font-inter text-[14px]
+}
+.transition{
+    @apply transform transition-transform duration-150
+}
+.searchbarIconhover{
+    @apply relative after:absolute after:content-["0"] after:w-5 after:h-5 after:bg-primary after:top-3 after:-right-[7px] after:rounded-full after:text-center after:font-semibold after:text-tcolor after:text-[14px]
+}
+
+
+@font-face {
+    font-family: "roboto";
+    font-weight: 400;
+    font-style: normal;
+    src: url(./fonts/Roboto/static/Roboto-Regular.ttf) format("truetype");
+}
+@font-face {
+    font-family: "inter";
+    font-weight: 400;
+    font-style: normal;
+    src: url(./fonts/Inter/static/Inter_18pt-Regular.ttf) format("truetype");
+}
