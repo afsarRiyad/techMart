@@ -1,8 +1,8 @@
 import React from 'react'
 import { Outlet } from 'react-router'
-import Navbar from '../../pages/Header/Navbar'
-import Topbar from '../../pages/Header/Topbar'
-import Searchbar from '../../pages/Header/Searchbar'
+import Navbar from '../../components/Header/Navbar'
+import Topbar from '../../components/Header/Topbar'
+import Searchbar from '../../components/Header/Searchbar'
 
 const  MainLayout= () => {
   return (

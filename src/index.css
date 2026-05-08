@@ -17,9 +17,15 @@
     @apply transform transition-transform duration-150
 }
 .searchbarIconhover{
-    @apply relative after:absolute after:content-["0"] after:w-5 after:h-5 after:bg-primary after:top-3 after:-right-[7px] after:rounded-full after:text-center after:font-semibold after:text-tcolor after:text-[14px]
+    @apply relative after:absolute after:content-["0"] after:w-5 after:h-5 sm:after:bg-primary  after:text-white after:bg-tcolor after:top-3 after:-right-[7px] after:rounded-full after:text-center after:font-semibold sm:after:text-tcolor after:text-[14px]
 }
-
+@keyframes stickyAnimation {
+    from {transform: translateY(-100%);}
+    to {transform: translateY(0);}
+}
+.animate-sticky {
+    animation: stickyAnimation 0.4s ease-in-out forwards;
+}
 
 @font-face {
     font-family: "roboto";

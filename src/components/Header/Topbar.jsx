@@ -1,12 +1,12 @@
 import React from 'react'
-import Container from '../../components/layouts/Container'
+import Container from '../layouts/Container'
 import { Link } from 'react-router'
 import { MapPin, TruckElectric, Handbag, UserRound   } from 'lucide-react';
 
 const Topbar = () => {
   return (
     <>
-   <div className='border-b border-b-[#DDDDDD]'>
+   <div className='border-b border-b-[#DDDDDD] hidden sm:block'>
      <Container>
         <div className='flex  justify-between items-center font-inter text-[13px] py-2'>
          <div>

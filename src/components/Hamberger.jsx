@@ -16,7 +16,7 @@ const Hamberger = ({ className = '' }) => {
   }
   return (
     < >
-      <button className={`flex flex-col  w-auto gap-[6px] ${className} cursor-pointer`} onClick={() => setSideDrawerOpen(!sideDrawerOpen)}>
+      <button aria-label="toggle" className={`flex flex-col  w-auto gap-[6px] ${className} cursor-pointer`} onClick={() => setSideDrawerOpen(!sideDrawerOpen)}>
         <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black ${sideDrawerOpen && 'rotate-50 translate-y-2'}`}> </span>
         <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black ${sideDrawerOpen && 'opacity-0'}`}> </span>
         <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black ${sideDrawerOpen && '-rotate-60 -translate-y-2'}`}> </span>
@@ -27,13 +27,13 @@ const Hamberger = ({ className = '' }) => {
         <div className='bg-black/40 fixed inset-0 z-50' onClick={()=> setSideDrawerOpen(false)}/>
       }
       <div ref={menuRef} >
-        <div className={`fixed inset-0 -translate-x-full bg-white z-50 w-100 transform transition-all ease-in-out duration-300 shadow-xl overflow-y-auto ${sideDrawerOpen && 'translate-x-0'}`}>
+        <div className={`fixed inset-0 -translate-x-full bg-white z-50 pb-4 sm:w-100 w-80 transform transition-all ease-in-out duration-300 shadow-xl overflow-y-auto ${sideDrawerOpen && 'translate-x-0'}`}>
           <Logo className='w-25 h-auto pt-6 pb-2 px-2' /> <X className='absolute cursor-pointer right-4 top-6' onClick={()=> setSideDrawerOpen(false)}/>
-          <ul className={``}>
+          <ul>
             {
               menu.map((item, index) => (
-                <li key={index} className={`px-3 select-none text-[14px] text-[#333E48] font-inter border-b border-b-gray-200  py-1 ${item.hasChild === false && 'hover:bg-gray-100 hover:text-black transition-all'} ${activeItem == item && 'bg-[#FED700] text-black text-black'}`}>
-                  <button className={`flex items-center justify-between cursor-pointer w-full h-[38px] pr-2  transition-all hover:text-black`} onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
+                <li key={index} className={`sm:px-3 px-1 select-none text-[14px] sm:text-[#333E48] text-gray-900 font-inter border-b border-b-gray-200  py-1 ${item.hasChild === false && 'hover:bg-gray-100 hover:text-black transition-all'} ${activeItem == item && 'bg-[#FED700] text-black'}`}>
+                  <button aria-label={`Toggle ${item.name}`} className={`flex items-center justify-between cursor-pointer w-full h-[38px] pr-2  transition-all hover:text-black`}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
                     {item.name}
                     <span>{item.hasChild === false ? '' : <ChevronDown className={`${activeIndex === index ? 'rotate-180' : 'rotate-0'} transform transition-transform duration-300 `} />}</span>
                   </button>
@@ -42,7 +42,7 @@ const Hamberger = ({ className = '' }) => {
                       <div className='overflow-hidden'>
                         <ul className='bg-gray-100   rounded-2xl '>
                           {item.children.map((child, i) => (
-                            <li key={i} className={`relative z-10 py-[9px] px-4 border-b border-b-gray-300 last:border-0 cursor-pointer font-inter text-gray-600 hover:text-black
+                            <li key={i} className={`relative z-10 py-[9px] px-4 border-b border-b-gray-300 last:border-0 cursor-pointer font-inter sm:text-gray-600 text-gray-900 hover:text-black
                                           hover:bg-gray-200 transition-all ${child.isBold && 'font-bold'} border-b border-b-gray-300  cursor-pointer`}>
                               {child.name}
                             </li>

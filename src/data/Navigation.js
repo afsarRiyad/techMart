@@ -165,3 +165,22 @@ export const menu = [
                                     {name: 'Daily Lifestyle'},
     ]},
 ]
+
+export const categoires = [
+  'Uncategorized',
+  'Accessories',
+  'Cameras & Photography',
+  'Computer Components',
+  'Gadgets',
+  'Home Entertainment',
+  'Laptop and Computers',
+  'Printers & Ink',
+  'lgart Phones & Tablets',
+  'TV & Audio',
+  'Video Games & Consoles',
+  'Stereo',
+  'Home Theatre',
+  'Bluetooth Speakers',
+  'Headphones',
+  'Speakers',
+]
