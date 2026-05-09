@@ -44,8 +44,7 @@ const Hamberger = ({ className = '' }) => {
                       <div className='overflow-hidden'>
                         <ul className='bg-gray-100   rounded-2xl '>
                           {item.children.map((child, i) => (
-                            <li key={i} className={`relative z-10 py-[9px] px-4 border-b border-b-gray-300 last:border-0 cursor-pointer font-inter sm:text-gray-600 text-gray-900 hover:text-black
-                                          hover:bg-gray-200 transition-all ${child.isBold && 'font-bold'} border-b border-b-gray-300  cursor-pointer`}>
+                            <li key={i} className={`relative z-10 py-[9px] px-4 border-b border-b-gray-300 last:border-0 cursor-pointer font-inter sm:text-gray-600 sidebarLiHover ${child.isBold && 'font-bold'} border-b border-b-gray-300  cursor-pointer`}>
                               {child.name}
                             </li>
                           ))}

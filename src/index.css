@@ -30,13 +30,55 @@
     @apply font-inter text-tcolor mb-3
 } 
 .footerSocial{
-    @apply transition transform hover:scale-110
+    @apply transition transform ;
+    --webkiut-tap-highlight-color: transparent;
+}
+@media (hover: hover){
+    .footerSocial{
+        @apply hover:scale-110
+    }
+}
+.footerSocial:active{
+    @apply scale-90 opacity-80
 }
 .footerLink{
     @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black hover:after:w-full
 }
-.mobileMenuLink{
-    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:bottom-1 after:left-0 hover:text-black hover:after:w-[40px] transition-all duration-300
+.mobileMenuLink {
+    @apply relative text-gray-600 transition-all duration-300 select-none;
+    -webkit-tap-highlight-color: transparent;
+
+    @apply after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary after:bottom-1 after:left-0 after:transition-all after:duration-300;
+}
+
+@media (hover: hover) {
+    .mobileMenuLink:hover {
+        @apply text-black;
+    }
+    .mobileMenuLink:hover::after {
+        @apply w-[40px];
+    }
+}
+
+.mobileMenuLink:active {
+    @apply text-black scale-95; 
+}
+
+.mobileMenuLink:active::after {
+    @apply w-[40px];
+}
+
+.sidebarLiHover{
+    @apply  text-gray-900 hover:text-black hover:bg-gray-200 transition-all duration-300 select-none;
+    --webkit-tap-highlight-color : transparent;
+}
+@media (hover: hover) {
+    .sidebarLiHover:hover {
+        @apply bg-gray-200 text-black;
+    }
+}
+.sidebarLiHover:active{
+    @apply bg-gray-300 scale-[0.98] origin-center text-black
 }
 
 @font-face {
