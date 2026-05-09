@@ -184,3 +184,32 @@ export const categoires = [
   'Headphones',
   'Speakers',
 ]
+
+export const mobileFooterData = [
+    {name: 'We Recommend', children: [
+        {name: 'Value of the day', hasChild: false},
+        {name: 'Top 100 Offers', hasChild: false},
+]},
+    {name: 'My Account', children: [
+        {name: 'My Account', hasChild: false},
+        {name: 'Order History', hasChild: false},
+        {name: 'Wishlist', hasChild: false},
+        {name: 'Checkout', hasChild: false},
+        {name: 'Recent Views', hasChild: false},
+        {name: 'FAQ', hasChild: false},
+]},
+{name: 'Customer Care', children: [
+        {name: 'Track your Orders', hasChild: false},
+        {name: 'Returns/Exchanges', hasChild: false},
+        {name: 'Product support', hasChild: false},
+        {name: 'Make a Complaint', hasChild: false},
+        {name: 'Repairs', hasChild: false},
+        {name: 'FAQs', hasChild: false},
+]},
+    {name: 'About Us', children: [
+        {name: 'About Us', hasChild: false},
+        {name: 'Blog Single', hasChild: false},
+        {name: 'Store Directory', hasChild: false},
+        {name: 'Compare', hasChild: false},
+]},
+]

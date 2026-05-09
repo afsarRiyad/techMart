@@ -26,6 +26,18 @@
 .animate-sticky {
     animation: stickyAnimation 0.4s ease-in-out forwards;
 }
+.footerLi{
+    @apply font-inter text-tcolor mb-3
+} 
+.footerSocial{
+    @apply transition transform hover:scale-110
+}
+.footerLink{
+    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black hover:after:w-full
+}
+.mobileMenuLink{
+    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:bottom-1 after:left-0 hover:text-black hover:after:w-[40px] transition-all duration-300
+}
 
 @font-face {
     font-family: "roboto";

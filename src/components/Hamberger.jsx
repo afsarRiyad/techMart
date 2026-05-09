@@ -3,11 +3,13 @@ import { menu } from '../data/Navigation'
 import { ChevronDown, ChevronUp, X  } from 'lucide-react';
 import useOutsideClick from '../hooks/outsideClick';
 import Logo from '../assets/images/logo.svg?react'
+import useScrollBlocker from '../hooks/scrollBlocker';
 
 const Hamberger = ({ className = '' }) => {
   const menuRef = useRef(null)
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false)
   useOutsideClick(menuRef, () => { setSideDrawerOpen(false); setActiveIndex(null); }, sideDrawerOpen)
+  useScrollBlocker(sideDrawerOpen)
   const [activeIndex, setActiveIndex] = useState(null)
   const [activeItem, setActiveItem] = useState('')
 
@@ -24,10 +26,10 @@ const Hamberger = ({ className = '' }) => {
       {/* overlay  */}
       {
         sideDrawerOpen &&
-        <div className='bg-black/40 fixed inset-0 z-50' onClick={()=> setSideDrawerOpen(false)}/>
+        <div className='bg-black/40 fixed inset-0 z-50 h-screen' onClick={()=> setSideDrawerOpen(false)}/>
       }
       <div ref={menuRef} >
-        <div className={`fixed inset-0 -translate-x-full bg-white z-50 pb-4 sm:w-100 w-80 transform transition-all ease-in-out duration-300 shadow-xl overflow-y-auto ${sideDrawerOpen && 'translate-x-0'}`}>
+        <div className={`fixed inset-0 -translate-x-full bg-white h-screen z-50 pb-4 sm:w-100 w-80 transform transition-all ease-in-out duration-300 shadow-xl overflow-y-auto ${sideDrawerOpen && 'translate-x-0'}`}>
           <Logo className='w-25 h-auto pt-6 pb-2 px-2' /> <X className='absolute cursor-pointer right-4 top-6' onClick={()=> setSideDrawerOpen(false)}/>
           <ul>
             {
