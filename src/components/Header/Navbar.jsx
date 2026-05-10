@@ -5,10 +5,10 @@ import { megaMenuData } from '../../data/MegaMenu'
 
 const Navbar = () => {
   return (
-    <div className='bg-primary '>
+    <div className='bg-primary hidden lg:flex'>
       <Container>
         <div className='flex w-full justify-center relative'>
-          <div className='group  z-50'>
+          <div className='group  40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer border-r border-r-gray-400'>
               Home
             </span>
@@ -17,7 +17,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='group z-50'>
+          <div className='group z-40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer border-r border-r-gray-400'>
               TV & Audio
             </span>
@@ -26,7 +26,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='group z-50'>
+          <div className='group z-40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer border-r border-r-gray-400'>
               Components
             </span>
@@ -44,7 +44,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='group z-50'>
+          <div className='group z-40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer border-r border-r-gray-400'>
               Laptops & Desktops
             </span>
@@ -53,7 +53,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='group z-50'>
+          <div className='group z-40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer border-r border-r-gray-400'>
               Cameras & Accessoreis
             </span>
@@ -62,7 +62,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='group z-50'>
+          <div className='group z-40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer border-r border-r-gray-400'>
               Smart Phones
             </span>
@@ -71,7 +71,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='group z-50'>
+          <div className='group z-40'>
             <span className='font-inter font-semibold block py-3 ps-4 pe-8 text-tcolor cursor-pointer'>
               GPS and Car
             </span>
