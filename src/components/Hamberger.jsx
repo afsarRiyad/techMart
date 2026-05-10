@@ -35,7 +35,7 @@ const Hamberger = ({ className = '' }) => {
             {
               menu.map((item, index) => (
                 <li key={index} className={`sm:px-3 px-1 select-none text-[14px] sm:text-[#333E48] text-gray-900 font-inter border-b border-b-gray-200  py-1 ${item.hasChild === false && 'hover:bg-gray-100 hover:text-black transition-all'} ${activeItem == item && 'bg-[#FED700] text-black'}`}>
-                  <button aria-label={`Toggle ${item.name}`} className={`flex items-center justify-between cursor-pointer w-full h-[38px] pr-2  transition-all hover:text-black`}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
+                  <button aria-label={`Toggle ${item.name}`} className={`flex accordionHeading items-center justify-between cursor-pointer w-full h-[38px] pr-2  transition-all hover:text-black`}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
                     {item.name}
                     <span>{item.hasChild === false ? '' : <ChevronDown className={`${activeIndex === index ? 'rotate-180' : 'rotate-0'} transform transition-transform duration-300 `} />}</span>
                   </button>

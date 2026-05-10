@@ -26,8 +26,8 @@ const MobileFooter = () => {
                             {
                                 mobileFooterData.map((item, index) => {
                                     return (
-                                        <li className='bg-white rounded-lg p-3' key={index}>
-                                            <button aria-label='toggle' className='flex justify-between w-full text-inter text-[18px] font-semibold' onClick={() => setActiveIndex(index === activeIndex ? null : index)}>{item.name} <ChevronDown className={`${activeIndex === index ? 'rotate-180' : ''} transition-all duration-300`} /></button>
+                                        <li className='bg-white  rounded-lg p-3' key={index}>
+                                            <button aria-label='toggle' className='flex accordionHeading cursor-pointer justify-between w-full text-inter text-[18px] font-semibold' onClick={() => setActiveIndex(index === activeIndex ? null : index)}>{item.name} <ChevronDown className={`${activeIndex === index ? 'rotate-180' : ''} transition-all duration-300`} /></button>
                                             {item.children &&
                                                 <div className={`grid transition-all duration-300 ease-in-out ${activeIndex === index ? 'grid grid-rows-[1fr] opacity-100 overflow-auto ' : 'grid grid-rows-[0fr] opacity-0'}`}>
                                                     <div className={`overflow-hidden`}>

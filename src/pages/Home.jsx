@@ -1,8 +1,13 @@
-import React from 'react'
+
+import Container from './../components/layouts/Container';
 
 const Home = () => {
   return (
-    <div className='h-300'>Home</div>
+    <div className='h-100'>
+      <Container>
+         <h1 className=''>SCROLL DOWN</h1>
+      </Container>
+    </div>
   )
 }
 

@@ -44,6 +44,18 @@
 .footerLink{
     @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black hover:after:w-full
 }
+.accordionHeading{
+    @apply transition-all duration-300;
+    --webkit-tap-highlight-color : transparent;
+}
+@media (hover: hover){
+    .accordionHeading:hover{
+        @apply translate-x-1 text-black;
+    }
+}
+.accordionHeading:active{
+    @apply translate-x-1 text-black scale-[0.97]
+}
 .mobileMenuLink {
     @apply relative text-gray-600 transition-all duration-300 select-none;
     -webkit-tap-highlight-color: transparent;
