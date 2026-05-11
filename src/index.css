@@ -32,7 +32,7 @@
 } 
 .footerSocial{
     @apply transition transform ;
-    --webkiut-tap-highlight-color: transparent;
+    --webkit-tap-highlight-color: transparent;
 }
 @media (hover: hover){
     .footerSocial{
@@ -94,15 +94,19 @@
     @apply bg-gray-300 scale-[0.98] origin-center text-black
 }
 .btnHover{
-    @apply absolute  inset-0 bg-black/10 opacity-0 rounded-br-full scale-x-0  origin-top-left z-10  transition-all duration-300 ease-in-out 
+    @apply absolute  inset-0 bg-black/10 opacity-0 rounded-br-full scale-x-0  origin-top-left z-10  transition-all duration-300 ease-in-out ;
+    --webkit-tap-highlight-color: transparent;
 }
 @media (hover: hover){
     .group:hover .btnHover{
       @apply    group-hover:scale-x-100 group-hover:opacity-100
     }
 }
-.btnHover:active{
-    @apply bg-black/20 scale-95;
+.group:active{
+    @apply scale-95 transition-transform duration-75
+}
+.group:active .btnHover{
+    @apply bg-black/20;
 }
 @keyframes slideImgMotion {
     from{
