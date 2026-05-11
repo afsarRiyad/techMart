@@ -21,7 +21,7 @@ const FooterTopbar = () => {
           <div>
             <input type="email" placeholder='Enter your email address' className='bg-white rounded-l-full text-tcolor py-3 px-6 outline-none leading-5 lg:w-[362px] sm:w-[262px]'/>
             <button className='relative text-white bg-black py-[10px] px-5 rounded-r-full group overflow-hidden cursor-pointer active:bg-black/90 '>
-                <span className='relative z-20'>
+                <span className='relative z-10'>
                     SignUp
                 </span>
                 <span className='absolute  inset-0 bg-primary/40 opacity-0 rounded-r-full scale-x-0 mr-2 origin-left z-0 group-hover:scale-x-100 group-hover:opacity-100 transition-all duration-300 ease-in-out'/>

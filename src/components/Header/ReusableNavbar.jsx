@@ -21,8 +21,8 @@ const ReusableNavbar = ( {data = []} ) => {
                     </h2>
                     <ul>
                         {
-                            item.links.map((item)=>(
-                                  <li className='  pb-1.5 text-[13px] '>
+                            item.links.map((item, index)=>(
+                                  <li key={index} className='  pb-1.5 text-[13px] '>
                                      <Link to={item.url || '#'} className='relative text-gray-700 font-inter cursor-pointer after:absolute after:content-[""] font-medium after:w-0 after:h-[1px] after:bg-black after:-bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 hover:text-black'>
                                        {item.label}
                                     </Link>
@@ -37,7 +37,7 @@ const ReusableNavbar = ( {data = []} ) => {
         {hasImg &&
          <div className='w-[260px] h-auto flex flex-col gap-4 shrink-0 items-center justify-center'>
             {Img.map((imgItem, index)=>(
-                <Link to={imgItem.image.url || '#'} className='relative overflow-hidden rounded-sm border border-gray-100 group/img '>
+                <Link key={index} to={imgItem.image.url || '#'} className='relative overflow-hidden rounded-sm border border-gray-100 group/img '>
                   <img src={imgItem.image.src} alt={imgItem.image.alt} className=' w-full h-auto object-cover group-hover/img:scale-105 transition-transform duration-500'/>
                   <div className='absolute inset-0 bg-black/9 group-hover/img:bg-transparent transition-colors duration-300 '/>
                 </Link>

@@ -180,6 +180,7 @@ export const categoires = [
   'Video Games & Consoles',
   'Stereo',
   'Home Theatre',
+  'Components',
   'Bluetooth Speakers',
   'Headphones',
   'Speakers',
