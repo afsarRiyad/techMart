@@ -16,7 +16,7 @@ const Topbar = () => {
           <Link className='topbarList'> <MapPin className='text-[16px] w-4 h-4'/> Store Locator</Link>
           <Link className='topbarList'> <TruckElectric className='text-[16px] text-tcolor w-4 h-4'/> Track Your Order</Link>
           <Link className='topbarList'> <Handbag  className='text-[16px] w-4 h-4'/> Shop</Link>
-          <Link className='flex items-center gap-1 '> <UserRound className='text-[16px] text-tcolor w-4 h-4'/> My Account</Link>
+          <Link to='/account' className='flex items-center gap-1 '> <UserRound className='text-[16px] text-tcolor w-4 h-4'/> My Account</Link>
          </div>
         </div>
     </Container>

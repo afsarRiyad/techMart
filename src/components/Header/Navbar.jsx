@@ -20,18 +20,18 @@ const Navbar = () => {
 
   return (
     <div
-      className='bg-primary hidden lg:flex lg:flex-cols-6 shrink w-full text-white text-sm font-inter relative z-10'
+      className='bg-primary hidden lg:flex lg:flex-cols-6 shrink w-full text-white text-sm font-inter relative z-30'
       onMouseLeave={() => setActiveMenu(null)}
     >
       <Container>
-        <div className='flex w-full justify-center relative'>
+        <div className='flex w-full justify-center relative z-50'>
           {navItems.map((item, index)=>(
-            <div className={`py-2 px-3 border-r border-r-gray-400 last:border-r-0 hover:bg-black/10 transition-all duration-150 ${activeMenu == index && 'bg-black/10'}`} onMouseEnter={()=> setActiveMenu(index)}>
-              <span className='text-base font-inter text-tcolor font-bold cursor-pointer '>
+            <div className={`py-3 px-4 border-r border-r-gray-400 last:border-r-0 hover:bg-black/10 transition-all  ${activeMenu == index && 'bg-black/10'}`} onMouseEnter={()=> setActiveMenu(index)}>
+              <span className='text-sm font-inter text-tcolor font-bold cursor-pointer select-none'>
                 {item.label}
-                <ChevronDown size={18} className={`inline-block ml-1 transition-transform duration-300 ${activeMenu == index ? 'rotate-180' : 'rotate-0'}`}/>
+                <ChevronDown size={18} className={`inline-block transition-transform duration-300 ${activeMenu == index ? 'rotate-180' : 'rotate-0'}`}/>
               </span>
-              <div className={` fixed left-0 right-0 top-auto transition-transform duration-200 ${activeMenu == index ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'}`}>
+              <div className={` absolute left-0 right-0 top-10 transition-transform duration-300 ${activeMenu == index ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
                 <ReusableNavbar data={item.data}/>
               </div>
             </div>

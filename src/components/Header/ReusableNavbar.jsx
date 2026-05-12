@@ -1,9 +1,9 @@
 import React from 'react'
 import Container from '../layouts/Container'
-import { megaMenuData } from './../../data/MegaMenu';
 import { Link } from 'react-router';
+import { memo } from 'react'
 
-const ReusableNavbar = ( {data = []} ) => {
+const ReusableNavbar = memo(( {data = []} ) => {
 
   const Img = data.filter(item => item.type == 'img')
   const textLink = data.filter(item => item.type !== 'img')
@@ -21,10 +21,10 @@ const ReusableNavbar = ( {data = []} ) => {
                     </h2>
                     <ul>
                         {
-                            item.links.map((item, index)=>(
+                            item.links.map((link, index)=>(
                                   <li key={index} className='  pb-1.5 text-[13px] '>
-                                     <Link to={item.url || '#'} className='relative text-gray-700 font-inter cursor-pointer after:absolute after:content-[""] font-medium after:w-0 after:h-[1px] after:bg-black after:-bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 hover:text-black'>
-                                       {item.label}
+                                     <Link to={link.url || '#'} className='relative text-gray-700 font-inter cursor-pointer after:absolute after:content-[""] font-medium after:w-0 after:h-[1px] after:bg-black after:-bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 hover:text-black'>
+                                       {link.label}
                                     </Link>
                                  </li>
                             ))
@@ -47,6 +47,6 @@ const ReusableNavbar = ( {data = []} ) => {
       </div>
     </Container>
   )
-}
+})
 
 export default ReusableNavbar
