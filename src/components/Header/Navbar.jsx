@@ -1,94 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '../layouts/Container'
 import ReusableNavbar from './ReusableNavbar'
 import { megaMenuData } from '../../data/MegaMenu'
 import { ChevronDown } from 'lucide-react'
 
+const navItems = [
+  { label: 'Home', data: megaMenuData.home },
+  { label: 'TV & Audio', data: megaMenuData.TVandAudio },
+  { label: 'Components', data: megaMenuData.component },
+  { label: 'Gadgets', data: megaMenuData.Gadgets },
+  { label: 'Laptops & Desktops', data: megaMenuData.LaptopAndPc },
+  { label: 'Cameras & Accessories', data: megaMenuData.CameraAndAccessories },
+  { label: 'Smart Phones', data: megaMenuData.smartphones },
+  { label: 'GPS and Car', data: megaMenuData.GpsAndCar },
+]
+
 const Navbar = () => {
+  const [activeMenu, setActiveMenu] = useState(null)
+
   return (
-    <div className='bg-primary hidden lg:flex lg:flex-cols-6 shrink w-full text-white text-sm font-inter relative z-10'>
+    <div
+      className='bg-primary hidden lg:flex lg:flex-cols-6 shrink w-full text-white text-sm font-inter relative z-10'
+      onMouseLeave={() => setActiveMenu(null)}
+    >
       <Container>
         <div className='flex w-full justify-center relative'>
-          <div className='group  z-40 '>
-            <span className='font-inter flex items-center justify-end font-semibold py-3 ps-4 pe-4 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              Home
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.home} />
+          {navItems.map((item, index)=>(
+            <div className={`py-2 px-3 border-r border-r-gray-400 last:border-r-0 hover:bg-black/10 transition-all duration-150 ${activeMenu == index && 'bg-black/10'}`} onMouseEnter={()=> setActiveMenu(index)}>
+              <span className='text-base font-inter text-tcolor font-bold cursor-pointer '>
+                {item.label}
+                <ChevronDown size={18} className={`inline-block ml-1 transition-transform duration-300 ${activeMenu == index ? 'rotate-180' : 'rotate-0'}`}/>
+              </span>
+              <div className={` fixed left-0 right-0 top-auto transition-transform duration-200 ${activeMenu == index ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-3 pointer-events-none'}`}>
+                <ReusableNavbar data={item.data}/>
+              </div>
             </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter  flex items-center justify-end  font-semibold  py-3 ps-4 pe-4 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              TV & Audio
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />  
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.TVandAudio} />
-            </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter  flex items-center justify-end  font-semibold  py-3 ps-4 pe-4 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              Components
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.component} />
-            </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter flex items-center justify-end  font-semibold  py-3 ps-4 pe-4 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              Gadgets
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.Gadgets} />
-            </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter flex items-center justify-end  font-semibold  py-3 ps-4 pe-4 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              Laptops & Desktops
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.LaptopAndPc} />
-            </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter  font-semibold block py-3 ps-4 pe-3 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              Cameras & Accessoreis
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.CameraAndAccessories} />
-            </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter flex items-center justify-end  font-semibold  py-3 ps-4 pe-4 text-tcolor cursor-pointer border-r border-r-gray-400 hover:bg-black/10 group-hover:bg-black/10'>
-              Smart Phones
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.smartphones} />
-            </div>
-          </div>
-
-          <div className='group z-40'>
-            <span className='font-inter  font-semibold block py-3 ps-4 pe-4 text-tcolor cursor-pointer hover:bg-black/10 group-hover:bg-black/10'>
-              GPS and Car
-              <ChevronDown size={16} className='inline-block ms-1 mb-1' />
-            </span>
-            <div className="absolute w-full top-full left-0 translate-y-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
-              <ReusableNavbar data={megaMenuData.GpsAndCar} />
-            </div>
-          </div>
-
+          ))}
         </div>
       </Container>
     </div>

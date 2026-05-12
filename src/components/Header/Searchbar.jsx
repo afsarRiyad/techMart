@@ -41,6 +41,9 @@ const Searchbar = () => {
           : 'relative bg-primary lg:bg-white'}`}>
         <Container>
           {/* mobile searchbar  */}
+          {mobileSearch && 
+           <div className='fixed inset-0 bg-black/10'/>
+          }
           <div ref={mobileSearchRef} className={`absolute top-full left-0 h-25 z-50   shadow-xl w-full flex items-center font-inter text-tcolor lg:hidden  transition-all duration-200 ease-in-out ${sticky ? 'bg-white  border-t-[2px] border-t-black' : 'bg-primary  border-t-[2px] border-t-white'} ${mobileSearch ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
             <input type="text" placeholder='Search for products..' className={` ps-6 pe-26  bg-white rounded-full w-[90%] py-4 flex ms-4 outline-none ${sticky ? 'border border-gray-300' : 'border-none'}`} value={search} onChange={(e) => setSearch(e.target.value)} />
             {search !== '' && <X size={18} className=' absolute right-21 cursor-pointer' onClick={() => setSearch('')} />}

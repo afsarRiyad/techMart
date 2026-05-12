@@ -13,7 +13,7 @@ export const megaMenuData = {
       id: "h-1",
       title: "Most Used Links",
       links: [
-        { label: "New Arrivals", url: "" },
+        { label: "New Arrivals", url: "#" },
         { label: "Best Sellers", url: "" },
         { label: "Today's deals", url: "" },
         { label: "Plash Sale", url: "" },

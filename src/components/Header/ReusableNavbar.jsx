@@ -11,7 +11,7 @@ const ReusableNavbar = ( {data = []} ) => {
   
   return (
     <Container>
-      <div className="bg-white p-8 w-full border-t-2  border-amber-400 shadow-2xl flex flex-row gap-10  min-h-[420px]">
+      <div className="bg-white p-8 w-full border-t-2  border-amber-400 shadow-xl flex flex-row gap-10  min-h-[420px]">
         <div className={`grid  gap-y-8 gap-x-6 grow ${hasImg ? 'grid-cols-3' : 'grid-cols-4'}`}>
           {
             textLink.map((item)=>(

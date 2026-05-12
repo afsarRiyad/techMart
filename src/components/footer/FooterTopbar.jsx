@@ -3,7 +3,7 @@ import Container from '../layouts/Container'
 import { Send } from 'lucide-react';
 
 const FooterTopbar = () => {
-  return (
+return (
     <div className='bg-primary font-inter py-3 hidden sm:block '>
      <Container>
         <div className='flex gap-4 items-center justify-between'>

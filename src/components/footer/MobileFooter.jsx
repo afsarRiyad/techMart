@@ -20,7 +20,7 @@ const MobileFooter = () => {
     return (
         <div className='bg-gray-100'>
             <Container>
-                <div className=' p-4 lg:hidden '>
+                <div className=' p-4 sm:hidden '>
                     <div className='bg-gray-100 text-black rounded-lg pt-3'>
                         <ul className=' flex flex-col gap-3'>
                             {
@@ -61,7 +61,7 @@ const MobileFooter = () => {
                     </div>
                 </div>
             </Container>
-            <div className='mb-3 bg-[#333E48] lg:hidden flex flex-col items-center justify-center py-4'>
+            <div className='mb-3 bg-[#333E48] sm:hidden flex flex-col items-center justify-center py-4'>
                 <LogoWhite className='w-40 h-auto' />
                 <div className='flex flex-col py-3 text-[14px] leading-7 font-inter items-center gap-4'>
                     <span className='text-white '>Experience App on your mobile:
