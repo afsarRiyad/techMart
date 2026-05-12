@@ -1,5 +1,7 @@
+
 import React from 'react'
 import { Link, useLocation } from 'react-router'
+import Container from './layouts/Container';
 
 const Breadcrumbs = () => {
     let direction = useLocation().pathname.split('/')
@@ -11,7 +13,8 @@ const Breadcrumbs = () => {
     }
   return (
     <>
-    <div className='flex py-6 gap-5'>
+    <Container >
+        <div className='flex py-6 gap-5'>
         <ul className='flex gap-3'>
             <li><Link  to='/' className='font-inter tracking-widest'>Home</Link></li>
             {arr.map((item, index)=>{
@@ -32,6 +35,7 @@ const Breadcrumbs = () => {
         })}
         </ul>
     </div>
+    </Container>
     </>
   )
 }

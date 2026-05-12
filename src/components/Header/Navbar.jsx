@@ -20,11 +20,11 @@ const Navbar = () => {
 
   return (
     <div
-      className='bg-primary hidden lg:flex lg:flex-cols-6 shrink w-full text-white text-sm font-inter relative z-30'
+      className='bg-primary hidden lg:block shrink w-full text-white text-sm font-inter relative z-30'
       onMouseLeave={() => setActiveMenu(null)}
     >
       <Container>
-        <div className='flex w-full justify-center relative z-50'>
+        <div className='flex w-full  relative z-50'>
           {navItems.map((item, index)=>(
             <div className={`py-3 px-4 border-r border-r-gray-400 last:border-r-0 hover:bg-black/10 transition-all  ${activeMenu == index && 'bg-black/10'}`} onMouseEnter={()=> setActiveMenu(index)}>
               <span className='text-sm font-inter text-tcolor font-bold cursor-pointer select-none'>
