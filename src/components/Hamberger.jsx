@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, X  } from 'lucide-react';
 import useOutsideClick from '../hooks/outsideClick';
 import Logo from '../assets/images/logo.svg?react'
 import useScrollBlocker from '../hooks/scrollBlocker';
+import { Link } from 'react-router';
 
 const Hamberger = ({ className = '' }) => {
   const menuRef = useRef(null)
@@ -45,7 +46,9 @@ const Hamberger = ({ className = '' }) => {
                         <ul className='bg-gray-100   rounded-2xl '>
                           {item.children.map((child, i) => (
                             <li key={i} className={`relative z-10 py-[9px] px-4 border-b border-b-gray-300 last:border-0 cursor-pointer font-inter sm:text-gray-600 sidebarLiHover ${child.isBold && 'font-bold'} border-b border-b-gray-300  cursor-pointer`}>
+                              <Link to={child.url || '#'}>
                               {child.name}
+                              </Link>
                             </li>
                           ))}
                         </ul>

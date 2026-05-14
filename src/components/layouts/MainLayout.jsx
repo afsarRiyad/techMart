@@ -8,6 +8,7 @@ import Footer from '../footer/Footer'
 import  Copyright  from '../footer/Copyright'
 import MobileFooter from '../footer/MobileFooter'
 import Breadcrumbs from '../Breadcrumbs'
+import DarkMode from '../DarkMode'
 
 
 const  MainLayout= () => {
@@ -17,6 +18,7 @@ const  MainLayout= () => {
     <Topbar/>
     <Searchbar/>
      <Navbar />
+     <DarkMode/>
     {direction.pathname !== '/' &&  <Breadcrumbs/>}
      <Outlet/>
      <FooterTopbar/>

@@ -3,6 +3,7 @@ import Home from "./pages/Home"
 import MainLayout from "./components/layouts/MainLayout"
 import MyAccount from "./pages/MyAccount"
 import Login from "./pages/Login"
+import Cart from "./pages/Cart"
 
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/account" element={<MyAccount/>}/>
         <Route path="/account/login" element={<Login/>}/>
+        <Route path="/cart" element={<Cart/>}/>
+        <Route path="/account" element={<MyAccount/>}/>
       </Route>
     </Routes>
     </>

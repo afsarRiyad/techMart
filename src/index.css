@@ -151,7 +151,7 @@
 }
 @keyframes anim-topWatch {
     from{
-        transform: translateY(-250px);
+        transform: translateY(-450px);
         opacity: 0;
     }
     to{

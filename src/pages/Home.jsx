@@ -1,5 +1,5 @@
 
-import HeroSlider from '../components/HeroSlider';
+import HeroSlider from '../components/HeroSlider/HeroSlider';
 import Container from './../components/layouts/Container';
 
 const Home = () => {

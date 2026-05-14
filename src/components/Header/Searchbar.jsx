@@ -5,7 +5,7 @@ import Hamberger from '../Hamberger'
 import { ChevronsUpDown, Search, GitCompareArrows, Heart, UserRound, Handbag, X } from 'lucide-react';
 import useOutsideClick from '../../hooks/outsideClick';
 import { Link } from 'react-router';
-import { categoires } from '../../data/Navigation'
+import { categories } from '../../data/Navigation'
 import useScrollBlocker from '../../hooks/scrollBlocker';
 
 const Searchbar = () => {
@@ -51,7 +51,7 @@ const Searchbar = () => {
           </div>
           <div className='lg:py-7 py-5 flex lg:gap-8 items-center lg:bg-white '>
             <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-between items-center ps-2'>
-              <Logo className='lg:h-10 h-6 w-auto block ps-4' />
+              <Link to='/'><Logo className='lg:h-10 h-6 w-auto block ps-4' /></Link>
               <Hamberger />
             </div>
             <div className='flex flex-1 justify-between items-center'>
@@ -61,8 +61,10 @@ const Searchbar = () => {
                   <h2 className='  bg-white outline-none select-none border border-[2px]  border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
                   <ul className={`absolute top-full border bg-white shadow-md border-gray-200  transition ${catOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none '}`}>
                     {
-                      categoires.map((item, index) => (
-                        <li key={index} className={`level0 ${category === item && 'bg-blue-500 text-white'}`} onClick={() => { setCategory(item); setCatOpen(false) }}>{item}</li>
+                      categories.map((item, index) => (
+                        <li key={index} className={`level0 ${category === item.name && 'bg-blue-500 text-white'}`} onClick={() => { setCategory(item.name); setCatOpen(false) }}>
+                          <Link to={item.url || '#'}>{item.name}</Link>
+                        </li>
                       ))
                     }
                   </ul>
@@ -73,14 +75,14 @@ const Searchbar = () => {
                 </div>
               </div>
               <div className='relative flex lg:gap-9.5 w-full justify-end  gap-8 lg:pr-0 pr-2'>
-                <Link to='#' className='searchbarIconhover hidden lg:block' ><GitCompareArrows size={22} className='text-tcolor  ' /></Link>
-                <Link to='#'><Heart size={22} className='text-tcolor hidden lg:flex' /></Link>
+                <Link aria-label='compare products' to='#' className='searchbarIconhover hidden lg:block' ><GitCompareArrows size={22} className='text-tcolor  ' /></Link>
+                <Link to='#' aria-label='browse to wishlist'><Heart size={22} className='text-tcolor hidden lg:flex' /></Link>
                 {
                   mobileSearch ? <X size={23} className='cursor-pointer lg:hidden ' onClick={() => setMobileSearch(false)} /> :
                     <Search size={23} className='cursor-pointer lg:hidden' onClick={() => setMobileSearch(true)} />
                 }
-                <Link to='#'><UserRound size={22} className='text-tcolor' /></Link>
-                <Link to='#' className='flex gap-2'>
+                <Link to='/account' aria-label='go to myAccount'><UserRound size={22} className='text-tcolor' /></Link>
+                <Link aria-label='go to Cart' to='/cart' className='flex gap-2'>
                   <div className={`searchbarIconhover `}>
                     <Handbag size={22} className='text-tcolor' />
                   </div>

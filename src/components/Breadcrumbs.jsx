@@ -16,7 +16,7 @@ const Breadcrumbs = () => {
     <Container >
         <div className='flex py-6 gap-5'>
         <ul className='flex gap-3'>
-            <li><Link  to='/' className='font-inter tracking-widest'>Home</Link></li>
+            <li className='hover:bg-black/10 rounded'><Link  to='/' className='font-inter tracking-widest '>Home</Link></li>
             {arr.map((item, index)=>{
                 let isLast = index === arr.length - 1;
                 let href = '/' + arr.slice(0, index + 1).join('/')
