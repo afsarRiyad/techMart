@@ -20,9 +20,9 @@ const Hamberger = ({ className = '' }) => {
   return (
     < >
       <button aria-label="toggle" className={`flex flex-col  w-auto gap-[6px] ${className} cursor-pointer`} onClick={() => setSideDrawerOpen(!sideDrawerOpen)}>
-        <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black ${sideDrawerOpen && 'rotate-50 translate-y-2'}`}> </span>
-        <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black ${sideDrawerOpen && 'opacity-0'}`}> </span>
-        <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black ${sideDrawerOpen && '-rotate-60 -translate-y-2'}`}> </span>
+        <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black lg:dark:bg-gray-200 ${sideDrawerOpen && 'rotate-50 translate-y-2'}`}> </span>
+        <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black lg:dark:bg-gray-200 ${sideDrawerOpen && 'opacity-0'}`}> </span>
+        <span className={`w-6 h-[2px] transition-transform duration-300 ease-in-out bg-black lg:dark:bg-gray-200 ${sideDrawerOpen && '-rotate-60 -translate-y-2'}`}> </span>
       </button>
       {/* overlay  */}
       {

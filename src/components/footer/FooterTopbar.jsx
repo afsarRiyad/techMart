@@ -4,23 +4,23 @@ import { Send } from 'lucide-react';
 
 const FooterTopbar = () => {
 return (
-    <div className='bg-primary font-inter py-3 hidden sm:block '>
+    <div className='bg-primary  font-inter py-3 hidden sm:block '>
      <Container>
         <div className='flex gap-4 items-center justify-between'>
           <div className='flex gap-13 items-center '>
               <div className='flex items-center gap-5'>
-                <Send size={30} className='text-gray-600'/>
+                <Send size={30} className='text-gray-600 '/>
                 <span className='text-[20px] text-tcolor leading-12'>
                     Sign up to Newsletter
                 </span>
               </div>
-              <div className='text-tcolor text-[14px] leading-6 hidden lg:flex'>
+              <div className='text-tcolor text-[14px] leading-6 hidden lg:flex '>
                 ...and receive <span className='font-bold pl-1'> $20 coupon for first shopping</span>
               </div>
          </div>    
           <div>
-            <input type="email" placeholder='Enter your email address' className='bg-white rounded-l-full text-tcolor py-3 px-6 outline-none leading-5 lg:w-[362px] sm:w-[262px]'/>
-            <button className='relative text-white bg-black py-[10px] px-5 rounded-r-full group overflow-hidden cursor-pointer active:bg-black/90 '>
+            <input type="email" placeholder='Enter your email address' className='bg-white dark:bg-gray-200 rounded-l-full text-tcolor py-3 px-6 outline-none leading-5 lg:w-[362px] sm:w-[262px]'/>
+            <button className='relative text-white  bg-black py-[10px] px-5 rounded-r-full group overflow-hidden cursor-pointer active:bg-black/90 '>
                 <span className='relative z-10'>
                     SignUp
                 </span>

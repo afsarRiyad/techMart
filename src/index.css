@@ -1,15 +1,29 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
+@layer base {
+    html {
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+  body {
+    @apply bg-white text-black dark:bg-[#121212] dark:text-gray-200;
+  }
+body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
 
 @theme {
     --color-primary : #FED700;
     --color-tcolor : #333E48;
+    --color-darkBg : #181818;
     --font-inter: "inter", sans-serif;
     --font-roboto: "roboto", sans-serif;
 }
 
 .topbarList{
-   @apply  relative font-inter flex items-center gap-2 text-tcolor after:absolute after:content-[""] after:h-4 after:w-[2px] after:bg-[#DDDDDD] after:-right-4 after:top-[2px]
+   @apply  relative font-inter flex items-center gap-2 text-tcolor after:absolute after:content-[""] after:h-4 after:w-[2px] after:bg-[#DDDDDD] after:-right-4 after:top-[2px] dark:hover:text-white
 }
 .level0{
     @apply pl-2 px-4 py-1 hover:bg-blue-600 hover:text-white cursor-pointer select-none font-inter text-[14px]
@@ -18,7 +32,7 @@
     @apply transform transition-transform duration-150
 }
 .searchbarIconhover{
-    @apply relative after:absolute after:content-["0"] after:w-5 after:h-5 sm:after:bg-primary  after:text-white after:bg-tcolor after:top-3 after:-right-[7px] after:rounded-full after:text-center after:font-semibold sm:after:text-tcolor after:text-[14px]
+    @apply relative after:absolute after:content-["0"] after:w-5 after:h-5 sm:after:bg-black   dark:after:bg-primary  dark:after:text-black  sm:after:bg-primary  after:text-white after:bg-tcolor after:top-3 after:-right-[7px] after:rounded-full after:text-center after:font-semibold sm:after:text-tcolor after:text-[14px]
 }
 @keyframes stickyAnimation {
     from {transform: translateY(-100%);}
@@ -43,7 +57,7 @@
     @apply scale-90 opacity-80
 }
 .footerLink{
-    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black hover:after:w-full
+    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black dark:hover:text-red-500 hover:after:w-full dark:text-gray-300 dark:hover:after:bg-red-500 
 }
 .accordionHeading{
     @apply transition-all duration-300;
@@ -238,4 +252,65 @@
     font-weight: 400;
     font-style: normal;
     src: url(./fonts/Inter/static/Inter_18pt-Regular.ttf) format("truetype");
+}
+
+.myLabel{
+    position: relative;
+    display: block;
+    width: 52px;
+    height: 100px;
+    cursor: pointer;
+}
+.myLabel::after{
+    position: absolute;
+    content: 'Light';
+    color: #2D3748;
+    font-weight: bold;
+    font-size: 12px;
+     display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-90deg);
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 100%;
+    bottom: 4px;
+    left: 4px;
+     transition: all 0.6s ease-in-out;
+}
+.myLabel::before{
+    position: absolute;
+    content: '';
+    width: 52px;
+    height: 100px;
+    background: #FED700;
+    border-radius: 50px;
+    bottom: 0;
+    left: 0;
+    box-shadow: 1px 1px 10px #0000005b;
+    transition: all 0.6s ease-in-out;
+}
+
+.myInput{
+    display: none;
+}
+.myInput:checked + .myLabel::after{
+    background: black;
+    color: white;
+     bottom: 50px;
+     content: 'Dark';
+     font-weight: bold;
+}
+.myInput:checked + .myLabel::before{
+    background: white;
+}
+.darkH{
+    @apply dark:text-gray-200 
+}
+.darkbg{
+    @apply dark:bg-darkBg dark:text-gray-300
+}
+.darktxt{
+     @apply dark:text-gray-400 
 }
