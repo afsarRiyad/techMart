@@ -7,6 +7,7 @@ import Cart from "./pages/Cart"
 import Signup from "./pages/Signup"
 import Forgot from "./pages/Forgot"
 import Reset from "./pages/Reset"
+import TrackOrder from "./pages/TrackOrder"
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/account/signup" element={<Signup/>}/>
         <Route path="/account/forgot-password" element={<Forgot/>}/>
         <Route path="/account/reset-password" element={<Reset/>}/>
+        <Route path="/track-order" element={<TrackOrder/>}/>
       </Route>
     </Routes>
     </>

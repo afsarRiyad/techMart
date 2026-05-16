@@ -42,8 +42,8 @@ const Forgot = () => {
                             </Link>
                         </span>
                     </div>
-                    <div className='pb-7'>
-                        <h1 className='text-[15px] text-tcolor font-inter dark:text-gray-300'>You may contact <Link to='/customer-services' className='text-[#FA8232] hover:underline'>Customer Services</Link> for help restoring access to your account</h1>
+                    <div className='pb-7 w-full'>
+                        <h1 className='text-[15px] text-tcolor font-inter dark:text-gray-300 text-center lg:text-left '>You may contact <Link to='/customer-services' className='text-[#FA8232] hover:underline'>Customer Services</Link> for help restoring access to your account</h1>
                     </div>
                 </div>
             </form>

@@ -8,8 +8,8 @@ const Signup = () => {
   const [show, setShow] = useState(false)
   const [confirmShow, setConfirmShow] = useState(false)
   return (
-    <main className="flex items-center justify-center mx-auto max-w-[424px] ]">
-      <form className='flex flex-col  shadow-lg rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10'>
+    <main className="flex items-center justify-center mx-auto max-w-[424px] px-4 w-full">
+      <form className='flex flex-col  shadow-lg max-w-[424px] w-full  rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10'>
         <div className='flex justify-around w-full font-robot text-[20px] font-bold text-tcolor border-b border-b-gray-200 '>
           <Link to='/account/login' className='lg:w-[212px] flex justify-center cursor-pointer py-4 text-gray-500 dark:text-gray-400 select-none'>Sign In</Link>
           <span className='lg:w-[212px] flex justify-center border-b-[3px] cursor-pointer border-b-primary py-4 dark:text-gray-300 dark:border-b-yellow-500'>Sign Up</span>

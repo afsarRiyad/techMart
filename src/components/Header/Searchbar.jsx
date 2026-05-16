@@ -51,15 +51,15 @@ const Searchbar = () => {
             {search !== '' && <X size={18} className=' absolute right-21 cursor-pointer' onClick={() => setSearch('')} />}
             <Search size={25} className='cursor-pointer absolute right-11' />
           </div>
-          <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-8 items-center lg:bg-white '>
-            <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-around items-center ps-2'>
+          <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-5 items-center lg:bg-white '>
+            <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-between items-center ps-2'>
               <Link aria-label='gok to homepage' to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 ' /></Link>
               <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pr-6' /></Link>
-              <Hamberger />
+              <Hamberger className='pl-5' />
             </div>
             <div className='flex flex-1 justify-between items-center '>
-              <div className=' rounded-full h-[44px] lg:w-140 w-100 flex items-center hidden lg:flex'>
-                <input type="text" placeholder='Search for Products' className='dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full  text-inter text-tcolor text-[14px] py-2 px-8 outline-none bg-white border border-[2px] dark:border-yellow-500 border-primary border-r-0 lg:w-70 ml-[2px]  placeholder:font-inter placeholder:text-gray-600 text-md leading-6' />
+              <div className=' rounded-full h-[44px] lg:w-200 w-100 flex items-center hidden lg:flex'>
+                <input type="text" placeholder='Search for Products' className='dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full  text-inter text-tcolor text-[14px] py-2 px-8 outline-none bg-white border border-[2px] dark:border-yellow-500 border-primary border-r-0 lg:w-[462px] ml-[2px]  placeholder:font-inter placeholder:text-gray-600 text-md leading-6' />
               { catOpen && <div className='fixed inset-0 left-0 top-34  bg-black/10'/>}
                 <div className='relative' ref={categoryRef}>
                   <h2 className='dark:bg-[#212121] dark:text-gray-400 bg-white outline-none select-none border border-[2px]  border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
@@ -83,20 +83,20 @@ const Searchbar = () => {
                 <GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' />
                  {/* Compare Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
-                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Compare
                       </div>
-                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
                      </div>
                 </Link>
                   <Link to='#' aria-label='browse to wishlist' className='relative group '>
                      <Heart size={22} className='text-tcolor lg:dark:text-gray-200 hidden lg:flex' />
                      {/*wishlist tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300'>
-                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Wishlist
                       </div>
-                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
                      </div>
                   </Link>
                 {
@@ -107,10 +107,10 @@ const Searchbar = () => {
                    <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
                    {/* My Account Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
-                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         My Account
                       </div>
-                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
                      </div>
                    </Link>
                 <Link aria-label='go to Cart' to='/cart' className='flex gap-2 group relative'>
@@ -120,10 +120,10 @@ const Searchbar = () => {
                   <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>$0.00</span>
                    {/*Cart Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
-                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Cart
                       </div>
-                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
                      </div>
                 </Link>
               </div>

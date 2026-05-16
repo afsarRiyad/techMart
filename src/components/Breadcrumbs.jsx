@@ -14,11 +14,11 @@ const Breadcrumbs = () => {
     }
   return (
     <>
-  <div className='dark:border-b  dark:border-gray-700 border-b border-b-gray-200'>
+  <div className='dark:border-b  dark:border-gray-700 border-b border-b-gray-200 text-[15px]'>
       <Container >
-        <div className='flex py-6 gap-5 px-3 lg:px-5'>
+        <div className='flex py-4 gap-5 px-3 lg:px-5'>
         <ul className='flex items-center gap-3'>
-            <li className='hover:bg-black/10 rounded'><Link aria-label='go to home page'  to='/' className='font-inter flex items-center tracking-widest dark:text-white'><House size={22} /></Link></li>
+            <li className='hover:bg-black/10 rounded'><Link aria-label='go to home page'  to='/' className='font-inter flex items-center tracking-widest dark:text-white'><House size={20} /></Link></li>
             {arr.map((item, index)=>{
                 let isLast = index === arr.length - 1;
                 let href = '/' + arr.slice(0, index + 1).join('/')
