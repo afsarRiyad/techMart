@@ -17,7 +17,7 @@ const Login = () => {
       <div className='px-8 flex flex-col gap-4 py-6'>
         <div className=''>
           <label htmlFor='email' className='font-inter text-tcolor block font-semibold pb-2 dark:text-gray-300 select-none'>Email Address</label>
-          <input type="email" id='email' className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Enter Your Email' autoComplete="email"/>
+          <input type="email" id='email' className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300  focus:ring-4 focus:ring-blue-400/10  focus:border-blue-500' placeholder='Enter Your Email' autoComplete="email"/>
         </div>
         <div className=''>
           <div className='flex justify-between'>
@@ -25,7 +25,7 @@ const Login = () => {
              <Link to='/account/forgot-password' className='text-[#0e78c4]  font-inter text-[14px] leading-6 cursor-pointer formTxtHover tracking-wide select-none'>Forgotten Password?</Link>
           </div>
           <div className='relative'>
-            <input id='password' type={show ? "text" : "password"} className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Enter Your Password' autoComplete="current-password"/>
+            <input id='password' type={show ? "text" : "password"} className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300  focus:ring-4 focus:ring-blue-400/10  focus:border-blue-500' placeholder='Enter Your Password' autoComplete="current-password"/>
             {show ? 
             <Eye size={20} className='absolute right-5 top-2.5 cursor-pointer' onClick={()=> setShow(!show)}/> :
              <EyeOff  size={20} className='absolute right-5 top-2.5 cursor-pointer' onClick={()=> setShow(!show)}/>

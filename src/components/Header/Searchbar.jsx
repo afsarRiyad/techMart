@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Logo from '../../assets/images/logo.svg?react'
-import LogoWhite from '../../assets/images/logoWhite.svg?react'
+import LogoWhite from '../../assets/images/LogoWhite.svg?react'
 import Container from '../layouts/Container'
 import Hamberger from '../Hamberger'
 import { ChevronsUpDown, Search, GitCompareArrows, Heart, UserRound, Handbag, X } from 'lucide-react';
@@ -79,18 +79,52 @@ const Searchbar = () => {
                 </div>
               </div>
               <div className='relative flex lg:gap-9.5 w-full justify-end  gap-8 lg:pr-0 pr-2'>
-                <Link aria-label='compare products' to='#' className='searchbarIconhover hidden lg:block' ><GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' /></Link>
-                <Link to='#' aria-label='browse to wishlist'><Heart size={22} className='text-tcolor lg:dark:text-gray-200 hidden lg:flex' /></Link>
+                <Link aria-label='compare products' to='#' className='searchbarIconhover hidden lg:block relative group' >
+                <GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' />
+                 {/* Compare Tooltip  */}
+                     <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
+                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                        Compare
+                      </div>
+                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                     </div>
+                </Link>
+                  <Link to='#' aria-label='browse to wishlist' className='relative group '>
+                     <Heart size={22} className='text-tcolor lg:dark:text-gray-200 hidden lg:flex' />
+                     {/*wishlist tooltip  */}
+                     <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300'>
+                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                        Wishlist
+                      </div>
+                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                     </div>
+                  </Link>
                 {
                   mobileSearch ? <X size={23} className='cursor-pointer lg:hidden ' onClick={() => setMobileSearch(false)} /> :
                     <Search size={23} className='cursor-pointer lg:hidden dark:text-tcolor' onClick={() => setMobileSearch(true)} />
                 }
-                <Link to='/account' aria-label='go to myAccount'><UserRound size={22} className='text-tcolor lg:dark:text-gray-200' /></Link>
-                <Link aria-label='go to Cart' to='/cart' className='flex gap-2'>
+                <Link to='/account' aria-label='go to myAccount ' className='relative group'>
+                   <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
+                   {/* My Account Tooltip  */}
+                     <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
+                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                        My Account
+                      </div>
+                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                     </div>
+                   </Link>
+                <Link aria-label='go to Cart' to='/cart' className='flex gap-2 group relative'>
                   <div className={`searchbarIconhover `}>
                     <Handbag size={22} className='text-tcolor lg:dark:text-gray-200' />
                   </div>
                   <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>$0.00</span>
+                   {/*Cart Tooltip  */}
+                     <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
+                      <div className='relative bg-black text-white dark:text-black dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                        Cart
+                      </div>
+                      <span className='absolute border-b-black dark:border-b-white border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                     </div>
                 </Link>
               </div>
             </div>

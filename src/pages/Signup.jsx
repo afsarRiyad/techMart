@@ -17,16 +17,16 @@ const Signup = () => {
         <div className='px-8 flex flex-col gap-4 py-6'>
           <div className=''>
             <label htmlFor='name' className='font-inter text-tcolor block font-semibold pb-2 dark:text-gray-300 select-none'>Name</label>
-            <input autoComplete="name" type="text" id='name' className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Enter Your Name' />
+            <input autoComplete="name" type="text" id='name' className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing' placeholder='Enter Your Name' />
           </div>
           <div className=''>
             <label htmlFor='email' className='font-inter text-tcolor block font-semibold pb-2 dark:text-gray-300 select-none'>Email Address</label>
-            <input type="email" id='email' className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Enter Your Email' autoComplete="email" />
+            <input type="email" id='email' className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing' placeholder='Enter Your Email' autoComplete="email" />
           </div>
           <div className=''>
             <label htmlFor='password' className='font-inter text-tcolor block font-semibold pb-2 dark:text-gray-300 select-none'>Password</label>
             <div className='relative'>
-              <input id='password' type={show ? "text" : "password"} className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Enter Your Password' autoComplete="new-password" />
+              <input id='password' type={show ? "text" : "password"} className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing' placeholder='Enter Your Password' autoComplete="new-password" />
               {show ?
                 <Eye size={20} className='absolute right-5 top-2.5 cursor-pointer' onClick={() => setShow(!show)} /> :
                 <EyeOff size={20} className='absolute right-5 top-2.5 cursor-pointer' onClick={() => setShow(!show)} />
@@ -36,12 +36,16 @@ const Signup = () => {
           <div className=''>
             <label htmlFor='confirmPassword' className='font-inter text-tcolor block font-semibold pb-2 dark:text-gray-300 select-none'>Confirm Password</label>
             <div className='relative'>
-              <input id='confirmPassword' type={confirmShow ? "text" : "password"} className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Confirm Your Password' autoComplete="new-password" />
+              <input id='confirmPassword' type={confirmShow ? "text" : "password"} className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing' placeholder='Confirm Your Password' autoComplete="new-password" />
               {confirmShow ?
                 <Eye size={20} className='absolute right-5 top-2.5 cursor-pointer' onClick={() => setConfirmShow(!confirmShow)} /> :
                 <EyeOff size={20} className='absolute right-5 top-2.5 cursor-pointer' onClick={() => setConfirmShow(!confirmShow)} />
               }
             </div>
+          </div>
+          <div className='flex gap-2 items-start '>
+            <input type="checkbox" id='signUp' className='mt-1 '/>
+            <label htmlFor="signUp" className='text-[15px] text-tcolor font-inter select-none dark:text-gray-300'>Are you agree to Electro <Link to='/termsofcondition' className='text-blue-500 hover:underline'>Terms of Condition</Link> and <Link to='/privacypolicy' className='text-blue-500 hover:underline'>Privacy Policy</Link> </label>
           </div>
           <div className='pt-2 relative'>
             <button className='bg-primary dark:bg-yellow-500 group w-full text-tcolor font-semibold py-3 px-4 rounded-sm hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-300 ease-in-out select-none'>Sign Up </button>

@@ -23,7 +23,7 @@ const Forgot = () => {
                             <label htmlFor='password' className='font-inter text-tcolor block font-semibold pb-2 dark:text-gray-300 select-none'>Email</label>
                             <Link to='/account/forgot-password' className='text-[#0e78c4]  font-inter text-[14px] leading-6 cursor-pointer hover:underline tracking-wide select-none'>Send again</Link>
                         </div>
-                        <input type="email" className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300' placeholder='Enter Your Email' autoComplete="email" />
+                        <input type="email" className='w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing' placeholder='Enter Your Email' autoComplete="email" />
                     </div>
                     <div className='pt-2 relative'>
                         <button className='bg-primary dark:bg-yellow-500 group w-full text-tcolor font-semibold py-3 px-4 rounded-sm hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-300 ease-in-out select-none'>Send Code </button>
@@ -43,7 +43,7 @@ const Forgot = () => {
                         </span>
                     </div>
                     <div className='pb-7'>
-                        <h1 className='text-[15px] text-tcolor font-inter'>You may contact <Link to='/customer-services' className='text-[#FA8232] hover:underline'>Customer Services</Link> for help restoring access to your account</h1>
+                        <h1 className='text-[15px] text-tcolor font-inter dark:text-gray-300'>You may contact <Link to='/customer-services' className='text-[#FA8232] hover:underline'>Customer Services</Link> for help restoring access to your account</h1>
                     </div>
                 </div>
             </form>
