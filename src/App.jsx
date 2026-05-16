@@ -4,6 +4,7 @@ import MainLayout from "./components/layouts/MainLayout"
 import MyAccount from "./pages/MyAccount"
 import Login from "./pages/Login"
 import Cart from "./pages/Cart"
+import Signup from "./pages/Signup"
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/account/login" element={<Login/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/account" element={<MyAccount/>}/>
+        <Route path="/account/signup" element={<Signup/>}/>
       </Route>
     </Routes>
     </>

@@ -44,7 +44,7 @@ const Searchbar = () => {
         <Container>
           {/* mobile searchbar  */}
           {mobileSearch && 
-           <div className='fixed inset-0 bg-black/10'/>
+           <div className='fixed left-0 top-16 w-full h-full bg-black/10 z-50' onClick={() => setMobileSearch(false)}/>
           }
           <div ref={mobileSearchRef} className={`absolute  top-full left-0 h-25 z-50   shadow-xl w-full flex items-center font-inter text-tcolor lg:hidden  transition-all duration-200 ease-in-out ${sticky ? 'bg-white  border-t-[2px] border-t-black' : 'bg-primary  border-t-[2px] border-t-white'} ${mobileSearch ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
             <input type="text" placeholder='Search for products..' className={` ps-6 pe-26  bg-white rounded-full w-[90%] py-4 flex ms-4 outline-none ${sticky ? 'border border-gray-300' : 'border-none'}`} value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -53,8 +53,8 @@ const Searchbar = () => {
           </div>
           <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-8 items-center lg:bg-white '>
             <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-around items-center ps-2'>
-              <Link to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 ' /></Link>
-              <Link to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pr-6' /></Link>
+              <Link aria-label='gok to homepage' to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 ' /></Link>
+              <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pr-6' /></Link>
               <Hamberger />
             </div>
             <div className='flex flex-1 justify-between items-center '>
@@ -83,7 +83,7 @@ const Searchbar = () => {
                 <Link to='#' aria-label='browse to wishlist'><Heart size={22} className='text-tcolor lg:dark:text-gray-200 hidden lg:flex' /></Link>
                 {
                   mobileSearch ? <X size={23} className='cursor-pointer lg:hidden ' onClick={() => setMobileSearch(false)} /> :
-                    <Search size={23} className='cursor-pointer lg:hidden' onClick={() => setMobileSearch(true)} />
+                    <Search size={23} className='cursor-pointer lg:hidden dark:text-tcolor' onClick={() => setMobileSearch(true)} />
                 }
                 <Link to='/account' aria-label='go to myAccount'><UserRound size={22} className='text-tcolor lg:dark:text-gray-200' /></Link>
                 <Link aria-label='go to Cart' to='/cart' className='flex gap-2'>

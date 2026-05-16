@@ -1,10 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router'
+import React, { useEffect } from 'react'
+import { Link, Navigate } from 'react-router'
+import Login from './Login'
 
 const MyAccount = () => {
+  let user = localStorage.getItem('user')
+  if(user) return <Navigate to='/account' replace />;
+           return <Navigate to='/account/login' replace />;
+
   return (
     <div>
-        <Link to='/account/login'><button className='bg-primary py-3 px-6 m-3 rounded-full '>Login</button></Link>
+       
     </div>
   )
 }

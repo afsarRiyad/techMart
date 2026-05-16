@@ -20,7 +20,7 @@ const Navbar = () => {
 
   return (
     <div
-      className='bg-primary   hidden lg:block shrink w-full text-white text-sm font-inter relative z-30'
+      className='bg-primary dark:bg-yellow-500  hidden lg:block shrink w-full text-white text-sm font-inter relative z-30'
       onMouseLeave={() => setActiveMenu(null)}
     >
       <Container>

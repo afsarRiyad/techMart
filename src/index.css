@@ -1,11 +1,8 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 @layer base {
-    html {
-    transition: background-color 0.5s ease, color 0.5s ease;
-  }
   body {
-    @apply bg-white text-black dark:bg-[#121212] dark:text-gray-200;
+    @apply bg-white dark:bg-[#181818] ;
   }
 body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     transition-property: background-color, border-color, color, fill, stroke;
@@ -57,7 +54,10 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     @apply scale-90 opacity-80
 }
 .footerLink{
-    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black dark:hover:text-red-500 hover:after:w-full dark:text-gray-300 dark:hover:after:bg-red-500 
+    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-primary  after:text-white  after:-bottom-1 after:left-0 hover:text-black dark:hover:text-red-500 hover:after:w-full dark:text-gray-300 dark:hover:after:bg-red-500  transition-all duration-300 ease-in-out
+}
+.formTxtHover{
+    @apply  relative after:absolute after:content-[""] after:w-0 after:h-[2px] after:bg-blue-500  after:text-white  after:bottom-1.5 after:left-0 dark:hover:text-red-500 hover:after:w-full dark:text-gray-300 dark:hover:after:bg-red-500  transition-all duration-300 ease-in-out
 }
 .accordionHeading{
     @apply transition-all duration-300;
@@ -297,16 +297,16 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 }
 .myInput:checked + .myLabel::after{
     background: black;
-    color: white;
+    color: rgb(206, 195, 195);
      bottom: 50px;
      content: 'Dark';
      font-weight: bold;
 }
 .myInput:checked + .myLabel::before{
-    background: white;
+    background: rgba(216, 212, 212, 0.849);
 }
 .darkH{
-    @apply dark:text-gray-200 
+    @apply dark:text-gray-300 
 }
 .darkbg{
     @apply dark:bg-darkBg dark:text-gray-300
