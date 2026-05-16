@@ -1,6 +1,7 @@
 
 import HeroSlider from '../components/HeroSlider/HeroSlider';
 import Container from './../components/layouts/Container';
+import Reset from './Reset';
 
 const Home = () => {
   return (

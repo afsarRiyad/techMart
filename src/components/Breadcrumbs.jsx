@@ -7,8 +7,10 @@ import { House, ChevronRight  } from 'lucide-react';
 const Breadcrumbs = () => {
     let direction = useLocation().pathname.split('/')
     let arr = direction.filter(item => item !== '')
-    const capitalize = (text) =>{
-      return  text.charAt(0).toUpperCase() + text.slice(1)
+    const capitalize = (text = '') =>{
+      return  (
+          text.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      )
     }
   return (
     <>

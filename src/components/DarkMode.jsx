@@ -20,9 +20,9 @@ const DarkMode = () => {
 
   return (
     <>
-    <div className='fixed left-10 top-1/2 z-20 h-30 w-13 rounded-full gony-roboto' >
+    <div className='fixed lg:left-10 top-1/2 hidden lg:block z-20 h-30 w-13 rounded-full gony-roboto' >
     <input id="dark-mode-toggle" aria-label='toggle dark mode'  className='myInput' checked={theme === 'dark'} type="checkbox" readOnly/>
-      <label htmlFor="dark-mode-toggle" className='myLabel' onClick={handleTheme}> 
+      <label htmlFor="dark-mode-toggle" className='myLabel ' onClick={handleTheme}> 
     </label>
     </div>
     </>
