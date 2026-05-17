@@ -57,9 +57,9 @@ const Searchbar = () => {
               <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pr-6' /></Link>
               <Hamberger className='pl-5' />
             </div>
-            <div className='flex flex-1 justify-between items-center '>
-              <div className=' rounded-full h-[44px] lg:w-200 w-100 flex items-center hidden lg:flex'>
-                <input type="text" placeholder='Search for Products' className='dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full  text-inter text-tcolor text-[14px] py-2 px-8 outline-none bg-white border border-[2px] dark:border-yellow-500 border-primary border-r-0 lg:w-[462px] ml-[2px]  placeholder:font-inter placeholder:text-gray-600 text-md leading-6' />
+            <div className='flex flex-1 items-center gap-20 min-w-0'>
+             <div className='rounded-full h-[44px] hidden lg:flex items-center flex-1 max-w-[850px]'>
+                <input type="text" placeholder='Search for Products' className='flex-1 min-w-0 dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full text-inter text-tcolor text-[14px] py-2 px-8 outline-none bg-white border-2 dark:border-yellow-500 border-primary border-r-0 ml-[2px] placeholder:font-inter placeholder:text-gray-600 leading-6'/>
               { catOpen && <div className='fixed inset-0 left-0 top-34  bg-black/10'/>}
                 <div className='relative' ref={categoryRef}>
                   <h2 className='dark:bg-[#212121] dark:text-gray-400 bg-white outline-none select-none border border-[2px]  border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
@@ -78,7 +78,7 @@ const Searchbar = () => {
                   <Search size={23} className='cursor-pointer' />
                 </div>
               </div>
-              <div className='relative flex lg:gap-9.5 w-full justify-end  gap-8 lg:pr-0 pr-2'>
+             <div className='relative flex lg:gap-9.5 lg:w-auto w-full justify-end gap-8 lg:pr-0 pr-2 shrink-0'>
                 <Link aria-label='compare products' to='#' className='searchbarIconhover hidden lg:block relative group' >
                 <GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' />
                  {/* Compare Tooltip  */}
