@@ -8,9 +8,19 @@ import Signup from "./pages/Signup"
 import Forgot from "./pages/Forgot"
 import Reset from "./pages/Reset"
 import TrackOrder from "./pages/TrackOrder"
+import { useEffect } from "react"
 
 
 function App() {
+  useEffect(() =>{
+    const handleTouch = () =>{
+        document.classList.add('touch')
+    }
+    document.documentElement.addEventListener('touchstart', handleTouch, { once: true } )
+    return () =>{
+        document.documentElement.removeEventListener('touchstart', handleTouch)
+    }
+  })
 
   return (
     <>

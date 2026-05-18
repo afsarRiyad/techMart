@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router';
+
 
 const FeatureCard = ({
        img,
@@ -14,11 +15,13 @@ const FeatureCard = ({
        decimal,
        discount,
 }) => {
+
     return (
+    
         <>
-            <div className='bg-[#F5F5F5] flex pl-3 py-3 lg:w-auto xl:gap-2 gap-8 items-center  snap-start shrink-0 rounded-lg dark:text-white dark:bg-[#212121]'>
-                <div className='w-34 sm:w-48 lg:w-38  shrink-0 relative group overflow-hidden'>
-                    <img draggable={false} src={img} alt={alt} className='transform-gpu group-hover:scale-110 transition-transform duration-500 ease-out will-change-transform cursor-pointer group-hover:rotate-6 }' />
+            <div className='bg-[#F5F5F5] flex pl-3 py-3 lg:w-auto sm:gap-8 xl:gap-2 gap-2 items-center  snap-start shrink-0 rounded-lg dark:text-white dark:bg-[#212121] '>
+                <div className='w-32 sm:w-48 lg:w-38  shrink-0 relative overflow-hidden group'>
+                    <img draggable={false} src={img} alt={alt} className='w-full h-full object-cover transform-gpu group-hover:scale-110 transition-transform duration-500 ease-out will-change-transform cursor-pointer group-hover:rotate-6 touch:scale-110 touch:rotate-6' />
                     <span className='absolute inset-0 bg-black/5 dark:bg-white/5 cursor-pointer group-hover:bg-transparent transition-colors duration-300 ease-in-out' />
                 </div>
                 

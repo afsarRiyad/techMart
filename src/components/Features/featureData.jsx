@@ -4,6 +4,7 @@ import laptop from '../../assets/images/features/laptop.webp'
 import roundcamera from '../../assets/images/features/360camera.webp'
 
 export const featureData = [
+    
     {
         id: 1,
         img: camera,
@@ -44,7 +45,7 @@ export const featureData = [
         variant: 'discount',
         title: 'the new',
         highlight: '360 cameras',
-        discount: '70',
+        discount: '25',
 
-    }
+    },
 ]
