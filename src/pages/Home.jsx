@@ -1,4 +1,4 @@
-import Features from '../components/Features';
+import Features from '../components/Features/Features';
 import HeroSlider from '../components/HeroSlider/HeroSlider';
 import Container from './../components/layouts/Container';
 import Reset from './Reset';
