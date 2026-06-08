@@ -52,7 +52,7 @@ const Searchbar = () => {
             <Search size={25} className='cursor-pointer absolute right-11' />
           </div>
           <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-5 items-center lg:bg-white '>
-            <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-between items-center ps-2'>
+            <div className='lg:w-[300px] lg:flex lg:flex-ro flex flex-row-reverse justify-between items-center '>
               <Link aria-label='gok to homepage' to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 ' /></Link>
               <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pr-6' /></Link>
               <Hamberger className='pl-5' />
