@@ -8,6 +8,7 @@ import Signup from "./pages/Signup"
 import Forgot from "./pages/Forgot"
 import Reset from "./pages/Reset"
 import TrackOrder from "./pages/TrackOrder"
+import Terms from "./pages/Terms"
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/account/forgot-password" element={<Forgot/>}/>
         <Route path="/account/reset-password" element={<Reset/>}/>
         <Route path="/track-order" element={<TrackOrder/>}/>
+        <Route path="/terms-and-conditions" element={<Terms/>}/>
       </Route>
     </Routes>
     </>

@@ -57,7 +57,7 @@ const Footer = () => {
                             <li className='footerLi'><Link to='#' className='footerLink'>Contact Us</Link></li>
 
                             <li className='footerLi'><Link to='#' className='footerLink'>About Us</Link></li>
-                            <li className='footerLi'><Link to='#' className='footerLink'>Terms and Conditions</Link></li>
+                            <li className='footerLi'><Link to='/terms-and-conditions' className='footerLink'>Terms and Conditions</Link></li>
                             <li className='footerLi'><Link to='#' className='footerLink'>Career</Link></li>
                             <li className='footerLi'><Link to='#' className='footerLink'>Brands</Link></li>
                         </ul>
