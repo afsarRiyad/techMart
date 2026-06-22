@@ -3,7 +3,7 @@
 @custom-variant touch (&:where(.touch, .touch *));
 @layer base {
   body {
-    @apply bg-white dark:bg-[#181818] ;
+    @apply bg-white dark:bg-[#181818]  ;
   }
 body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     transition-property: background-color, border-color, color, fill, stroke;
@@ -319,3 +319,12 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     @apply focus:ring-4 focus:ring-blue-400/10  focus:border-blue-500
 }
 
+.featuredSpan{
+    @apply font-bold relative dark:border-b-[#181818] after:absolute after:content-[""] after:border-[10px] after:border-t-primary after:-translate-x-1/2 after:left-1/2 after:-bottom-[31px] after:border-white dark:after:border-[#181818] dark:after:border-t-primary before:content-[""] before:absolute before:left-1/2 before:-translate-x-1/2 before:-bottom-[11px] before:w-20 before:h-1 before:bg-primary dark:before:bg-primary
+}
+
+.swiper-pagination .swiper-pagination-bullet .swiper-pagination-bullet.active{
+    background-color: yellow;
+    color: #FED700;
+    width: 10px;
+}

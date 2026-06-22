@@ -30,13 +30,13 @@ const Hamberger = ({ className = '' }) => {
         <div className='bg-black/40 fixed inset-0 z-50 h-screen' onClick={()=> setSideDrawerOpen(false)}/>
       }
       <div ref={menuRef} >
-        <div className={`fixed inset-0 -translate-x-full bg-white h-screen z-50 pb-4 sm:w-100 w-80 transform transition-all ease-in-out duration-300 shadow-xl overflow-y-auto ${sideDrawerOpen && 'translate-x-0'}`}>
+        <div className={`fixed inset-0 dark:bg-[#181818]  -translate-x-full bg-white h-screen z-50 pb-4 sm:w-100 w-80 transform transition-all ease-in-out duration-300 shadow-xl overflow-y-auto ${sideDrawerOpen && 'translate-x-0'}`}>
           <Logo className='w-25 h-auto pt-6 pb-2 px-2' /> <X className='absolute cursor-pointer right-4 top-6' onClick={()=> setSideDrawerOpen(false)}/>
           <ul>
             {
               menu.map((item, index) => (
-                <li key={index} className={`sm:px-3 px-1 select-none text-[14px] sm:text-[#333E48] text-gray-900 font-inter border-b border-b-gray-200  py-1 ${item.hasChild === false && 'hover:bg-gray-100 hover:text-black transition-all'} ${activeItem == item && 'bg-[#FED700] text-black'}`}>
-                  <button aria-label={`Toggle ${item.name}`} className={`flex accordionHeading items-center justify-between cursor-pointer w-full h-[38px] pr-2  transition-all hover:text-black`}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
+                <li key={index} className={`sm:px-3 dark:text-white px-1 select-none text-[14px] sm:text-[#333E48] text-gray-900 font-inter border-b border-b-gray-200  py-1 ${item.hasChild === false && 'hover:bg-gray-100 hover:text-black transition-all'} ${activeItem == item && 'bg-[#FED700] text-black'}`}>
+                  <button aria-label={`Toggle ${item.name}`} className={`flex accordionHeading items-center justify-between cursor-pointer w-full h-[38px] pr-2  transition-all hover:text-black `}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
                     {item.name}
                     <span>{item.hasChild === false ? '' : <ChevronDown className={`${activeIndex === index ? 'rotate-180' : 'rotate-0'} transform transition-transform duration-300 `} />}</span>
                   </button>

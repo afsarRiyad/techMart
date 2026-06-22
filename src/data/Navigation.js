@@ -258,7 +258,7 @@ export const mobileFooterData = [
         name: 'Customer Care',
         url: '',
         children: [
-            { name: 'Track your Orders', hasChild: false, url: '' },
+            { name: 'Track your Orders', hasChild: false, url: '/track-order' },
             { name: 'Returns/Exchanges', hasChild: false, url: '' },
             { name: 'Product support', hasChild: false, url: '' },
             { name: 'Make a Complaint', hasChild: false, url: '' },

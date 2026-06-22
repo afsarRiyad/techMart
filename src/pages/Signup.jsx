@@ -45,7 +45,7 @@ const Signup = () => {
           </div>
           <div className='flex gap-2 items-start '>
             <input type="checkbox" id='signUp' className='mt-1 accent-blue-500/75'/>
-            <label htmlFor="signUp" className='text-[15px] text-tcolor font-inter select-none dark:text-gray-300'>Are you agree to Electro <Link to='/termsofcondition' className='text-blue-500 hover:underline'>Terms of Condition</Link> and <Link to='/privacypolicy' className='text-blue-500 hover:underline'>Privacy Policy</Link> </label>
+            <label htmlFor="signUp" className='text-[15px] text-tcolor font-inter select-none dark:text-gray-300'>Are you agree to Electro <Link to='/terms-and-conditions' className='text-blue-500 hover:underline'>Terms of Condition</Link> and <Link to='/privacypolicy' className='text-blue-500 hover:underline'>Privacy Policy</Link> </label>
           </div>
           <div className='pt-2 relative'>
             <button className='bg-primary dark:bg-yellow-500 group w-full text-tcolor font-semibold py-3 px-4 rounded-sm hover:bg-blue-600 hover:text-white cursor-pointer transition-all duration-300 ease-in-out select-none'>Sign Up </button>

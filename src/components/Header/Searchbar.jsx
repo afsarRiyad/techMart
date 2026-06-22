@@ -2,15 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import Logo from '../../assets/images/logo.svg?react'
 import LogoWhite from '../../assets/images/LogoWhite.svg?react'
 import Container from '../layouts/Container'
-import Hamberger from '../Hamberger'
+import Hamberger from '../Sidebar'
 import { ChevronsUpDown, Search, GitCompareArrows, Heart, UserRound, Handbag, X } from 'lucide-react';
 import useOutsideClick from '../../hooks/outsideClick';
 import { Link } from 'react-router';
-import { categories } from '../../data/Navigation'
 import useScrollBlocker from '../../hooks/scrollBlocker';
+import axios from 'axios'
 
 const Searchbar = () => {
   const [category, setCategory] = useState('All Categories')
+  const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([])
   const [catOpen, setCatOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [mobileSearch, setMobileSearch] = useState(false)
@@ -36,6 +38,19 @@ const Searchbar = () => {
     }
   }, [])
 
+  useEffect(()=>{
+
+       const fetchCat=async()=>{
+         try { 
+            let res = await axios.get('https://electrobackend-1.onrender.com/api/categories')
+            setCategories(res.data.data)   
+         } catch (error) {
+            setError('Failed to load categories')
+         } 
+      } 
+      fetchCat()
+  },[])
+
   return (
     <>
       <div className={`z-50 lg:dark:bg-darkBg transition-all duration-300 lg: ${sticky
@@ -51,22 +66,26 @@ const Searchbar = () => {
             {search !== '' && <X size={18} className=' absolute right-21 cursor-pointer' onClick={() => setSearch('')} />}
             <Search size={25} className='cursor-pointer absolute right-11' />
           </div>
+          {/* mobile searchbar ends here  */}
           <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-5 items-center lg:bg-white '>
-            <div className='lg:w-[300px] lg:flex lg:flex-ro flex flex-row-reverse justify-between items-center '>
-              <Link aria-label='gok to homepage' to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 ' /></Link>
-              <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pr-6' /></Link>
-              <Hamberger className='pl-5' />
+            <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-between items-center '>
+              <Link aria-label='gok to homepage' to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 lg:ps-0' /></Link>
+              <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pl-10' /></Link>
+              <Hamberger  />
             </div>
             <div className='flex flex-1 items-center gap-20 min-w-0'>
              <div className='rounded-full h-[44px] hidden lg:flex items-center flex-1 max-w-[850px]'>
                 <input type="text" placeholder='Search for Products' className='flex-1 min-w-0 dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full text-inter text-tcolor text-[14px] py-2 px-8 outline-none bg-white border-2 dark:border-yellow-500 border-primary border-r-0 ml-[2px] placeholder:font-inter placeholder:text-gray-600 leading-6'/>
               { catOpen && <div className='fixed inset-0 left-0 top-34  bg-black/10'/>}
+               {/* all categories starts here  */}
                 <div className='relative' ref={categoryRef}>
-                  <h2 className='dark:bg-[#212121] dark:text-gray-400 bg-white outline-none select-none border border-[2px]  border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
-                  <ul className={`absolute top-full border bg-white shadow-md  border-gray-200  transition ${catOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none '}`}>
+                  <h2 className='dark:bg-[#212121]  dark:text-gray-400 bg-white outline-none select-none border border-[2px]  border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
+                  <ul className={`absolute top-full border bg-white shadow-md dark:bg-[#181818]  dark:border-gray-500 border-gray-200  transition ${catOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none '}`}>
+                    {error && 
+                         <p>{error}</p>}
                     {
-                      categories.map((item, index) => (
-                        <li key={index} className={`level0 ${category === item.name && 'bg-blue-500 text-white'}`} onClick={() => { setCategory(item.name); setCatOpen(false) }}>
+                      categories?.map((item, index) => (
+                        <li key={index} className={`level0 dark:text-gray-100 ${category === item.name && 'bg-blue-500 text-white'}`} onClick={() => { setCategory(item.name); setCatOpen(false) }}>
                           <Link to={item.url || '#'}>{item.name}</Link>
                         </li>
                       ))
@@ -74,6 +93,7 @@ const Searchbar = () => {
                   </ul>
                   <ChevronsUpDown size={15} className='absolute top-4  right-4 text-gray-500 pointer-events-none' />
                 </div>
+              {/* all categories ends here  */}
                 <div className='w-16 h-11  bg-primary dark:bg-yellow-500 flex justify-center items-center rounded-r-full'>
                   <Search size={23} className='cursor-pointer' />
                 </div>
