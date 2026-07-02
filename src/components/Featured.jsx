@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { FaOpencart } from "react-icons/fa6";
 import {  GitCompareArrows, Heart  } from 'lucide-react';
 import Container from './layouts/Container';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 
 const Featured = () => {
     const [sections, setSections] = useState([])
@@ -37,10 +41,32 @@ const Featured = () => {
         <span onClick={()=>setShow(2)} className={`${show === 2 && 'featuredSpan'} dark:text-gray-300 cursor-pointer `}>Top Rated</span>
     </div>
         {currentSection && (
-            <div className='pb-5'>
-              <div className='grid xl:grid-cols-6 md:grid-cols-4 overflow-hidde'>
-                {currentSection.products && currentSection.products.slice(0,6).map(pro =>(
-                    <div key={pro.id} className={`relative after:content-[''] after:absolute after:top-5 after:right-0 after:h-75 after:w-[1px] after:bg-gray-200 last:after:hidden px-4 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] py-2 rounded-md transition-all duration-10 hover:text-black0`}>
+            <div className=''>
+              <div className=''>
+                <Swiper
+                   modules={[Pagination]}
+    pagination={{ dynamicBullets: true, clickable: true }}
+    breakpoints={{
+      320: {
+        slidesPerView: 2,
+        spaceBetween: 10,
+      },
+      768: {
+        slidesPerView: 4,
+        spaceBetween: 15,
+      },
+      1280: {
+        slidesPerView: 6,
+        spaceBetween: 1,
+      },
+    }}
+    className="pb-5"
+                 >
+                {currentSection.products && currentSection.products.slice(0,6).map((pro, index) =>(
+                 <SwiperSlide key={pro.id} className='pb-6 '>
+                    <div key={pro.id} className={`relative  ${index !== currentSection.products.length - 1 ? "after:content-[''] after:absolute after:right-0 after:top-5 after:h-[75%] after:w-[1px] after:bg-gray-200 "
+          : ""
+      }  px-4 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] py-2`}>
                         <div className='flex flex-wrap items-center line-clamp-2 min-h-[35px] '>
                             {pro.categories?.slice(0,2).map((tag, index)=>(
                             <p key={tag} className='text-[12px] pr-1 block text-gray-500 font-inter cursor-pointer hover:text-gray-500 hover:font-semibold '>{tag}
@@ -79,7 +105,9 @@ const Featured = () => {
                         </div>
                      </div>
                     </div>
+                </SwiperSlide>
                 ))}
+              </Swiper>
               </div>
             </div>
   ) }
