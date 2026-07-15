@@ -247,12 +247,14 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
     font-style: normal;
     src: url(./fonts/Roboto/static/Roboto-Regular.ttf) format("truetype");
+    font-display: swap;
 }
 @font-face {
     font-family: "inter";
     font-weight: 400;
     font-style: normal;
     src: url(./fonts/Inter/static/Inter_18pt-Regular.ttf) format("truetype");
+    font-display: swap;
 }
 
 .myLabel{

@@ -7,30 +7,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
+import { useFetchData } from '../hooks/Fetchdata';
 
 const Featured = () => {
-    const [sections, setSections] = useState([])
+
     const [show, setShow]= useState(0)
-    const [errors, setErrors] = useState('')
-    const [loading, setLoading] = useState(true)
-    useEffect(()=>{
-        const fetchData = async()=>{
-             try {
-                setLoading(true)
-                const res = await axios.get('https://electrobackend-1.onrender.com/api/home-v3')
-                setSections(res.data.data.sections)
-                console.log(Object.values(res.data));
-                
-             } catch (error) {
-                console.error(error);
-                setErrors('Error loading products')
-             } finally{
-                setLoading(false)
-             }
-        }
-        fetchData()
-    },[])
-    const currentSection = sections[show]
+
+    const {data:sections, loading, errs:errors} = useFetchData('/api/home-v3')
+
+    
+    const currentSection = sections?.data?.sections[show]
     if (loading) return <p className="text-center p-10 text-gray-500 font-inter">Loading items...</p>
     if (errors) return <p className="text-center p-10 text-red-500 font-inter">{errors}</p>
   return (
@@ -41,23 +27,21 @@ const Featured = () => {
         <span onClick={()=>setShow(2)} className={`${show === 2 && 'featuredSpan'} dark:text-gray-300 cursor-pointer `}>Top Rated</span>
     </div>
         {currentSection && (
-            <div className=''>
-              <div className=''>
                 <Swiper
                    modules={[Pagination]}
     pagination={{ dynamicBullets: true, clickable: true }}
     breakpoints={{
       320: {
         slidesPerView: 2,
-        spaceBetween: 10,
+        spaceBetween: 0,
       },
       768: {
         slidesPerView: 4,
-        spaceBetween: 15,
+        spaceBetween: 0,
       },
       1280: {
         slidesPerView: 6,
-        spaceBetween: 1,
+        spaceBetween: 0,
       },
     }}
     className="pb-5"
@@ -76,10 +60,11 @@ const Featured = () => {
                         </div>
                         <p className='text-[#0062BD] text-[16px] leading-tight min-h-[45px] pt-1 line-clamp-2 font-semibold'>{pro.name}</p>
                       <div className='h-50 flex items-center justify-center overflow-hidden'>
-                        <img src={pro.image} alt="" className='max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform duration-300 group-hover/card:scale-105' />
+                        <img loading="lazy" src={pro.image} alt="" className='max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
                       </div>
                      <div className='flex justify-between items-center pb-2'>
                         <p className='pt-3 text-tcolor text-[20px] '>${pro.price}</p>
+                        {pro.salePrice && <p className='pt-3 text-gray-500 text-[14px] line-through'>${pro.salePrice}</p>}
                         <div className='group relative'>
                         <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
                             <FaOpencart size={25} className='text-white' />
@@ -94,7 +79,7 @@ const Featured = () => {
                     {/* tooltip ends here  */}
                     </div>
                      </div>
-                     <div className='flex justify-between text-[12px] text-gray-500 pt-3 border-t border-t-gray-200 pb-1 opacity-0 group-hover/card:opacity-100 transition-all duration-150'>
+                     <div className='flex justify-between text-[12px] text-gray-500 pt-3 border-t border-t-gray-200 pb-1 opacity-0 group-hover/card:opacity-100 '>
                         <div className='flex items-center gap-1 cursor-pointer hover:text-black'>
                             <Heart />
                             <span>Wishlist</span>
@@ -108,8 +93,6 @@ const Featured = () => {
                 </SwiperSlide>
                 ))}
               </Swiper>
-              </div>
-            </div>
   ) }
     </Container>
   )

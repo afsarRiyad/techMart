@@ -9,6 +9,7 @@ import  Copyright  from '../footer/Copyright'
 import MobileFooter from '../footer/MobileFooter'
 import Breadcrumbs from '../Breadcrumbs'
 import DarkMode from '../DarkMode'
+import SponsorLogo from '../SponsorLogo'
 
 
 const  MainLayout= () => {
@@ -21,6 +22,7 @@ const  MainLayout= () => {
      <DarkMode/>
     {direction.pathname !== '/' &&  <Breadcrumbs/>}
      <Outlet/>
+     <SponsorLogo/>
      <FooterTopbar/>
      <MobileFooter/>
      <Footer/>
