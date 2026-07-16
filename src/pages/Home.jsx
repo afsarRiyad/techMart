@@ -1,6 +1,8 @@
 import Featured from '../components/Featured';
 import Features from '../components/Features/Features';
 import HeroSlider from '../components/HeroSlider/HeroSlider';
+import LaptopsPc from '../components/LaptopsPc';
+import ProductShowcase from '../components/ProductShowcase';
 import PromotionalCat from '../components/PromotionalCat';
 import ValueProps from '../components/ValueProps';
 import Container from './../components/layouts/Container';
@@ -14,6 +16,7 @@ const Home = () => {
         <ValueProps/>
         <Featured/>
         <PromotionalCat/>
+        <LaptopsPc/>
          <h1 className=''>SCROLL DOWN</h1>
     </>
   )

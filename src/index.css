@@ -66,12 +66,10 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 }
 @media (hover: hover){
     .accordionHeading:hover{
-        @apply translate-x-1 text-black;
+        @apply  text-black;
     }
 }
-.accordionHeading:active{
-    @apply translate-x-1 text-black scale-[0.97]
-}
+
 .mobileMenuLink {
     @apply relative text-gray-600 transition-all duration-300 select-none;
     -webkit-tap-highlight-color: transparent;
