@@ -330,3 +330,18 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     color: #FED700;
     width: 10px;
 }
+
+.promotional-swiper .swiper-pagination {
+  bottom: -20px !important;
+}
+
+.swiper-pagination-bullets-dynamic {
+
+    
+}
+
+.swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-horizontal.swiper-pagination-bullets {
+    &.swiper-pagination-bullets-dynamic {
+        bottom: 0px;
+    }
+}
