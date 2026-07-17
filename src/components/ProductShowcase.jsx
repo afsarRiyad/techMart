@@ -13,18 +13,18 @@ import { Pagination } from 'swiper/modules';
 import { Grid, Navigation } from "swiper/modules";
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
-const ProductShowcase = ({data, loading, errs}) => {
+const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
         if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
         if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
   return (
     <div>
        <Container>
-                <div className='flex py-15 z-50 '>
+                <div className='flex py-2 z-50 '>
                     <div className=' w-full '>
                         <div className='border-b border-b-gray-300 mb-5 relative'>
                             <h1 className='font-inter text-[22px] text-tcolor w-70 border-b-[2px] select-none border-b-primary pb-3'>{data?.title}</h1>
-                            <ChevronLeft size={30} className='absolute top-1 text-gray-500 cursor-pointer right-8 prev-l disabled:opacity-50' />
-                            <ChevronRight size={30} className='absolute top-1 text-gray-500 cursor-pointer right-2 prev-r disabled:opacity-50' />
+                            <ChevronLeft size={30} className={`absolute top-1 text-gray-500 cursor-pointer right-8 prev-${type} disabled:opacity-50`} />
+                            <ChevronRight size={30} className={`absolute top-1 text-gray-500 cursor-pointer right-2 next-${type} prev-2 disabled:opacity-50`} />
                         </div>
                         <Swiper
                             modules={[Grid, Pagination, Navigation]}
@@ -34,8 +34,8 @@ const ProductShowcase = ({data, loading, errs}) => {
                                 fill: "row",
                             }}
                             navigation={{
-                                prevEl: ".prev-l",
-                                nextEl: ".prev-r",
+                                prevEl: `.prev-${type}` ,
+                                nextEl: `.next-${type}`,
                             }}
                             breakpoints={{
                                 320: {
@@ -50,10 +50,10 @@ const ProductShowcase = ({data, loading, errs}) => {
                                     },
                                 },
                                 1280: {
-                                    slidesPerView: 3,
+                                    slidesPerView: trending ? 4 : 3,
                                     spaceBetween: 0,
                                     grid: {
-                                        rows: 2,
+                                        rows:  trending ? 1 : 2,
                                     },
                                 },
                             }}
@@ -61,9 +61,7 @@ const ProductShowcase = ({data, loading, errs}) => {
                         >
                             {data?.products && data.products.map((pro, index) => (
                                 <SwiperSlide key={index} className='hover:z-30 '>
-                                    <div className={`relative flex py-3 bg-white mr-1 mb-2 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)]  ${index === 5 ? "border-b-0" : "border-b border-b-gray-300 md:border-b-0"}
-                      ${(index + 1) % 2 !== 0 ? "md:border-r md:border-r-gray-300" : ""}
-                      ${(index + 1) % 3 !== 0 ? "xl:border-r xl:border-r-gray-300" : "xl:border-r-0"}`}>
+                                    <div className={`relative flex py-3 bg-white mr-1  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-b border-b-gray-300 md:border-b-0 md:border-r md:border-r-gray-300 ${trending ? 'mb-6' : 'mb-2'}`}>
                                         {pro.image &&
                                             <div className='w-[35%]'>
                                                 <img src={pro.image} alt='img' className='  object-cover pl-2 ' />
@@ -88,7 +86,7 @@ const ProductShowcase = ({data, loading, errs}) => {
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
-                                                <div className='absolute left-0 flex justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-[0_8px_16px_rgba(0,0,0,0.15)] before:absolute before:top-0 before:right-1 before:w-55 before:border-t-2 before:border-primary before:content-[""] '>
+                                                <div className={`absolute left-0 ${!trending ? 'flex' : ''}  justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-[0_8px_16px_rgba(0,0,0,0.15)] before:absolute before:top-0 before:right-1  ${trending ? 'before:w-40' : 'before:w-55'} before:border-t-2 before:border-primary before:content-[""]`}>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
                                                         <Heart size={18} />
                                                         <span className='text-sm pl-2'>Wishlist</span>

@@ -6,11 +6,10 @@ import ProductShowcase from './ProductShowcase'
 const LaptopsPc = () => {
      const { data: sec, loading, errs } = useFetchData('/api/home-v3')
     const section = sec?.data?.sections?.find(cat => cat.id === 'laptops-and-computers') || [];
-    console.log(section);
     
   return (
     <Container>
-        <ProductShowcase data={section} loading={loading} errs={errs}/>
+        <ProductShowcase data={section} loading={loading} errs={errs } type={'pcs'}/>
     </Container>
   )
 }

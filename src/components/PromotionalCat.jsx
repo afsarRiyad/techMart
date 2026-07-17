@@ -17,7 +17,6 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 const PromotionalCat = () => {
     const { data: sec, loading, errs } = useFetchData('/api/home-v3')
     const section = sec?.data?.sections?.find(cat => cat.id === 'television-and-entertainment')
-    console.log(section);
     if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
     if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
     return (
