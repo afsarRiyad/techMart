@@ -1,10 +1,10 @@
 import React from 'react'
-import background from '../assets/images/ProductBackground.webp'
-import Container from './layouts/Container'
-import { useFetchData } from '../hooks/Fetchdata'
+import background from '../../assets/images/ProductBackground.webp'
+import Container from '../layouts/Container'
+import { useFetchData } from '../../hooks/Fetchdata'
 import { FaOpencart } from "react-icons/fa6";
 import { GitCompareArrows, Heart } from 'lucide-react';
-import Tooltip from './ui/Tooltip'
+import Tooltip from './Tooltip'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import "swiper/css/grid";
@@ -17,7 +17,6 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
         if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
         if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
   return (
-    <div>
        <Container>
                 <div className='flex py-2 z-50 '>
                     <div className=' w-full '>
@@ -86,7 +85,7 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
-                                                <div className={`absolute left-0 ${!trending ? 'flex' : ''}  justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-[0_8px_16px_rgba(0,0,0,0.15)] before:absolute before:top-0 before:right-1  ${trending ? 'before:w-40' : 'before:w-55'} before:border-t-2 before:border-primary before:content-[""]`}>
+                                                <div className={`absolute left-0 ${!trending ? 'flex' : ''}  justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-1  ${trending ? 'before:w-40' : 'before:w-65'} before:border-t-2 before:border-primary before:content-[""]`}>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
                                                         <Heart size={18} />
                                                         <span className='text-sm pl-2'>Wishlist</span>
@@ -104,7 +103,7 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                     </div>
                 </div>
             </Container>
-    </div>
+
   )
 }
 

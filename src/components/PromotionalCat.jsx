@@ -69,12 +69,11 @@ const PromotionalCat = () => {
                                 <SwiperSlide key={index} >
                                     <div className='relative flex py-3 bg-white mr-1 mb-2 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] '>
                                         {pro.image &&
-                                            <div className='w-[40%] h-full flex items-center'>
+                                            <div className='w-[35%] h-full flex items-center'>
                                                 <img src={pro.image} className=' object-cover pl-1 ' />
                                             </div>
                                         }
-                                        <div>
-                                            <div className='xl:px-2 px-1'>
+                                            <div className='xl:px-2 px-1 w-[65%]'>
                                                 <div className='flex items-center pt-1'>
                                                     {pro?.categories?.map((tag, index) => (
                                                         <p key={index} className='truncate text-[12px] pr-1 block text-gray-500 font-inter cursor-pointer hover:text-gray-500 hover:font-semibold '>{tag}{index < pro.categories.length - 1 && ','}</p>
@@ -93,7 +92,7 @@ const PromotionalCat = () => {
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
-                                                <div className='absolute left-0 right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-20 shadow-[0_8px_16px_rgba(0,0,0,0.15)] before:absolute before:top-0 before:right-1 before:w-48 before:border-t-2 before:border-primary before:content-[""]'>
+                                                <div className='absolute left-0 right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-20 shadow-xl before:absolute before:top-0 before:right-1 before:w-48 before:border-t-2 before:border-primary before:content-[""]'>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
                                                         <Heart size={18} />
                                                         <span className='text-sm pl-2'>Wishlist</span>
@@ -104,7 +103,6 @@ const PromotionalCat = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
                                     </div>
                                 </SwiperSlide>
                             ))}

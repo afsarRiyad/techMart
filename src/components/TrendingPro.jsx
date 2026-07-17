@@ -1,7 +1,6 @@
 import React from 'react'
-import Container from './layouts/Container'
 import { useFetchData } from '../hooks/Fetchdata'
-import ProductShowcase from './ProductShowcase'
+import ProductShowcase from './ui/ProductShowcase'
 
 const TrendingPro = () => {
     const {data: products, loading, errs} = useFetchData('/api/products')
@@ -10,9 +9,9 @@ const TrendingPro = () => {
                            ),
                         };
   return (
-    <Container>
+    <>
       <ProductShowcase data={trendingPro} loading={loading} errs={errs} trending={true} type={'trending'}/>
-    </Container>
+    </>
   )
 }
 
