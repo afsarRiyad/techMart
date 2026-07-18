@@ -8,8 +8,6 @@ const Recommendation = () => {
           title: 'Recommendation for you',
           products: pro.data,
     }
-    console.log(pro);
-    
   return (
     <div>
       <ProShocaseTwo data={allPro} type='Recommendation' />

@@ -16,9 +16,8 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
      if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
         if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
   return (
-   <div className={`${type === 'bestSellers' && 'bg-[#F4F4F4] pt-8'}`}>
        <Container>
-                <div className='flex py-2 z-50 '>
+                <div className='flex py-2 z-50 pt-8'>
                     <div className=' w-full '>
                         <div className={`border-b border-b-gray-300 mb-5 relative  }`}>
                             <h1 className='font-inter text-[22px] text-tcolor w-70 border-b-[2px] select-none border-b-primary pb-3'>{data?.title}</h1>
@@ -38,7 +37,7 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                                     spaceBetween: 0,
                                 },
                                 768: {
-                                    slidesPerView: 2,
+                                    slidesPerView: 4,
                                     spaceBetween: 0,
                                 },
                                 1280: {
@@ -50,7 +49,7 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                         >
                             {data?.products && data.products.map((pro, index) => (
                                 <SwiperSlide key={index} className='hover:z-30 '>
-                                    <div className={`relative  py-3 bg-white mr-1  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-r border-r-gray-300 mb-2 cursor-pointer `}>
+                                    <div className={`relative  py-3 bg-white   group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-r border-r-gray-300 mb-2 cursor-pointer `}>
                                             <div className=' px-5 '>
                                                 <div className='flex items-center pt-1'>
                                                     {pro?.categories?.map((tag, index) => (
@@ -73,7 +72,7 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
-                                                <div className={`absolute left-0  justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5  before:w-47 lg:before:w-40 before:border-t-2 before:border-gray-200 before:content-[""]`}>
+                                                <div className={`absolute left-0  justify-center right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5  before:w-47 lg:before:w-40 before:border-t-2 before:border-gray-200 before:content-[""]`}>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
                                                         <Heart size={18} />
                                                         <span className='text-sm pl-2'>Wishlist</span>
@@ -91,7 +90,6 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                     </div>
                 </div>
             </Container>
-    </div>
   )
 }
 

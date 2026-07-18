@@ -29,7 +29,7 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                             modules={[Grid, Pagination, Navigation]}
                             pagination={{ dynamicBullets: true, clickable: true }}
                             grid={{
-                                rows: 6,
+                                rows: 3,
                                 fill: "row",
                             }}
                             navigation={{
@@ -60,7 +60,7 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                         >
                             {data?.products && data.products.map((pro, index) => (
                                 <SwiperSlide key={index} className='hover:z-30 '>
-                                    <div className={`relative flex py-3 bg-white mr-1  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-b border-b-gray-300 md:border-b-0 md:border-r md:border-r-gray-300 ${trending ? 'mb-6' : 'mb-2'}`}>
+                                    <div className={`relative flex py-3 bg-white  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-b border-b-gray-300 md:border-b-0 md:border-r md:border-r-gray-300 ${trending ? 'mb-6' : 'mb-2'}`}>
                                         {pro.image &&
                                             <div className='w-[35%]'>
                                                 <img src={pro.image} alt='img' className='  object-cover pl-2 ' />
