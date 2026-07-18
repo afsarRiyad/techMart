@@ -329,17 +329,10 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     width: 10px;
 }
 
-.promotional-swiper .swiper-pagination {
-  bottom: -20px !important;
-}
 
-.swiper-pagination-bullets-dynamic {
 
-    
-}
-
-.swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-horizontal.swiper-pagination-bullets {
-    &.swiper-pagination-bullets-dynamic {
-        bottom: 0px;
-    }
+.swiper-pagination-bullet-active {
+  background-color: #FED700 !important;
+  width: 30px !important;
+  border-radius: 5px !important;
 }

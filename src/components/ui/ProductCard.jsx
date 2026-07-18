@@ -74,7 +74,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                             <img src={pro.image} alt="" className='w-75 h-auto' />
                                         </div>
                                         <div className='flex flex-col items-center justify-center gap-4'>
-                                            <p className='text-[#0062BD] text-[16px]  leading-tight  pt-1  font-semibold line-clamp-2'>{pro.name}</p>
+                                            <p className='text-[#0062BD] text-[16px]  leading-tight  pt-1  font-semibold line-clamp-2 text-center'>{pro.name}</p>
                                             <div className=' font-inter'>
                                                 <span className='text-[#DC3545]  text-[30px]'>${(pro.salePrice).toFixed(2)}</span>
                                                 <span className='line-through text-[18px] text-gray-500 pl-2'>${(pro.regularPrice).toFixed(2)}</span>

@@ -57,7 +57,7 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                                                     ))}
                                                 </div>
                                                 {pro.name &&
-                                                    <span className='text-[#0062BD] text-[16px]  leading-tight  pt-2  font-semibold line-clamp-2'>{pro.name}</span>
+                                                    <span className='text-[#0062BD] text-[16px] min-h-12 leading-tight  pt-2  font-semibold line-clamp-2'>{pro.name}</span>
                                                 }
                                                  {pro.image &&
                                                 <img  loading="lazy" src={pro.image} alt='img' className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
