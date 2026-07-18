@@ -30,7 +30,7 @@ const logos = [
 
 const SponsorLogo = () => {
   return (
-   <Container className='py-12 relative'>
+   <Container className='pt-12 pb-8 relative'>
      <button className="custom-prev absolute xl:left-10 left-0 xl:top-21 top-20 z-10 disabled:opacity-50 cursor-pointer">
         <ChevronLeft />
       </button>

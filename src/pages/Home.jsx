@@ -26,7 +26,6 @@ const Home = () => {
         <Recommendation/>
         <Banner/>
         <TopCategories/>
-         <h1 className=''>SCROLL DOWN</h1>
     </>
   )
 }

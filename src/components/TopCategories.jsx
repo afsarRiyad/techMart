@@ -13,7 +13,7 @@ const TopCategories = () => {
     return (
         <div className='bg-[#F4F4F4]'>
             <Container>
-                <div className='flex pt-12 pb-14'>
+                <div className='flex md:pt-12 pt-6 md:pb-14 pb-8'>
                     <div className=' w-full '>
                         <div className={`border-b border-b-gray-300 mb-5 relative  }`}>
                             <h1 className='font-inter text-[22px] text-tcolor w-70 border-b-[2px]  border-b-primary pb-3'>{Categories?.title}</h1>
@@ -24,7 +24,7 @@ const TopCategories = () => {
                                        <div className='w-25 '>
                                          <img src={cat.image} className='' loading='lazy' alt={cat.name} />
                                        </div>
-                                        <span className='font-inter text-[14px] text-[#333E48]'>{cat.name}</span>
+                                        <span className='font-inter text-[14px] text-[#333E48] hover:text-black hover:underline'>{cat.name}</span>
                                     </div>
                                 ))}
                             </div>
