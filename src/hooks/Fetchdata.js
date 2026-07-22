@@ -27,3 +27,14 @@ export const useFetchData = (endpoint) =>{
      return { data, loading, errs };
 }
 
+
+ const signup = async ( formData) =>{
+  const res = await axios.post(`${API}/api/auth/signup`, formData);
+  return res.data
+}
+export default signup
+
+export const signin = async (formData) =>{
+  const res = await axios.post(`${API}/api/auth/login`, formData)
+  return res.data
+}

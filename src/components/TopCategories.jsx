@@ -20,7 +20,7 @@ const TopCategories = () => {
                         </div>
                             <div className='grid grid-cols-2 xl:grid-cols-5 gap-x-5 gap-y-4'>
                                 {Categories?.products?.data?.slice(0,10).map((cat, index)=>(
-                                    <div className='flex  items-center bg-white gap-3 cursor-pointer hover:shadow-lg rounded-xm px-1'>
+                                    <div key={cat.id} className='flex  items-center bg-white gap-3 cursor-pointer hover:shadow-lg rounded-xm px-1'>
                                        <div className='w-25 '>
                                          <img src={cat.image} className='' loading='lazy' alt={cat.name} />
                                        </div>

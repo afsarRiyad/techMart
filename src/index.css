@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant touch (&:where(.touch, .touch *));
+
 @layer base {
   body {
     @apply bg-white dark:bg-[#181818]  ;

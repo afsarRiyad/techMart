@@ -4,8 +4,8 @@ import Login from './Login'
 
 const MyAccount = () => {
   let user = localStorage.getItem('user')
-  if(user) return <Navigate to='/account' replace />;
-           return <Navigate to='/account/login' replace />;
+  if(user) return <Navigate to='/account/login' replace />;
+           return <Navigate to='/account/signup' replace />;
 
   return (
     <div>

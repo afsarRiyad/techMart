@@ -9,6 +9,7 @@ import Forgot from "./pages/Forgot"
 import Reset from "./pages/Reset"
 import TrackOrder from "./pages/TrackOrder"
 import Terms from "./pages/Terms"
+import { ToastContainer } from "react-toastify"
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
     <>
     <Routes>
       <Route element={<MainLayout/>}>
+      
         <Route path="/" element={<Home/>}/>
         <Route path="/account" element={<MyAccount/>}/>
         <Route path="/account/login" element={<Login/>}/>
@@ -28,6 +30,7 @@ function App() {
         <Route path="/terms-and-conditions" element={<Terms/>}/>
       </Route>
     </Routes>
+     <ToastContainer />
     </>
   )
 }
