@@ -50,7 +50,9 @@ const Signup = () => {
                 transition: Bounce,
               });
             }
-            localStorage.setItem("user", JSON.stringify(data.user))
+            localStorage.setItem("user", JSON.stringify(data.data))
+            console.log(data.data);
+            
             setTimeout(() => {
                  navigate("/account/login", { replace: true });
                    }, 1500);

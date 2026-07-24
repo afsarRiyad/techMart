@@ -38,3 +38,20 @@ export const signin = async (formData) =>{
   const res = await axios.post(`${API}/api/auth/login`, formData)
   return res.data
 }
+
+export const useGetUser = async (endpoint) =>{
+  const [data, setData] = useState([])
+  const [errs, setErrs] = useState('')
+  useEffect(()=>{
+     const getData = async()=>{
+       try {
+        const res = await axios.get(`${API}${endpoint}`)
+        setData(res.data)
+       } catch (error) {
+        setErrs(error.response.data)
+       }
+     }
+     getData()
+  },[endpoint])
+  return {data, errs} 
+}

@@ -8,6 +8,7 @@ import {signin}  from '../hooks/Fetchdata';
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
 const Login = () => {
+
   const navigate = useNavigate()
   const [errs, setErrs] = useState({})
   const [touched, setTouched] = useState({})
@@ -32,7 +33,9 @@ const Login = () => {
                         theme: "light",
                         transition: Bounce,
                         });
-              navigate("/", {replace:true})
+                        localStorage.setItem("user", JSON.stringify(data.data))
+              navigate("/account", {replace:true})
+            
        } catch (error) {
   const errs = error.response?.data;
   errs?.errors?.forEach(errors => {
