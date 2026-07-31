@@ -4,8 +4,9 @@ import { Link, Navigate, useNavigate  } from 'react-router';
 import { CircleAlert, CircleAlertIcon, Eye, EyeOff   } from 'lucide-react';
 import Apple from '../assets/images/apple-logo.svg?react'
 import Goolgle from '../assets/images/google.svg?react'
-import {signin}  from '../hooks/Fetchdata';
+// import {signin}  from '../hooks/Fetchdata';
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import { apiCustomer } from '../api/apiCustomer';
 
 const Login = () => {
 
@@ -21,8 +22,8 @@ const Login = () => {
     setErrs({})
     e.preventDefault()
        try {
-        const data = await signin(formData)
-        toast.success(data.message, {
+        const data = await apiCustomer.post('/api/auth/login',formData)
+        toast.success(data.data?.message, {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -33,9 +34,9 @@ const Login = () => {
                         theme: "light",
                         transition: Bounce,
                         });
-                        localStorage.setItem("user", JSON.stringify(data.data))
-              navigate("/account", {replace:true})
-            
+                    navigate("/account", {replace:true}) 
+                    console.log(data);
+                    
        } catch (error) {
   const errs = error.response?.data;
   errs?.errors?.forEach(errors => {
@@ -52,6 +53,8 @@ const Login = () => {
                         theme: "dark",
                         transition: Bounce,
                   });
+                  console.log(errs);
+                  
 }}
 const handleChange = (e) =>{
         const {name, value} = e.target 

@@ -7,6 +7,7 @@ import Cart from "./pages/Cart"
 import Signup from "./pages/Signup"
 import Forgot from "./pages/Forgot"
 import Reset from "./pages/Reset"
+import OtpVerification from "./pages/OtpVerification"
 import TrackOrder from "./pages/TrackOrder"
 import Terms from "./pages/Terms"
 import { ToastContainer } from "react-toastify"
@@ -16,9 +17,11 @@ import Addresses from "./components/dashboard/Addresses"
 import Payments from "./components/dashboard/Payments"
 import Details from "./components/dashboard/Details"
 import Dashboard from "./components/dashboard/Dashboard"
+import ProtectedRoute from "./routes/ProtectedRoute"
 
 
 function App() {
+  // localStorage.removeItem('user')
 
   return (
     <>
@@ -30,9 +33,11 @@ function App() {
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/account/signup" element={<Signup/>}/>
         <Route path="/account/forgot-password" element={<Forgot/>}/>
+        <Route path="/account/otp-verification" element={<OtpVerification/>}/>
         <Route path="/account/reset-password" element={<Reset/>}/>
         <Route path="/track-order" element={<TrackOrder/>}/>
-      <Route element={<Dashboard/>}>
+     <Route element={<ProtectedRoute/>}>
+       <Route element={<Dashboard/>}>
         <Route path="/account" element={<MyAccount/>}/>
         <Route path="/account/orders" element={<Oders/>}/>
         <Route path="/account/downloads" element={<Downloads/>}/>
@@ -40,6 +45,7 @@ function App() {
         <Route path="/account/payments-methods" element={<Payments/>}/>
         <Route path="/account/account-details" element={<Details/>}/>
       </Route>
+     </Route>
         <Route path="/terms-and-conditions" element={<Terms/>}/>
       </Route>
     </Routes>

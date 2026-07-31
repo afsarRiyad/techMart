@@ -1,7 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { apiCustomer } from "../api/apiCustomer";
 
-const API = 'https://electrobackend-1.onrender.com';
+const API = import.meta.env.VITE_API_URL;
 
 export const useFetchData = (endpoint) =>{
   const [data, setData] = useState([])
@@ -28,30 +29,50 @@ export const useFetchData = (endpoint) =>{
 }
 
 
- const signup = async ( formData) =>{
-  const res = await axios.post(`${API}/api/auth/signup`, formData);
-  return res.data
-}
-export default signup
-
-export const signin = async (formData) =>{
-  const res = await axios.post(`${API}/api/auth/login`, formData)
-  return res.data
-}
-
-export const useGetUser = async (endpoint) =>{
+export const useGetUser =  () =>{
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
   const [errs, setErrs] = useState('')
   useEffect(()=>{
      const getData = async()=>{
        try {
-        const res = await axios.get(`${API}${endpoint}`)
+        setLoading(true);
+         setErrs("");
+        const res = await apiCustomer.get(`${API}/api/auth/me`)
         setData(res.data)
        } catch (error) {
         setErrs(error.response.data)
-       }
+       }finally {
+        setLoading(false);
+      }
      }
      getData()
-  },[endpoint])
-  return {data, errs} 
+  },[])
+  return {data,loading, errs} 
+}
+
+export const verifyOtp = async (formData) => {
+  const res = await axios.post(`${API}/api/auth/verify-otp`, formData, { withCredentials: true });
+  return res.data;
+}
+
+
+export const validateCoupon = async (code, orderTotal) => {
+  const res = await axios.post(`${API}/api/coupons/validate`, { code, orderTotal });
+  return res.data;
+}
+
+export const applyCoupon = async (code, orderTotal) => {
+  const res = await axios.post(`${API}/api/coupons/apply`, { code, orderTotal }, { withCredentials: true });
+  return res.data;
+}
+
+
+export const logout = async()=>{
+  const res = await apiCustomer.post('/api/auth/logout')
+  return res.data
+}
+
+export const resendOtp = async(email) =>{
+  const res = await apiCustomer.post('/api/auth/resendotp')
 }

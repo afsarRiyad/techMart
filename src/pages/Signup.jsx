@@ -3,9 +3,10 @@ import { Link, Navigate, useNavigate } from 'react-router';
 import { Eye, EyeOff, Vault } from 'lucide-react';
 import Apple from '../assets/images/apple-logo.svg?react'
 import Goolgle from '../assets/images/google.svg?react'
-import  signup  from '../hooks/Fetchdata';
+// import  signup  from '../hooks/Fetchdata';
 import { CircleAlert } from "lucide-react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import { apiCustomer } from '../api/apiCustomer';
 
 const Signup = () => {
   const [touched, setTouched] = useState({})
@@ -36,27 +37,21 @@ const Signup = () => {
            e.preventDefault();
            setErrs({})
            try {
-            const data = await signup(formData)
-            if(data?.success){
-              toast.success(data.message || "account created", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-              });
-            }
-            localStorage.setItem("user", JSON.stringify(data.data))
-            console.log(data.data);
+            const data = await apiCustomer.post('/api/auth/signup',formData)
             
-            setTimeout(() => {
-                 navigate("/account/login", { replace: true });
-                   }, 1500);
-                   
+            toast.success(data.data.message || "Account created. Please verify your email.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
+            
+            navigate("/account/otp-verification", { replace: true, state: { email: formData.email } });
                     
            } catch (error) {
             const data = error.response?.data;
@@ -113,7 +108,7 @@ const Signup = () => {
           <div className=''>
             <label htmlFor='email' className={`font-inter block font-semibold pb-2 dark:text-gray-300 select-none ${errs.email ? 'text-red-500' : 'text-tcolor'}`}>Email Address</label>
             <input type="email" id='email' className={`w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing ${errs.email ? 'border-2 border-red-400 placeholder:text-red-500' : ''}`} placeholder='Enter Your Email' autoComplete="email" name='email' onChange={(e)=>handleChange(e)} onBlur={(e)=>handleBlur(e) }/>
-            {errs.email && 
+            {errs.email  && 
                             <div className="flex items-start gap-1 mt-1 text-sm text-red-500 font-inter">
                   <CircleAlert size={16} className="mt-0.5 shrink-0" />
                   <span className='font-semibold'>{errs.email}</span>
