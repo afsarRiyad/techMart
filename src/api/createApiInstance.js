@@ -64,10 +64,6 @@ export function createApiInstance({
             onSessionExpired("Your session has expired. Please log in again.");
           }
 
-          if (typeof window !== "undefined") {
-            window.location.href = loginPath;
-          }
-
           return Promise.reject(refreshError);
         }
       }

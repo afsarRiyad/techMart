@@ -10,6 +10,7 @@ import Reset from "./pages/Reset"
 import OtpVerification from "./pages/OtpVerification"
 import TrackOrder from "./pages/TrackOrder"
 import Terms from "./pages/Terms"
+import AuthCallback from "./pages/AuthCallback"
 import { ToastContainer } from "react-toastify"
 import Oders from "./components/dashboard/Oders"
 import Downloads from "./components/dashboard/Downloads"
@@ -36,6 +37,7 @@ function App() {
         <Route path="/account/otp-verification" element={<OtpVerification/>}/>
         <Route path="/account/reset-password" element={<Reset/>}/>
         <Route path="/track-order" element={<TrackOrder/>}/>
+        <Route path="/auth/callback" element={<AuthCallback/>}/>
      <Route element={<ProtectedRoute/>}>
        <Route element={<Dashboard/>}>
         <Route path="/account" element={<MyAccount/>}/>

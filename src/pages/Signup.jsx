@@ -8,6 +8,7 @@ import { CircleAlert } from "lucide-react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { apiCustomer } from '../api/apiCustomer';
 
+
 const Signup = () => {
   const [touched, setTouched] = useState({})
   const navigate = useNavigate();
@@ -81,7 +82,9 @@ const Signup = () => {
                       [e.target.name]: true,
   }));
   }
- 
+const handleGoogleLogin  = () =>{
+             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+}
   
   return (
     <main className="flex items-center justify-center mx-auto max-w-[424px] px-4 w-full">
@@ -173,7 +176,7 @@ const Signup = () => {
             <span className='w-40 bg-gray-200 h-[2px]' />
           </div>
           <div className='select-none'>
-            <div className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer mb-3 hover:shadow-md transition-all duration-300 ease-in-out'>
+            <div onClick={handleGoogleLogin } className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer mb-3 hover:shadow-md transition-all duration-300 ease-in-out'>
               <Goolgle fill='currentColor' className='w-8 h-auto ml-3' />
               <span className='text-gray-500 text-[15px] w-full pl-20 darkH'>Login with Google</span>
             </div>

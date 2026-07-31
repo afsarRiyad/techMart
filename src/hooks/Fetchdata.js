@@ -29,28 +29,6 @@ export const useFetchData = (endpoint) =>{
 }
 
 
-export const useGetUser =  () =>{
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [errs, setErrs] = useState('')
-  useEffect(()=>{
-     const getData = async()=>{
-       try {
-        setLoading(true);
-         setErrs("");
-        const res = await apiCustomer.get(`${API}/api/auth/me`)
-        setData(res.data)
-       } catch (error) {
-        setErrs(error.response.data)
-       }finally {
-        setLoading(false);
-      }
-     }
-     getData()
-  },[])
-  return {data,loading, errs} 
-}
-
 export const verifyOtp = async (formData) => {
   const res = await axios.post(`${API}/api/auth/verify-otp`, formData, { withCredentials: true });
   return res.data;
@@ -74,5 +52,5 @@ export const logout = async()=>{
 }
 
 export const resendOtp = async(email) =>{
-  const res = await apiCustomer.post('/api/auth/resendotp')
+  const res = await apiCustomer.post('/api/auth/resendotp', {email})
 }

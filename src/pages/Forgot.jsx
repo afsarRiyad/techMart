@@ -23,7 +23,7 @@ const Forgot = () => {
         }
 
         try {
-            await apiCustomer.post('/api/auth/resend-otp',email)
+            await apiCustomer.post('/api/auth/resend-otp',{email})
             
             toast.success('OTP sent successfully! Please check your email.', {
                 position: "top-right",

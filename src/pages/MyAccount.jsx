@@ -3,12 +3,13 @@ import { Link, Navigate, replace, useNavigate } from 'react-router'
 
 import Container from '../components/layouts/Container';
 import Dashboard from '../components/dashboard/Dashboard';
-import { useGetUser } from '../hooks/Fetchdata';
 import { apiCustomer, clearCustomerToken } from '../api/apiCustomer';
 import { useAuth } from '../hooks/useAuth';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 const MyAccount = () => {
+  const queryClient = useQueryClient()
   const {data, isLoading, isError} = useAuth()
   const [verified, setVerified] = useState(false)
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ const MyAccount = () => {
     try {
       await apiCustomer.post('/api/auth/logout')
       clearCustomerToken()
+       queryClient.setQueryData(['me'], null);
+    queryClient.removeQueries({ queryKey: ['me'] });
       navigate("/account/login");
     } catch (err) {
       console.error(err);

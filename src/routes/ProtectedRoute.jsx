@@ -1,5 +1,4 @@
 import React from 'react'
-import { useGetUser } from '../hooks/Fetchdata'
 import { Navigate, Outlet } from 'react-router'
 import { useAuth } from '../hooks/useAuth';
 

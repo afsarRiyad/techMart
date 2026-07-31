@@ -6,7 +6,7 @@ import Apple from '../assets/images/apple-logo.svg?react'
 import Goolgle from '../assets/images/google.svg?react'
 // import {signin}  from '../hooks/Fetchdata';
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { apiCustomer } from '../api/apiCustomer';
+import { apiCustomer, setCustomerToken } from '../api/apiCustomer';
 
 const Login = () => {
 
@@ -23,6 +23,8 @@ const Login = () => {
     e.preventDefault()
        try {
         const data = await apiCustomer.post('/api/auth/login',formData)
+        setCustomerToken(data.data?.data?.accessToken)
+        
         toast.success(data.data?.message, {
                         position: "top-right",
                         autoClose: 5000,

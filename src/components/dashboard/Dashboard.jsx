@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import Container from '../layouts/Container';
 import { logout } from '../../hooks/Fetchdata';
 import { clearCustomerToken } from '../../api/apiCustomer';
+import {  useQueryClient } from '@tanstack/react-query';
 
 const dashboardNav = [
                {id:1, name: 'Dashborad', icon: LayoutDashboard, href: '/account', title:'My Account' },
@@ -17,15 +18,16 @@ const dashboardNav = [
 
 
 const Dashboard = () => {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const location = useLocation();
   const active = dashboardNav.find(item => item.href === location.pathname)?.title
   const handleLogout = async () => {
   try {
     await logout();
-
     clearCustomerToken();
-
+    queryClient.setQueryData(['me'], null)
+    queryClient.removeQueries({ queryKey: ['me'] });
     navigate("/account/login", { replace: true });
   } catch (error) {
     console.error(error);

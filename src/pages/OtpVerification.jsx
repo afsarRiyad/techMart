@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router';
 import { CircleAlertIcon, ArrowRight, Home } from 'lucide-react';
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { verifyOtp } from '../hooks/Fetchdata';
+import { resendOtp, verifyOtp } from '../hooks/Fetchdata';
 
 const OtpVerification = () => {
     const navigate = useNavigate()
