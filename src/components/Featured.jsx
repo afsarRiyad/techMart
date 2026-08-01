@@ -9,11 +9,15 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { useFetchData } from '../hooks/Fetchdata';
 import Tooltip from './ui/Tooltip';
+import { useAddToCart } from '../features/Cart/hooks/useAddToCart';
 
 const Featured = () => {
-
+  const addToCart = useAddToCart()
     const [show, setShow]= useState('on-sale')
     const {data:sections, loading, errs:errors} = useFetchData('/api/home-v3')
+    const handleCart = (productId) =>{
+          addToCart.mutate({ product: productId, quantity: 1 });
+    }
     let datas = sections?.data?.sections.filter(item => (
       ['featured-products', 'on-sale', 'top-selling'].includes(item.id)
     )) || [];
@@ -69,9 +73,9 @@ const Featured = () => {
                         {pro.salePrice && <p className='pt-3 text-gray-500 text-[14px] line-through'>${pro.salePrice}</p>}
                         </div>
                         <div className='group relative'>
-                        <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
+                        <button onClick={()=>handleCart(pro.id)} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
                             <FaOpencart size={25} className='text-white' />
-                        </div>
+                        </button>
                      {/* tooltip  */}
                         <Tooltip title='Add to Cart'/>
                     {/* tooltip ends here  */}

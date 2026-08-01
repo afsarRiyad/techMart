@@ -5,8 +5,13 @@ import { useFetchData } from '../../hooks/Fetchdata'
 import { FaOpencart } from "react-icons/fa6";
 import { GitCompareArrows, Heart } from 'lucide-react';
 import Tooltip from './Tooltip'
+import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
 
 const ProductCard = ({ data, loading = false, errs = '', type = '', discount, timers }) => {
+    const addToCart = useAddToCart()
+    const handleCart = (productId) => {
+        addToCart.mutate({ product: productId, quantity: 1 });
+    }
     if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
     if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
     const { days, hours, minutes, seconds } = timers
@@ -40,7 +45,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                                 {pro.price &&
                                                     <p className=' text-tcolor text-[20px] '>${pro.price}</p>
                                                 }
-                                                <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary group relative mr-2'>
+                                                <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary group relative mr-2' onClick={() => handleCart(pro._id || pro.id)}>
                                                     <FaOpencart size={25} className='text-white' />
                                                     <Tooltip title='Add to Cart' />
                                                 </div>

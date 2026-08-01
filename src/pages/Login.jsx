@@ -69,6 +69,9 @@ const handleBlur = (e) =>{
        const {name} = e.target 
        setTouched(prev =>({...prev, [name]: true}))
 }
+const handleGoogleLogin  = () =>{
+             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+}
   return (
     <main className="flex items-center justify-center px-4">
     <form className='flex flex-col  shadow-lg max-w-[424px] w-full  rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10' onSubmit={(e)=>handleSubmit(e)}>
@@ -118,10 +121,10 @@ const handleBlur = (e) =>{
           <span className='w-40  bg-gray-200 h-[2px]'/>
          </div>
        <div className='select-none'>
-         <div className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer mb-3 hover:shadow-md transition-all duration-300 ease-in-out'>
+         <button onClick={handleGoogleLogin} className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer mb-3 hover:shadow-md transition-all duration-300 ease-in-out'>
            <Goolgle fill='currentColor' className='w-8 h-auto ml-3' />
            <span className='text-gray-500 text-[15px] w-full pl-20 darkH'>Login with Google</span>
-        </div>
+        </button>
 
          <div className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer hover:shadow-md transition-all duration-300 ease-in-out'>
            <Apple fill='currentColor' className='w-8 dark:text-white h-auto ml-3' />

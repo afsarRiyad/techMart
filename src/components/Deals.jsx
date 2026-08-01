@@ -1,8 +1,13 @@
 import React from 'react'
 import { FaOpencart } from "react-icons/fa6"
 import { Heart, GitCompareArrows } from 'lucide-react'
+import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
 
 const ProductCard = ({ product }) => {
+    const addToCart = useAddToCart()
+    const handleCart = (productId) => {
+        addToCart.mutate({ product: productId, quantity: 1 });
+    }
     return (
         <div className="relative after:content-[''] after:absolute after:top-5 after:right-0 after:h-75 after:w-[1px] after:bg-gray-200 last:after:hidden px-4 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] py-2 rounded-md transition-all duration-10 hover:text-black0 bg-white dark:bg-neutral-900">
             {/* Categories Layout */}
@@ -33,7 +38,7 @@ const ProductCard = ({ product }) => {
                 <p className='pt-3 text-tcolor text-[20px]'>${product.price}</p>
                 
                 <div className='group relative'>
-                    <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary transition-colors'>
+                    <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary transition-colors' onClick={() => handleCart(product._id || product.id)}>
                         <FaOpencart size={25} className='text-white' />
                     </div>
 

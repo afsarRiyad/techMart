@@ -1,128 +1,191 @@
-import React, { useState } from 'react'
-import { validateCoupon, applyCoupon } from '../hooks/Fetchdata'
+
+import { ChevronDown, X } from 'lucide-react';
+import Container from './../components/layouts/Container';
+import { Link } from 'react-router';
+import Dropdown from '../components/ui/Dropdown';
+import { useCart } from '../features/Cart/hooks/useCart.js.js';
+export const cartItems = [
+  {
+    id: 1,
+    name: "Classic Cotton Brief",
+    image: "https://picsum.photos/seed/underwear1/120/120",
+    price: 19.99,
+    quantity: 2,
+  },
+  {
+    id: 2,
+    name: "Premium Boxer Brief",
+    image: "https://picsum.photos/seed/underwear2/120/120",
+    price: 24.99,
+    quantity: 1,
+  },
+  {
+    id: 3,
+    name: "Stretch Trunk",
+    image: "https://picsum.photos/seed/underwear3/120/120",
+    price: 21.5,
+    quantity: 3,
+  },
+  {
+    id: 4,
+    name: "Comfort Boxer",
+    image: "https://picsum.photos/seed/underwear4/120/120",
+    price: 209.99,
+    quantity: 1,
+  },
+];
 
 const Cart = () => {
-  const [couponCode, setCouponCode] = useState('')
-  const [discount, setDiscount] = useState(null)
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [orderTotal] = useState(100) // This should come from your cart total
+  const {data, isLoading, error} = useCart()
+  console.log(data);
+  
+  return(
+    <section className="font-pop ">
+      <Container>
+        <h1 className="text-[40px] text-tcolor w-full text-center pt-6 pb-10">Shopping Cart</h1>
+         <table className="w-full table-fixed">
+            <thead>
+              <tr className="border-b border-gray-300 text-[#747474] font-semibold">
+                <th className="w-[55%] py-4 text-start pl-45">Product</th>
+                <th className="w-[15%] py-4 text-left">Price</th>
+                <th className="w-[15%] py-4 text-left">Quantity</th>
+                <th className="w-[15%] py-4 text-left">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cartItems.map((item)=>(
+                <tr key={item.id} className='border-b border-b-gray-200'>
+                  <td className="py-4 flex items-center gap-4">
+                 <div className='flex items-center gap-8'>
+                   <X className='text-gray-400 cursor-pointer hover:text-black'/>
+                    <Link to={`/product/${item.id}`}>
+                      <img src={item.image} alt={item.name} className="w-[80px] h-[80px] object-cover rounded" />
+                    </Link>
+                    <span className='text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold'> {item.name}</span>
+                 </div>
+                   </td>
+                   <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.price).toFixed(2)}</td>
+                   <td>
+                    <input
+                      type="number"
+                      min="1"
+                      defaultValue={item.quantity}
+                      className='w-20 px-4 py-2 rounded-[12px] outline-none border border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+                    />
+                   </td>
+                    <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.price * item.quantity).toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+           {/* button section  */}
+           <div className='pb-10 pt-20 flex justify-between '>
+              <div className='w-full max-w-[480px] flex relative left-0 h-13'>
+                <input type="text" className='w-full border border-gray-400 border-r-0 rounded-s-full rounded-e-none outline-none  pl-8 pr-15' placeholder='Coupon code ' />
+                <button className='whitespace-normal w-60 bg-tcolor font-semibold rounded-e-full text-white cursor-pointer hover:bg-black transition-colors duration-200'>Apply coupon</button>
+              </div>
+              <div className='flex flex-col '>
+                <button className='bg-gray-200 text-gray-500 font-semibold py-3 w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200 ml-15'>Update Cart</button>
+                <button className='bg-primary hover:text-white text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'>Procesed to checkout</button>
+              </div>
+           </div>
+           {/* cart totals  */}
+           <section className='w-full  flex justify-end pt-8 '>
+            <div className='max-w-[400px] w-full'>
+             <div className='border-b border-b-gray-300 '>
+               <h4 className='text-[25px] text-tcolor border-b-[2px] border-b-primary w-40 pb-3 '>
+                  Cart totals
+                </h4>
+             </div>
+             <div className='flex justify-between border-b border-b-gray-300 pt-4 pb-2'>
+               <span className='font-bold text-[15px] '>Subtotal</span>
+               <span className='text-gray-900'>${(121).toFixed(2)}</span>
+             </div>
+             <div className='font-bold  pt-3 pb-4 text-[15px] text-tcolor'>Shipping: {`sara palson`}</div>
 
-  const handleValidateCoupon = async () => {
-    if (!couponCode.trim()) {
-      setError('Please enter a coupon code')
-      return
-    }
+             <div className='flex justify-between pb-2'>
+               <span className=' text-[15px] '>Flat rate:</span>
+               <span className='text-gray-900'>${(50).toFixed(2)}</span>
+             </div>
+             <div className=' pt-1 pb-4 text-[15px] text-tcolor'>
+              Shipping to <span className='font-bold'> {`sdfsad, asdfsd, CA 94102.`}</span> 
+              </div>
+               <div className='border-b border-b-gray-300 pb-4'>
+                 <Dropdown 
+                title={'Change addresses'} 
+                titleCls={'text-[15px] text-tcolor font-bold cursor-pointer'} 
+                icon={<ChevronDown size={20} className='ml-2' />}
+              >
+                <div className='pt-6 space-y-5 max-w-[400px]'>
+                  {/* Country / Region */}
+                  <div>
+                    <label className='block text-[14px] font-bold text-tcolor mb-1'>
+                      Country / Region <span className='text-red-500'>*</span>
+                    </label>
+                    <select
+                      className='w-full px-4 py-2 rounded-full border border-gray-300 outline-none text-gray-600 appearance-none cursor-pointer focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-[url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23666%27 stroke-width=%272%27%3e%3cpolyline points=%276 9 12 15 18 9%27/%3e%3c/svg%3e")] bg-no-repeat bg-[right_1rem_center]'
+                    >
+                      <option>United States (US)</option>
+                      <option>Bangladesh (BD)</option>
+                      <option>Canada (CA)</option>
+                      <option>United Kingdom (UK)</option>
+                    </select>
+                  </div>
 
-    setLoading(true)
-    setError('')
-    setDiscount(null)
+                  {/* State */}
+                  <div>
+                    <label className='block text-[14px] font-bold text-tcolor mb-1'>
+                      State <span className='text-red-500'>*</span>
+                    </label>
+                    <select
+                      className='w-full px-4 py-2 rounded-full border border-gray-300 outline-none text-gray-600 appearance-none cursor-pointer focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-[url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23666%27 stroke-width=%272%27%3e%3cpolyline points=%276 9 12 15 18 9%27/%3e%3c/svg%3e")] bg-no-repeat bg-[right_1rem_center]'
+                    >
+                      <option>California</option>
+                      <option>Texas</option>
+                      <option>New York</option>
+                      <option>Florida</option>
+                    </select>
+                  </div>
 
-    try {
-      const response = await validateCoupon(couponCode, orderTotal)
-      if (response.success) {
-        setDiscount(response.data)
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Invalid coupon code')
-    } finally {
-      setLoading(false)
-    }
-  }
+                  {/* Town / City */}
+                  <div>
+                    <label className='block text-[14px] font-bold text-tcolor mb-1'>
+                      Town / City <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      type='text'
+                      defaultValue='asdfsd'
+                      className='w-full px-4 py-2 rounded-full border border-gray-300 outline-none text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+                    />
+                  </div>
 
-  const handleApplyCoupon = async () => {
-    if (!couponCode.trim()) {
-      setError('Please enter a coupon code')
-      return
-    }
+                  {/* ZIP Code */}
+                  <div>
+                    <label className='block text-[14px] font-bold text-tcolor mb-1'>
+                      ZIP Code <span className='text-red-500'>*</span>
+                    </label>
+                    <input
+                      type='text'
+                      defaultValue='94102'
+                      className='w-full px-4 py-2 rounded-full border border-gray-300 outline-none text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+                    />
+                  </div>
 
-    setLoading(true)
-    setError('')
-
-    try {
-      const response = await applyCoupon(couponCode, orderTotal)
-      if (response.success) {
-        setDiscount(response.data)
-        alert('Coupon applied successfully!')
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to apply coupon')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
-      
-      {/* Coupon Section */}
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
-        <h3 className="font-semibold mb-3">Have a coupon?</h3>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={couponCode}
-            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-            placeholder="Enter coupon code"
-            className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleValidateCoupon}
-            disabled={loading}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-          >
-            {loading ? 'Checking...' : 'Validate'}
-          </button>
-          <button
-            onClick={handleApplyCoupon}
-            disabled={loading || !discount}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? 'Applying...' : 'Apply'}
-          </button>
-        </div>
-        {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
-        {discount && (
-          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-700 font-semibold">
-              Coupon Applied: {discount.code}
-            </p>
-            <p className="text-green-600 text-sm">
-              {discount.discountType === 'percentage' 
-                ? `${discount.discountValue}% off` 
-                : `$${discount.discountValue} off`}
-            </p>
-            <p className="text-green-600 text-sm">
-              Discount: ${discount.discountAmount.toFixed(2)}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Order Summary */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-semibold mb-3">Order Summary</h3>
-        <div className="flex justify-between mb-2">
-          <span>Subtotal:</span>
-          <span>${orderTotal.toFixed(2)}</span>
-        </div>
-        {discount && (
-          <div className="flex justify-between mb-2 text-green-600">
-            <span>Discount:</span>
-            <span>-${discount.discountAmount.toFixed(2)}</span>
-          </div>
-        )}
-        <div className="flex justify-between font-bold text-lg border-t pt-2">
-          <span>Total:</span>
-          <span>
-            ${discount 
-              ? (orderTotal - discount.discountAmount).toFixed(2) 
-              : orderTotal.toFixed(2)}
-          </span>
-        </div>
-      </div>
-    </div>
+                  {/* Update button */}
+                  <button className='bg-gray-200 text-gray-500 font-semibold py-3 px-8 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200'>
+                    Update
+                  </button>
+                </div>
+              </Dropdown>
+               </div>
+               <div className='flex justify-between pt-2 pb-2'>
+               <span className='font-bold text-[15px] '>Total</span>
+               <span className='text-gray-900'>${(1121).toFixed(2)}</span>
+             </div>
+            </div>
+           </section>
+      </Container>
+    </section>
   )
 }
 

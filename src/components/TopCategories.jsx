@@ -8,7 +8,6 @@ const TopCategories = () => {
         title: 'Top Categories this Week',
         products: cat
     }
-    console.log(cat);
     
     return (
         <div className='bg-[#F4F4F4]'>

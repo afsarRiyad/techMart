@@ -11,8 +11,13 @@ import "swiper/css/grid";
 import 'swiper/css/pagination';
 import { Navigation } from "swiper/modules";
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
 
 const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
+    const addToCart = useAddToCart()
+    const handleCart = (productId) => {
+        addToCart.mutate({ product: productId, quantity: 1 });
+    }
      if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
         if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
   return (
@@ -66,7 +71,7 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                                                     {pro.price &&
                                                         <p className=' text-tcolor text-[20px] '>${pro.price}</p>
                                                     }
-                                                    <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary group relative mr-2'>
+                                                    <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary group relative mr-2' onClick={() => handleCart(pro._id || pro.id)}>
                                                         <FaOpencart size={25} className='text-white' />
                                                         <Tooltip title='Add to Cart' />
                                                     </div>
