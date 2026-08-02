@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router';
 import { CircleAlertIcon, ArrowRight, Home } from 'lucide-react';
-import { ToastContainer, toast, Bounce } from "react-toastify";
 import { resendOtp, verifyOtp } from '../hooks/Fetchdata';
+import toast, { Toaster } from 'react-hot-toast';
 
 const OtpVerification = () => {
     const navigate = useNavigate()
@@ -104,17 +104,7 @@ const OtpVerification = () => {
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Invalid or expired OTP code'
             setErrs({ otp: errorMessage })
-            toast.error(errorMessage, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            })
+            toast.error(errorMessage)
         } finally {
             setIsLoading(false)
         }
@@ -122,17 +112,7 @@ const OtpVerification = () => {
 
     const handleResend = async () => {
         if (!email) {
-            toast.error('Email is required. Please go back and enter your email.', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            })
+            toast.error('Email is required. Please go back and enter your email.')
             return
         }
 
@@ -183,6 +163,7 @@ const OtpVerification = () => {
 
     return (
         <main className="flex items-center justify-center px-4">
+            <Toaster/>
             <form className='flex flex-col shadow-lg w-full max-w-[424px] rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10' onSubmit={handleSubmit}>
                 <div className='flex flex-col items-center text-center w-full gap-2 p-8'>
                     <h1 className='font-robot text-[20px] font-bold text-tcolor dark:text-white'>

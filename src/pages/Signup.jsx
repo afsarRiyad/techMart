@@ -3,10 +3,9 @@ import { Link, Navigate, useNavigate } from 'react-router';
 import { Eye, EyeOff, Vault } from 'lucide-react';
 import Apple from '../assets/images/apple-logo.svg?react'
 import Goolgle from '../assets/images/google.svg?react'
-// import  signup  from '../hooks/Fetchdata';
 import { CircleAlert } from "lucide-react";
-import { ToastContainer, toast, Bounce } from "react-toastify";
 import { apiCustomer } from '../api/apiCustomer';
+import toast, { Toaster } from "react-hot-toast";
 
 
 const Signup = () => {
@@ -40,33 +39,13 @@ const Signup = () => {
            try {
             const data = await apiCustomer.post('/api/auth/signup',formData)
             
-            toast.success(data.data.message || "Account created. Please verify your email.", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-              transition: Bounce,
-            });
+            toast.success(data.data.message || "Account created. Please verify your email.");
             
             navigate("/account/otp-verification", { replace: true, state: { email: formData.email } });
                     
            } catch (error) {
             const data = error.response?.data;
-                    toast.error(data?.message || "Something went wrong", {
-                                  position: "top-right",
-                                  autoClose: 5000,
-                                  hideProgressBar: false,
-                                  closeOnClick: false,
-                                  pauseOnHover: true,
-                                  draggable: true,
-                                  progress: undefined,
-                                  theme: "dark",
-                                  transition: Bounce,
-                                  });
+                    toast.error(data?.message || "Something went wrong");
                    
               data?.errors?.forEach((err) => {
                   setErrs((prev) => (
@@ -88,13 +67,13 @@ const handleGoogleLogin  = () =>{
   
   return (
     <main className="flex items-center justify-center mx-auto max-w-[424px] px-4 w-full">
+      <Toaster position="top-right" />
       <form className='flex flex-col  shadow-lg max-w-[424px] w-full  rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10' onSubmit={handleSubmit}>
         <div className='flex justify-around w-full font-robot text-[20px] font-bold text-tcolor border-b border-b-gray-200 '>
           <Link to='/account/login' className='lg:w-[212px] flex justify-center cursor-pointer py-4 text-gray-500 dark:text-gray-400 select-none'>Sign In</Link>
           <span className='lg:w-[212px] flex justify-center border-b-[3px] cursor-pointer border-b-primary py-4 dark:text-gray-300 dark:border-b-yellow-500'>Sign Up</span>
         </div>
         <div className='px-8 flex flex-col gap-4 py-6'>
-          {/* username field username field  */}
           {/* username field username field  */}
           <div className=''>
             <label htmlFor='name' className={`font-inter block font-semibold pb-2 dark:text-gray-300 select-none ${errs.username ? 'text-red-500' : 'text-tcolor'}`}>User Name</label>
@@ -106,7 +85,6 @@ const handleGoogleLogin  = () =>{
                 </div>
               }
           </div>
-           {/* email field email field  */}
            {/* email field email field  */}
           <div className=''>
             <label htmlFor='email' className={`font-inter block font-semibold pb-2 dark:text-gray-300 select-none ${errs.email ? 'text-red-500' : 'text-tcolor'}`}>Email Address</label>
@@ -120,7 +98,6 @@ const handleGoogleLogin  = () =>{
           </div>
           <div className=''>
             <label htmlFor='password' name='password' className={`font-inter block font-semibold pb-2 dark:text-gray-300 select-none ${errs.password ? 'text-red-500' : 'text-tcolor'}`} >Password</label>
-            {/* password password  */}
             {/* password password  */}
             <div className='relative'>
               <input id='password' type={show ? "text" : "password"} className={`w-full border border-gray-200 rounded-sm outline-0 py-2 px-3 dark:placeholder:text-gray-300 inputRing ${errs.password ? 'border-2 border-red-400 placeholder:text-red-500' : ''}`} placeholder='Enter Your Password' autoComplete="new-password" name='password' onChange={(e)=>handleChange(e)} onBlur={(e)=>handleBlur(e) }/>
@@ -136,7 +113,6 @@ const handleGoogleLogin  = () =>{
               }
             </div>
           </div>
-          {/* confirm password confirm password  */}
           {/* confirm password confirm password  */}
           <div className=''>
             <label htmlFor='confirmPassword' className={`font-inter block font-semibold pb-2 dark:text-gray-300 select-none ${errs.confirmPassword ? 'text-red-500' : 'text-tcolor'}`} >Confirm Password</label>
@@ -154,7 +130,6 @@ const handleGoogleLogin  = () =>{
 )}
             </div>
           </div>
-          {/* checkbox checkbox checkbox  */}
           {/* checkbox checkbox checkbox  */}
           <div className='flex gap-2 items-start '>
             <input type="checkbox" id='signUp' className='mt-1 accent-blue-500/75' name='agreeToTerms'  onBlur={(e)=>handleBlur(e) } onChange={(e)=>handleChange(e)}/>

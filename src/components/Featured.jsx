@@ -10,14 +10,25 @@ import { Pagination } from 'swiper/modules';
 import { useFetchData } from '../hooks/Fetchdata';
 import Tooltip from './ui/Tooltip';
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Featured = () => {
   const addToCart = useAddToCart()
     const [show, setShow]= useState('on-sale')
     const {data:sections, loading, errs:errors} = useFetchData('/api/home-v3')
-    const handleCart = (productId) =>{
-          addToCart.mutate({ product: productId, quantity: 1 });
-    }
+    const handleCart = (productId) => {
+                    toast.promise(
+                        addToCart.mutateAsync({
+                          product: productId,
+                          quantity: 1,
+                        }),
+                        {
+                          loading: "Adding item to cart...",
+                          success: "Item added to cart!",
+                          error: "Failed to add item.",
+                        }
+                      );
+                    };
     let datas = sections?.data?.sections.filter(item => (
       ['featured-products', 'on-sale', 'top-selling'].includes(item.id)
     )) || [];
@@ -26,6 +37,7 @@ const Featured = () => {
     if (errors) return <p className="text-center p-10 text-red-500 font-inter">{errors}</p>
   return (
     <Container  className='font-inter dark:text-white'>
+      <Toaster/>
         <div className='flex justify-center items-center gap-5 font-inter text-[18px] text-[#333E48] pt-6 pb-2 border-b border-b-gray-200 mb-8'>
         <span onClick={()=>setShow('featured-products')} className={`${show === 'featured-products' && 'featuredSpan'} dark:text-gray-300 cursor-pointer `}>Featured</span>
         <span onClick={()=>setShow('on-sale')} className={`${show === 'on-sale' && 'featuredSpan'} dark:text-gray-300 cursor-pointer `}>On Sale  </span>
@@ -73,7 +85,7 @@ const Featured = () => {
                         {pro.salePrice && <p className='pt-3 text-gray-500 text-[14px] line-through'>${pro.salePrice}</p>}
                         </div>
                         <div className='group relative'>
-                        <button onClick={()=>handleCart(pro.id)} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
+                        <button onClick={()=>handleCart(pro._id)} disabled={addToCart.isPending} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
                             <FaOpencart size={25} className='text-white' />
                         </button>
                      {/* tooltip  */}

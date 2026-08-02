@@ -20,3 +20,7 @@ export const clearCart = async() => {
     const res = await apiCustomer.delete('/api/cart')
     return res.data
 }
+export const updateCart = async(id, quantity) =>{
+    const {data} = await apiCustomer.put(`/api/cart/${id}`, { quantity })
+    return data
+}

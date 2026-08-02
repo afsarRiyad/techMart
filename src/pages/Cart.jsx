@@ -1,46 +1,57 @@
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, X } from 'lucide-react';
 import Container from './../components/layouts/Container';
-import { Link } from 'react-router';
 import Dropdown from '../components/ui/Dropdown';
-import { useCart } from '../features/Cart/hooks/useCart.js.js';
-export const cartItems = [
-  {
-    id: 1,
-    name: "Classic Cotton Brief",
-    image: "https://picsum.photos/seed/underwear1/120/120",
-    price: 19.99,
-    quantity: 2,
-  },
-  {
-    id: 2,
-    name: "Premium Boxer Brief",
-    image: "https://picsum.photos/seed/underwear2/120/120",
-    price: 24.99,
-    quantity: 1,
-  },
-  {
-    id: 3,
-    name: "Stretch Trunk",
-    image: "https://picsum.photos/seed/underwear3/120/120",
-    price: 21.5,
-    quantity: 3,
-  },
-  {
-    id: 4,
-    name: "Comfort Boxer",
-    image: "https://picsum.photos/seed/underwear4/120/120",
-    price: 209.99,
-    quantity: 1,
-  },
-];
+import { useCart } from '../features/Cart/hooks/useCart.js';
+import toast, { Toaster } from "react-hot-toast";
+import { useRemoveFromCart } from "../features/Cart/hooks/useRemoveCart.js";
+import { useState } from "react";
+import { useUpdateCart } from "../features/Cart/hooks/useUpdateCart.js";
+import { Link } from "react-router";
 
 const Cart = () => {
-  const {data, isLoading, error} = useCart()
-  console.log(data);
+  const [cartData, setCartData] = useState({});
+  const { data, isLoading, error } = useCart();
+ let subTotal = data?.data?.totalAmount
+ let totalAmount = subTotal + 50
+let cartItems = data?.data?.items
+
+
+const removeMutation = useRemoveFromCart()
+const updateMutation = useUpdateCart()
+const handleRemove = (itemId)=>{
+       toast.promise(
+        removeMutation.mutateAsync(itemId),
+        {
+          loading: "Removing item from cart...",
+          success: "Item removed from cart!",
+          error: "Failed to remove item.",
+        }
+      );
+}
+const handleChange = (itemId, newQuantity) =>{
+  setCartData(prev =>({...prev, [itemId]: newQuantity}))
+}
+const handleUpdate = async () => {
+  const updates = Object.entries(cartData).map(([itemId, quantity]) =>
+      updateMutation.mutateAsync({ itemId, quantity })
+    );
+
+  toast.promise(
+    Promise.all(updates),
+    {
+      loading: "Updating cart...",
+      success: "Cart updated successfully!",
+      error: "Failed to update cart.",
+    }
+  );
+  setCartData({});
+};
   
   return(
     <section className="font-pop ">
+      <Toaster/>
       <Container>
         <h1 className="text-[40px] text-tcolor w-full text-center pt-6 pb-10">Shopping Cart</h1>
          <table className="w-full table-fixed">
@@ -53,27 +64,30 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item)=>(
-                <tr key={item.id} className='border-b border-b-gray-200'>
+              {cartItems?.map((item)=>(
+                <tr key={item._id} className='border-b border-b-gray-200'>
                   <td className="py-4 flex items-center gap-4">
                  <div className='flex items-center gap-8'>
-                   <X className='text-gray-400 cursor-pointer hover:text-black'/>
-                    <Link to={`/product/${item.id}`}>
-                      <img src={item.image} alt={item.name} className="w-[80px] h-[80px] object-cover rounded" />
+                   <X className='text-gray-400 cursor-pointer hover:text-black' onClick={ ()=>handleRemove(item._id) }/>
+                    <Link to={`/product/${item.product._id || item.product.id}`}>
+                      <img src={item.product.image} alt={item.product.name} className="w-[80px] h-[80px] object-cover rounded" />
                     </Link>
-                    <span className='text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold'> {item.name}</span>
+                    <span className='text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold'> {item.product.name}</span>
                  </div>
                    </td>
-                   <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.price).toFixed(2)}</td>
+                   <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.product.price).toFixed(2)}</td>
                    <td>
                     <input
+                     onChange={(e)=>handleChange(item._id, parseInt(e.target.value))}
+                     disabled={updateMutation.isPending}
                       type="number"
                       min="1"
+                      max={item.product.stock}
                       defaultValue={item.quantity}
                       className='w-20 px-4 py-2 rounded-[12px] outline-none border border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
                     />
                    </td>
-                    <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.price * item.quantity).toFixed(2)}</td>
+                    <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.product.price * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -85,7 +99,7 @@ const Cart = () => {
                 <button className='whitespace-normal w-60 bg-tcolor font-semibold rounded-e-full text-white cursor-pointer hover:bg-black transition-colors duration-200'>Apply coupon</button>
               </div>
               <div className='flex flex-col '>
-                <button className='bg-gray-200 text-gray-500 font-semibold py-3 w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200 ml-15'>Update Cart</button>
+                <button onClick={handleUpdate} className='bg-gray-200 text-gray-500 font-semibold py-3 w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200 ml-15'>Update Cart</button>
                 <button className='bg-primary hover:text-white text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'>Procesed to checkout</button>
               </div>
            </div>
@@ -99,7 +113,7 @@ const Cart = () => {
              </div>
              <div className='flex justify-between border-b border-b-gray-300 pt-4 pb-2'>
                <span className='font-bold text-[15px] '>Subtotal</span>
-               <span className='text-gray-900'>${(121).toFixed(2)}</span>
+               <span className='text-gray-900'>${subTotal?.toFixed(2)}</span>
              </div>
              <div className='font-bold  pt-3 pb-4 text-[15px] text-tcolor'>Shipping: {`sara palson`}</div>
 
@@ -180,7 +194,7 @@ const Cart = () => {
                </div>
                <div className='flex justify-between pt-2 pb-2'>
                <span className='font-bold text-[15px] '>Total</span>
-               <span className='text-gray-900'>${(1121).toFixed(2)}</span>
+               <span className='text-gray-900'>${totalAmount?.toFixed(2)}</span>
              </div>
             </div>
            </section>

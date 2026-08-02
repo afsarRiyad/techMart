@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Container from './../components/layouts/Container';
 import { Link, useNavigate } from 'react-router';
-import { ToastContainer, toast, Bounce } from "react-toastify";
 import { apiCustomer } from '../api/apiCustomer';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Forgot = () => {
@@ -25,33 +25,13 @@ const Forgot = () => {
         try {
             await apiCustomer.post('/api/auth/resend-otp',{email})
             
-            toast.success('OTP sent successfully! Please check your email.', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            })
+            toast.success('OTP sent successfully! Please check your email.')
 
             navigate('/account/otp-verification', { state: { email } })
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Failed to send OTP'
             setErrs({ email: errorMessage })
-            toast.error(errorMessage, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            })
+            toast.error(errorMessage)
         } finally {
             setIsLoading(false)
         }
@@ -59,6 +39,7 @@ const Forgot = () => {
 
     return (
         <main className="flex items-center justify-center px-4">
+            <Toaster/>
             <form className='flex flex-col  shadow-lg w-full max-w-[424px] rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10' onSubmit={handleSubmit}>
                 <div className='flex flex-col items-center text-center w-full gap-2 p-8'>
                     <h1 className='font-robot text-[20px] font-bold text-tcolor dark:text-white'>

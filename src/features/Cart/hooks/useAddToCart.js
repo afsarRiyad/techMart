@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addToCart } from "../services/cartService";
+import { addToCart, removeCartItem } from "../services/cartService";
 
 export function useAddToCart() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: addToCart,
+ return useMutation({
+  mutationFn: ({ product, quantity = 1, variant = null }) =>
+    addToCart(product, quantity, variant),
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["cart"],
-      });
-    },
-  });
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["cart"] });
+  },
+});
 }
+

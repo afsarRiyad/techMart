@@ -11,7 +11,6 @@ import OtpVerification from "./pages/OtpVerification"
 import TrackOrder from "./pages/TrackOrder"
 import Terms from "./pages/Terms"
 import AuthCallback from "./pages/AuthCallback"
-import { ToastContainer } from "react-toastify"
 import Oders from "./components/dashboard/Oders"
 import Downloads from "./components/dashboard/Downloads"
 import Addresses from "./components/dashboard/Addresses"
@@ -51,7 +50,6 @@ function App() {
         <Route path="/terms-and-conditions" element={<Terms/>}/>
       </Route>
     </Routes>
-     <ToastContainer />
     </>
   )
 }

@@ -8,8 +8,10 @@ import useOutsideClick from '../../hooks/outsideClick';
 import { Link } from 'react-router';
 import useScrollBlocker from '../../hooks/scrollBlocker';
 import axios from 'axios'
+import { useCart } from '../../features/Cart/hooks/useCart.js'
 
 const Searchbar = () => {
+  const {data} = useCart()
   const [category, setCategory] = useState('All Categories')
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([])
@@ -22,7 +24,8 @@ const Searchbar = () => {
   useOutsideClick(categoryRef, () => setCatOpen(false), catOpen)
   useOutsideClick(mobileSearchRef, () => setMobileSearch(false), mobileSearch)
   useScrollBlocker(mobileSearch)
-
+  let totalItem = data?.data?.totalItems
+  let totalAmount = data?.data?.totalAmount
   
   useEffect(() => {
     const handleScroll = () => {
@@ -134,10 +137,13 @@ const Searchbar = () => {
                      </div>
                    </Link>
                 <Link aria-label='go to Cart' to='/cart' className='flex gap-2 group relative'>
-                  <div className={`searchbarIconhover `}>
+                  <div className={`relative `}>
                     <Handbag size={22} className='text-tcolor lg:dark:text-gray-200' />
+                    <span className='absolute -bottom-2 -right-1 bg-primary text-black text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center'>
+                      {totalItem || '0'}
+                    </span>
                   </div>
-                  <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>$0.00</span>
+                  <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>${totalAmount?.toFixed(2) || '0.00'}</span>
                    {/*Cart Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
                       <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
