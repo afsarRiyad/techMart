@@ -3,11 +3,13 @@ import { Link, useNavigate, useLocation } from 'react-router';
 import { CircleAlertIcon, ArrowRight, Home } from 'lucide-react';
 import { resendOtp, verifyOtp } from '../hooks/Fetchdata';
 import toast, { Toaster } from 'react-hot-toast';
+import { useAuth } from '../hooks/useAuth';
 
 const OtpVerification = () => {
+    const {data} = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
-    const email = location.state?.email || ''
+    const email = location.state?.email || data?.data?.email
     const [otp, setOtp] = useState(['', '', '', '', '', ''])
     const [errs, setErrs] = useState({})
     const [touched, setTouched] = useState({})

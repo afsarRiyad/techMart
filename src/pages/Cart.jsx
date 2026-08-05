@@ -4,31 +4,34 @@ import { ChevronDown, X } from 'lucide-react';
 import Container from './../components/layouts/Container';
 import Dropdown from '../components/ui/Dropdown';
 import { useCart } from '../features/Cart/hooks/useCart.js';
-import toast, { Toaster } from "react-hot-toast";
 import { useRemoveFromCart } from "../features/Cart/hooks/useRemoveCart.js";
 import { useState } from "react";
 import { useUpdateCart } from "../features/Cart/hooks/useUpdateCart.js";
 import { Link } from "react-router";
+import { useApplyCoupon } from "../features/Cart/hooks/useApplyCoupon.js";
+import toast from "react-hot-toast";
 
 const Cart = () => {
+  const queryClient = useQueryClient();
+  const [discount, setDiscount] = useState(() => {
+  const stored = localStorage.getItem("cartCouponCode");
+  return stored ? JSON.parse(stored) : null;
+});
+const [couponData, setCouponData] = useState({})
   const [cartData, setCartData] = useState({});
   const { data, isLoading, error } = useCart();
- let subTotal = data?.data?.totalAmount
- let totalAmount = subTotal + 50
-let cartItems = data?.data?.items
+ const subTotal = data?.data?.totalAmount
+ const totalAmount = subTotal + 50
+const cartItems = data?.data?.items
+const dis = discount?.discountAmount ?? 0
+const discountAmount = subTotal - (discount?.discountAmount ?? 0)
+console.log(discountAmount);
 
-
+const couponMutation = useApplyCoupon()
 const removeMutation = useRemoveFromCart()
 const updateMutation = useUpdateCart()
 const handleRemove = (itemId)=>{
-       toast.promise(
-        removeMutation.mutateAsync(itemId),
-        {
-          loading: "Removing item from cart...",
-          success: "Item removed from cart!",
-          error: "Failed to remove item.",
-        }
-      );
+        removeMutation.mutateAsync(itemId)
 }
 const handleChange = (itemId, newQuantity) =>{
   setCartData(prev =>({...prev, [itemId]: newQuantity}))
@@ -36,24 +39,49 @@ const handleChange = (itemId, newQuantity) =>{
 const handleUpdate = async () => {
   const updates = Object.entries(cartData).map(([itemId, quantity]) =>
       updateMutation.mutateAsync({ itemId, quantity })
-    );
-
-  toast.promise(
-    Promise.all(updates),
-    {
-      loading: "Updating cart...",
-      success: "Cart updated successfully!",
-      error: "Failed to update cart.",
+   );
+     await Promise.all(updates);
+    if(dis > 0){
+       await queryClient.invalidateQueries({
+                          queryKey: ["cart"],
+                        });
+    const cart = queryClient.getQueryData(["cart"]);
+    const newTotal = cart?.data?.totalAmount;
+    let oldCode = discount?.code ;
+    const res = await couponMutation.apply({code: oldCode, orderTotal: newTotal})
+    setDiscount(res);
     }
-  );
-  setCartData({});
 };
+
+const hanldleCoupon=(e)=>{
+     setCouponData({["code"]: e.target.value })
+}
+const cancleCoupon = () =>{
+    localStorage.removeItem("cartCouponCode")
+    setDiscount(null)
+    toast.success('Coupon removed!')
+}
+const applyCoupon =async ()=>{
+     const payload = {
+      ...couponData,
+      orderTotal: Number(subTotal),
+     }
+    const res = await  couponMutation.mutateAsync(payload)
+     setDiscount(res.data);
+      setCouponData({
+          code: "",
+        });
+      }
+
+console.log(discount?.code);
+
   
   return(
     <section className="font-pop ">
-      <Toaster/>
       <Container>
         <h1 className="text-[40px] text-tcolor w-full text-center pt-6 pb-10">Shopping Cart</h1>
+        {cartItems?.length > 0 ?
+        <>
          <table className="w-full table-fixed">
             <thead>
               <tr className="border-b border-gray-300 text-[#747474] font-semibold">
@@ -87,16 +115,21 @@ const handleUpdate = async () => {
                       className='w-20 px-4 py-2 rounded-[12px] outline-none border border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
                     />
                    </td>
-                    <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.product.price * item.quantity).toFixed(2)}</td>
+                    <td className="py-4 text-left text-tcolor text-[17px] "><span className={`${dis > 0 ? 'line-through text-red-500' : 'font-semibold'}`}>${(item.product.price * item.quantity).toFixed(2)}</span> {dis > 0 && <span className="font-semibold">${discountAmount.toFixed(2)}</span>}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {dis > 0 &&
+          <button className="px-4 py-2 rounded-full text-white font-semibold hover:bg-red-500 cursor-pointer mt-5 bg-red-400" onClick={cancleCoupon}>Cancel Coupon</button>}
+          {discount?.description && 
+            <span className="pl-5 text-red-400 text-[22px] font-semibold">{discount?.description}</span>
+          }
            {/* button section  */}
            <div className='pb-10 pt-20 flex justify-between '>
               <div className='w-full max-w-[480px] flex relative left-0 h-13'>
-                <input type="text" className='w-full border border-gray-400 border-r-0 rounded-s-full rounded-e-none outline-none  pl-8 pr-15' placeholder='Coupon code ' />
-                <button className='whitespace-normal w-60 bg-tcolor font-semibold rounded-e-full text-white cursor-pointer hover:bg-black transition-colors duration-200'>Apply coupon</button>
+                <input onChange={(e)=>hanldleCoupon(e)} value={couponData.code} type="text" className='w-full border border-gray-400 border-r-0 rounded-s-full rounded-e-none outline-none  pl-8 pr-15' placeholder='Coupon code ' />
+                <button onClick={applyCoupon} className='whitespace-normal w-60 bg-tcolor font-semibold rounded-e-full text-white cursor-pointer hover:bg-black transition-colors duration-200'>Apply coupon</button>
               </div>
               <div className='flex flex-col '>
                 <button onClick={handleUpdate} className='bg-gray-200 text-gray-500 font-semibold py-3 w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200 ml-15'>Update Cart</button>
@@ -112,8 +145,11 @@ const handleUpdate = async () => {
                 </h4>
              </div>
              <div className='flex justify-between border-b border-b-gray-300 pt-4 pb-2'>
-               <span className='font-bold text-[15px] '>Subtotal</span>
-               <span className='text-gray-900'>${subTotal?.toFixed(2)}</span>
+               <span className={`font-bold text-[15px] `}>Subtotal</span>
+              <div>
+                 <span className={`text-gray-900 pr-2 ${dis > 0 && ' pr-2 line-through text-red-800'}`}>${subTotal?.toFixed(2)}</span>
+                 {dis > 0 && <span className="font-semibold">${discountAmount.toFixed(2)}</span>}
+              </div>
              </div>
              <div className='font-bold  pt-3 pb-4 text-[15px] text-tcolor'>Shipping: {`sara palson`}</div>
 
@@ -194,10 +230,16 @@ const handleUpdate = async () => {
                </div>
                <div className='flex justify-between pt-2 pb-2'>
                <span className='font-bold text-[15px] '>Total</span>
-               <span className='text-gray-900'>${totalAmount?.toFixed(2)}</span>
+               <div>
+                <span className={`text-gray-900  ${dis > 0 && 'line-through text-red-800 pr-2'}`}>${totalAmount?.toFixed(2)}</span>
+                {dis > 0 && <span className="font-semibold">${(discountAmount + 50).toFixed(2)}</span>}
+               </div>
              </div>
             </div>
            </section>
+           </>
+        : <h1>cart is empty</h1>
+        }
       </Container>
     </section>
   )

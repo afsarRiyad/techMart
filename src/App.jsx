@@ -18,13 +18,14 @@ import Payments from "./components/dashboard/Payments"
 import Details from "./components/dashboard/Details"
 import Dashboard from "./components/dashboard/Dashboard"
 import ProtectedRoute from "./routes/ProtectedRoute"
+import { Toaster } from "react-hot-toast"
 
 
 function App() {
-  // localStorage.removeItem('user')
 
   return (
     <>
+      <Toaster  />
     <Routes>
       <Route element={<MainLayout/>}>
     

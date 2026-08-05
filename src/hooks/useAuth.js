@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiCustomer } from "../api/apiCustomer";
 
-const API = import.meta.env.VITE_API_URL;
-
 export const useAuth=() =>{
          return useQuery({
             queryKey:['me'],

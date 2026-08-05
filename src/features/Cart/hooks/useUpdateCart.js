@@ -1,16 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { updateCart } from "../services/cartService"
+import toast from "react-hot-toast"
 
 export const useUpdateCart = () =>{
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ itemId, quantity }) => updateCart(itemId, quantity),
+        onMutate: () =>{
+            toast.loading("Updating cart...", {id:"update-cart"})
+            },
         onSuccess: () =>{
             queryClient.invalidateQueries({queryKey: ['cart']});
-            console.log("Cart updated successfully");
-            
-        },onError: (error) =>{
-            console.error("Update cart response:", error.response?.data);
+            toast.success("Cart updated successfully!", {id: 'update-cart'}) 
+        },onError: () =>{
+            toast.error("Failed to update cart.", {id: 'update-cart'})
         }
     })
 }

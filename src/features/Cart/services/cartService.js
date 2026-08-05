@@ -24,3 +24,7 @@ export const updateCart = async(id, quantity) =>{
     const {data} = await apiCustomer.put(`/api/cart/${id}`, { quantity })
     return data
 }
+export const applyCoupon = async ({code, orderTotal}) =>{
+    const {data} = await apiCustomer.post('/api/coupons/apply', {code, orderTotal})
+    return data
+}
