@@ -10,9 +10,11 @@ import { Pagination } from 'swiper/modules';
 import { useFetchData } from '../hooks/Fetchdata';
 import Tooltip from './ui/Tooltip';
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart';
+import { useUpdateWishlist } from '../features/wishlist/hooks/useUpdateWishlist';
 
 const Featured = () => {
   const addToCart = useAddToCart()
+  const addToWishlist = useUpdateWishlist()
     const [show, setShow]= useState('on-sale')
     const {data:sections, loading, errs:errors} = useFetchData('/api/home-v3')
     const handleCart =async  (productId) => {
@@ -21,6 +23,11 @@ const Featured = () => {
                           quantity: 1,
                         });
                       }
+    const hadleWishlist = async(id)=>{
+         await addToWishlist.mutate({
+                    productId : id
+         })
+    }
     let datas = sections?.data?.sections.filter(item => (
       ['featured-products', 'on-sale', 'top-selling'].includes(item.id)
     )) || [];
@@ -87,7 +94,7 @@ const Featured = () => {
                      <div className='flex justify-between text-[12px] text-gray-500 pt-3 border-t border-t-gray-200 pb-1 opacity-0 group-hover/card:opacity-100 '>
                         <div className='flex items-center gap-1 cursor-pointer hover:text-black'>
                             <Heart />
-                            <span>Wishlist</span>
+                            <button onClick={()=>hadleWishlist(pro._id)}>Wishlist</button>
                         </div>
                         <div className='flex items-center gap-1 cursor-pointer hover:text-black'>
                              <GitCompareArrows/>

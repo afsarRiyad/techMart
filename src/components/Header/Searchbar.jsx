@@ -112,7 +112,7 @@ const Searchbar = () => {
                       <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
                      </div>
                 </Link>
-                  <Link to='#' aria-label='browse to wishlist' className='relative group '>
+                  <Link to='/wishlist' aria-label='browse to wishlist' className='relative group '>
                      <Heart size={22} className='text-tcolor lg:dark:text-gray-200 hidden lg:flex' />
                      {/*wishlist tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300'>

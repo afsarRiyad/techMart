@@ -19,6 +19,9 @@ import Details from "./components/dashboard/Details"
 import Dashboard from "./components/dashboard/Dashboard"
 import ProtectedRoute from "./routes/ProtectedRoute"
 import { Toaster } from "react-hot-toast"
+import Wishlist from './pages/Wishlist';
+import Billing from "./pages/Billing"
+import Shipping from "./pages/Shipping"
 
 
 function App() {
@@ -30,6 +33,7 @@ function App() {
       <Route element={<MainLayout/>}>
     
         <Route path="/" element={<Home/>}/>
+        <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/account/login" element={<Login/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/account/signup" element={<Signup/>}/>
@@ -45,6 +49,8 @@ function App() {
         <Route path="/account/downloads" element={<Downloads/>}/>
         <Route path="/account/addresses" element={<Addresses/>}/>
         <Route path="/account/payments-methods" element={<Payments/>}/>
+        <Route path="/account/billing" element={<Billing/>}/>
+        <Route path="/account/shipping" element={<Shipping/>}/>
         <Route path="/account/account-details" element={<Details/>}/>
       </Route>
      </Route>

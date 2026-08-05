@@ -1,7 +1,5 @@
-import { useState } from 'react';
-import FormInput from './../features/user/components/FormInput';
+import { useState } from 'react';import FormInput from '../features/user/components/FormInput';
 import Container from '../components/layouts/Container';
-
 
 const FormSelect = ({ label, required, hint, value, onChange, options = [] }) => (
   <div className="mb-6">
@@ -26,9 +24,8 @@ const FormSelect = ({ label, required, hint, value, onChange, options = [] }) =>
 const COUNTRIES = ['Albania', 'United States', 'United Kingdom', 'Canada', 'Germany', 'France'];
 const COUNTIES = ['Gjirokastër', 'Tirana', 'Durrës', 'Vlorë', 'Berat', 'Korçë'];
 
-const Billing = () => {
+const Shipping = () => {
   const [form, setForm] = useState({
-    email: '',
     firstName: '',
     lastName: '',
     company: '',
@@ -51,20 +48,11 @@ const Billing = () => {
 
   return (
     <Container>
-      <form onSubmit={handleSubmit} className=" font-inter">
+        <form onSubmit={handleSubmit} className=" font-inter">
       <h2 className="mb-4 font-inter text-2xl font-bold text-tcolor darkH sm:mb-6 sm:text-[28px]">
-        Billing address
+        Shipping address
       </h2>
       <hr className="mb-6 border-gray-200 dark:border-gray-700" />
-
-      <FormInput
-        label="Email address"
-        required
-        type="email"
-        value={form.email}
-        onChange={set('email')}
-        placeholder="you@example.com"
-      />
 
       <div className="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
         <FormInput
@@ -123,22 +111,21 @@ const Billing = () => {
         options={COUNTIES}
       />
 
-      <div className="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
-        <FormInput
-          label="Postcode / ZIP"
-          required
-          value={form.postcode}
-          onChange={set('postcode')}
-        />
-        <FormInput
-          label="Phone"
-          required
-          type="tel"
-          value={form.phone}
-          onChange={set('phone')}
-          placeholder="(555) 555-0199"
-        />
-      </div>
+      <FormInput
+        label="Postcode / ZIP"
+        required
+        value={form.postcode}
+        onChange={set('postcode')}
+      />
+
+      <FormInput
+        label="Phone"
+        required
+        type="tel"
+        value={form.phone}
+        onChange={set('phone')}
+        placeholder="(555) 555-0199"
+      />
 
       <button
         type="submit"
@@ -151,4 +138,4 @@ const Billing = () => {
   );
 };
 
-export default Billing;
+export default Shipping;
