@@ -22,6 +22,8 @@ import { Toaster } from "react-hot-toast"
 import Wishlist from './pages/Wishlist';
 import Billing from "./pages/Billing"
 import Shipping from "./pages/Shipping"
+import Deals from "./components/Deals"
+import Recommendation from "./components/Recommendation"
 
 
 function App() {

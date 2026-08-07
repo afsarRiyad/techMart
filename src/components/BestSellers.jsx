@@ -1,7 +1,7 @@
 
 import { useFetchData } from '../hooks/Fetchdata';
 import { useTimers } from '../hooks/Timers';
-import ProductCard from './ui/ProductCard';
+import ProductCard from './ui/TopSelling';
 
 const BestSellers = () => {
      const { data: sec, loading, errs } = useFetchData('/api/home-v3')

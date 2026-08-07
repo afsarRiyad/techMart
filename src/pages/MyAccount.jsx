@@ -1,8 +1,9 @@
-import React, { usefect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, Navigate, replace, useNavigate } from 'react-router'
 
 import Container from '../components/layouts/Container';
 import Dashboard from '../components/dashboard/Dashboard';
+import ProfileImageUpload from '../components/ui/ProfileImageUpload';
 import { apiCustomer, clearCustomerToken } from '../api/apiCustomer';
 import { useAuth } from '../hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
@@ -34,6 +35,7 @@ const MyAccount = () => {
     }
   };
   
+console.log(data);
 
 
   return (
@@ -59,13 +61,25 @@ const MyAccount = () => {
             </button>
           </div>
         )}
-        Hello <span className='font-semibold cursor-pointer pr-1'>{data?.data?.username}</span>
-        (not <span className='font-semibold cursor-pointer pr-1'>{data?.data?.username}?</span>
-        <button onClick={handleClick} className='hover:underline hover:text-blue-800 bg-transparent border-none cursor-pointer'>
-          Log out
-        </button>)
-        <div className='pt-5'>
-          From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.
+        
+        <div className="flex items-start gap-8 mb-6">
+          <ProfileImageUpload 
+            currentImage={data?.data?.avatar} 
+            username={data?.data?.username} 
+          />
+          
+          <div className="flex-1">
+            <p className="text-lg">
+              Hello <span className='font-semibold cursor-pointer pr-1'>{data?.data?.username}</span>
+              (not <span className='font-semibold cursor-pointer pr-1'>{data?.data?.username}?</span>
+              <button onClick={handleClick} className='hover:underline hover:text-blue-800 bg-transparent border-none cursor-pointer ml-2'>
+                Log out
+              </button>)
+            </p>
+            <div className='pt-3'>
+              From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.
+            </div>
+          </div>
         </div>
       </div>
     </>

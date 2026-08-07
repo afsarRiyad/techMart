@@ -2,12 +2,24 @@ import React from 'react'
 import { FaOpencart } from "react-icons/fa6"
 import { Heart, GitCompareArrows } from 'lucide-react'
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
+import { useCart } from '../features/Cart/hooks/useCart.js'
+import { useWishlist } from '../features/Wishlist/hooks/useWishlist'
 
-const ProductCard = ({ product }) => {
+const Deals = ({ product }) => {
     const addToCart = useAddToCart()
+    const {data: cartData} = useCart()
+    const {data: wishlistData} = useWishlist()
+    const cartItem = cartData?.data?.items || []
+    const wishListItem = wishlistData?.data || []
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
     }
+    const isInCart = (proId) =>{
+        return cartItem.some((item)=> item?.product?._id === proId)
+    }
+    const isInWishlist = (proId) => {
+  return wishListItem.some((item) => item._id === proId);
+};
     return (
         <div className="relative after:content-[''] after:absolute after:top-5 after:right-0 after:h-75 after:w-[1px] after:bg-gray-200 last:after:hidden px-4 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] py-2 rounded-md transition-all duration-10 hover:text-black0 bg-white dark:bg-neutral-900">
             {/* Categories Layout */}
@@ -38,9 +50,17 @@ const ProductCard = ({ product }) => {
                 <p className='pt-3 text-tcolor text-[20px]'>${product.price}</p>
                 
                 <div className='group relative'>
-                    <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary transition-colors' onClick={() => handleCart(product._id || product.id)}>
-                        <FaOpencart size={25} className='text-white' />
-                    </div>
+                    {isInWishlist(product._id) ? 
+                            <>
+                            <Heart className='text-black' fill="currentColor"/>
+                             <Link to='/wishlist'>Added to Wishlist</Link>
+                            </>
+                            :
+                            <>
+                            <Heart />
+                             <button onClick={()=>hadleWishlist(product._id)}>Wishlist</button>
+                            </>
+                           }
 
                     {/* Tooltip */}
                     <div className='absolute z-50 left-1/2 -translate-x-1/2 -top-16 mt-5 opacity-0 invisible -translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
@@ -56,7 +76,7 @@ const ProductCard = ({ product }) => {
             <div className='flex justify-between text-[12px] text-gray-500 pt-3 border-t border-t-gray-200 pb-1 opacity-0 group-hover/card:opacity-100 transition-all duration-150'>
                 <div className='flex items-center gap-1 cursor-pointer hover:text-black dark:hover:text-white'>
                     <span className="text-current"><Heart /></span> 
-                    <span>Wishlist</span>
+                    <span>sdfsdf</span>
                 </div>
                 <div className='flex items-center gap-1 cursor-pointer hover:text-black dark:hover:text-white'>
                   <span className="text-current"><GitCompareArrows /></span>
@@ -67,4 +87,4 @@ const ProductCard = ({ product }) => {
     )
 }
 
-export default ProductCard
+export default Deals

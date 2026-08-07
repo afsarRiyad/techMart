@@ -1,5 +1,3 @@
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown, X } from 'lucide-react';
 import Container from './../components/layouts/Container';
 import Dropdown from '../components/ui/Dropdown';
@@ -12,7 +10,6 @@ import { useApplyCoupon } from "../features/Cart/hooks/useApplyCoupon.js";
 import toast from "react-hot-toast";
 
 const Cart = () => {
-  const queryClient = useQueryClient();
   const [discount, setDiscount] = useState(() => {
   const stored = localStorage.getItem("cartCouponCode");
   return stored ? JSON.parse(stored) : null;
@@ -24,8 +21,7 @@ const [couponData, setCouponData] = useState({})
  const totalAmount = subTotal + 50
 const cartItems = data?.data?.items
 const dis = discount?.discountAmount ?? 0
-const discountAmount = subTotal - (discount?.discountAmount ?? 0)
-console.log(discountAmount);
+const discountedSubTotal = subTotal - dis
 
 const couponMutation = useApplyCoupon()
 const removeMutation = useRemoveFromCart()
@@ -37,20 +33,21 @@ const handleChange = (itemId, newQuantity) =>{
   setCartData(prev =>({...prev, [itemId]: newQuantity}))
 }
 const handleUpdate = async () => {
-  const updates = Object.entries(cartData).map(([itemId, quantity]) =>
+  const updateEntries = Object.entries(cartData);
+  if (updateEntries.length === 0) return;
+
+  const results = await Promise.all(
+    updateEntries.map(([itemId, quantity]) =>
       updateMutation.mutateAsync({ itemId, quantity })
-   );
-     await Promise.all(updates);
-    if(dis > 0){
-       await queryClient.invalidateQueries({
-                          queryKey: ["cart"],
-                        });
-    const cart = queryClient.getQueryData(["cart"]);
-    const newTotal = cart?.data?.totalAmount;
-    let oldCode = discount?.code ;
-    const res = await couponMutation.apply({code: oldCode, orderTotal: newTotal})
+    )
+  );
+
+  if (dis > 0) {
+    const freshTotal = results[results.length - 1]?.data?.totalAmount;
+    const res = await couponMutation.apply({ code: discount?.code, orderTotal: freshTotal });
     setDiscount(res);
-    }
+  }
+  toast.success('Cart updated!');
 };
 
 const hanldleCoupon=(e)=>{
@@ -66,14 +63,14 @@ const applyCoupon =async ()=>{
       ...couponData,
       orderTotal: Number(subTotal),
      }
-    const res = await  couponMutation.mutateAsync(payload)
+    const res = await couponMutation.mutateAsync(payload)
      setDiscount(res.data);
       setCouponData({
           code: "",
         });
       }
 
-console.log(discount?.code);
+
 
   
   return(
@@ -115,7 +112,9 @@ console.log(discount?.code);
                       className='w-20 px-4 py-2 rounded-[12px] outline-none border border-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
                     />
                    </td>
-                    <td className="py-4 text-left text-tcolor text-[17px] "><span className={`${dis > 0 ? 'line-through text-red-500' : 'font-semibold'}`}>${(item.product.price * item.quantity).toFixed(2)}</span> {dis > 0 && <span className="font-semibold">${discountAmount.toFixed(2)}</span>}</td>
+                     <td className="py-4 text-left text-tcolor text-[17px] font-semibold">
+                       ${(item.product.price * item.quantity).toFixed(2)}
+                     </td>
                 </tr>
               ))}
             </tbody>
@@ -145,12 +144,15 @@ console.log(discount?.code);
                 </h4>
              </div>
              <div className='flex justify-between border-b border-b-gray-300 pt-4 pb-2'>
-               <span className={`font-bold text-[15px] `}>Subtotal</span>
-              <div>
-                 <span className={`text-gray-900 pr-2 ${dis > 0 && ' pr-2 line-through text-red-800'}`}>${subTotal?.toFixed(2)}</span>
-                 {dis > 0 && <span className="font-semibold">${discountAmount.toFixed(2)}</span>}
-              </div>
+               <span className='font-bold text-[15px]'>Subtotal</span>
+               <span className='text-gray-900'>${subTotal?.toFixed(2)}</span>
              </div>
+             {dis > 0 && (
+               <div className='flex justify-between border-b border-b-gray-300 pt-3 pb-2'>
+                 <span className='font-bold text-[15px] text-green-600'>Coupon Discount</span>
+                 <span className='font-semibold text-green-600'>- ${dis.toFixed(2)}</span>
+               </div>
+             )}
              <div className='font-bold  pt-3 pb-4 text-[15px] text-tcolor'>Shipping: {`sara palson`}</div>
 
              <div className='flex justify-between pb-2'>
@@ -230,10 +232,7 @@ console.log(discount?.code);
                </div>
                <div className='flex justify-between pt-2 pb-2'>
                <span className='font-bold text-[15px] '>Total</span>
-               <div>
-                <span className={`text-gray-900  ${dis > 0 && 'line-through text-red-800 pr-2'}`}>${totalAmount?.toFixed(2)}</span>
-                {dis > 0 && <span className="font-semibold">${(discountAmount + 50).toFixed(2)}</span>}
-               </div>
+               <span className='font-bold text-tcolor text-[17px]'>${(discountedSubTotal + 50).toFixed(2)}</span>
              </div>
             </div>
            </section>

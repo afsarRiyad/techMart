@@ -11,9 +11,19 @@ import { useFetchData } from '../hooks/Fetchdata';
 import Tooltip from './ui/Tooltip';
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart';
 import { useUpdateWishlist } from '../features/wishlist/hooks/useUpdateWishlist';
+import { useCart } from './../features/Cart/hooks/useCart.js';
+import { ArrowBigRight } from 'lucide-react';
+import { Link } from 'react-router';
+import { useWishlist } from '../features/Wishlist/hooks/useWishlist';
 
 const Featured = () => {
   const addToCart = useAddToCart()
+  const {data} = useCart()
+  const {data: wishlistData} = useWishlist()
+  const cartItem = data?.data?.items || []
+  const wishListItem = wishlistData?.data || []
+  console.log(wishListItem);
+  
   const addToWishlist = useUpdateWishlist()
     const [show, setShow]= useState('on-sale')
     const {data:sections, loading, errs:errors} = useFetchData('/api/home-v3')
@@ -24,9 +34,15 @@ const Featured = () => {
                         });
                       }
     const hadleWishlist = async(id)=>{
-         await addToWishlist.mutate({
+         await addToWishlist.mutateAsync({
                     productId : id
          })
+    }
+    const isInCart = (proId)=>{
+      return cartItem?.some((item)=> item?.product?._id === proId )
+    }
+    const isInWishlist = (proId)=>{
+      return wishListItem.some((item)=> item?._id === proId)
     }
     let datas = sections?.data?.sections.filter(item => (
       ['featured-products', 'on-sale', 'top-selling'].includes(item.id)
@@ -83,18 +99,33 @@ const Featured = () => {
                         {pro.salePrice && <p className='pt-3 text-gray-500 text-[14px] line-through'>${pro.salePrice}</p>}
                         </div>
                         <div className='group relative'>
+                        {isInCart(pro._id) ? 
+                          <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
+                            <ArrowBigRight size={25} className='text-white'/>
+                        </Link>
+                          :
                         <button onClick={()=>handleCart(pro._id)} disabled={addToCart.isPending} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary'>
                             <FaOpencart size={25} className='text-white' />
                         </button>
+                          }
                      {/* tooltip  */}
-                        <Tooltip title='Add to Cart'/>
+                        <Tooltip title={`${isInCart(pro._id) ? 'Go to Cart' : 'Add to Cart'}`}/>
                     {/* tooltip ends here  */}
                     </div>
                      </div>
-                     <div className='flex justify-between text-[12px] text-gray-500 pt-3 border-t border-t-gray-200 pb-1 opacity-0 group-hover/card:opacity-100 '>
+                     <div className={` justify-between text-[12px] text-gray-500 pt-3 border-t border-t-gray-200 pb-1 opacity-0 group-hover/card:opacity-100 ${isInWishlist(pro._id) ? 'flex-row ': 'flex '}`}>
                         <div className='flex items-center gap-1 cursor-pointer hover:text-black'>
+                           {isInWishlist(pro._id) ? 
+                            <>
+                            <Heart className='text-black' fill="currentColor"/>
+                             <Link to='/wishlist'>Added to Wishlist</Link>
+                            </>
+                            :
+                            <>
                             <Heart />
-                            <button onClick={()=>hadleWishlist(pro._id)}>Wishlist</button>
+                             <button onClick={()=>hadleWishlist(pro._id)}>Wishlist</button>
+                            </>
+                           }
                         </div>
                         <div className='flex items-center gap-1 cursor-pointer hover:text-black'>
                              <GitCompareArrows/>

@@ -3,14 +3,33 @@ import background from '../../assets/images/ProductBackground.webp'
 import Container from '../layouts/Container'
 import { useFetchData } from '../../hooks/Fetchdata'
 import { FaOpencart } from "react-icons/fa6";
-import { GitCompareArrows, Heart } from 'lucide-react';
+import { GitCompareArrows, Heart, ArrowBigRight } from 'lucide-react';
 import Tooltip from './Tooltip'
 import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
+import { useUpdateWishlist } from '../../features/Wishlist/hooks/useUpdateWishlist'
+import { useWishlist } from '../../features/Wishlist/hooks/useWishlist'
+import { Link } from 'react-router'
+import { useCart } from '../../features/Cart/hooks/useCart.js';
 
 const ProductCard = ({ data, loading = false, errs = '', type = '', discount, timers }) => {
     const addToCart = useAddToCart()
+    const { data: cartData } = useCart()
+    const { data: wishlistData } = useWishlist()
+    const cartItem = cartData?.data?.items || []
+    const wishListItem = wishlistData?.data || []
+    const addToWishlist = useUpdateWishlist()
+
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
+    }
+    const handleWishlist = async (id) => {
+        await addToWishlist.mutateAsync({ productId: id })
+    }
+    const isInCart = (proId) => {
+        return cartItem?.some((item) => item?.product?._id === proId)
+    }
+    const isInWishlist = (proId) => {
+        return wishListItem.some((item) => item?._id === proId)
     }
     if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
     if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
@@ -45,16 +64,35 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                                 {pro.price &&
                                                     <p className=' text-tcolor text-[20px] '>${pro.price}</p>
                                                 }
-                                                <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary group relative mr-2' onClick={() => handleCart(pro._id || pro.id)}>
-                                                    <FaOpencart size={25} className='text-white' />
-                                                    <Tooltip title='Add to Cart' />
+                                                <div className='group relative mr-2'>
+                                                    {isInCart(pro._id) ?
+                                                        <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
+                                                            <ArrowBigRight size={25} className='text-white' />
+                                                        </Link>
+                                                        :
+                                                        <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary group relative' onClick={() => handleCart(pro._id)}>
+                                                            <FaOpencart size={25} className='text-white' />
+                                                        </div>
+                                                    }
+                                                    <Tooltip title={`${isInCart(pro._id) ? 'Go to Cart' : 'Add to Cart'}`} />
                                                 </div>
                                             </div>
                                             {/* Hover wishlist and compare  */}
                                             <div className={`absolute left-0 flex gap-4 items-center justify-center right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5  before:w-47 lg:before:w-35 xl:before:w-57 before:border-t-2 before:border-gray-200 before:content-[""]`}>
                                                 <div className='flex items-center gap-1 justify-end cursor-pointer hover:text-black text-gray-500 pb-2 pt-1'>
-                                                    <Heart size={18} />
-                                                    <span className='text-sm pl-2'>Wishlist</span>
+                                                    {isInWishlist(pro._id) ?
+                                                        <>
+                                                            <Heart className='text-black' fill="currentColor" />
+                                                            <Link to='/wishlist' className='text-[14px]'>Added to Wishlist</Link>
+                                                        </>
+                                                        :
+                                                        <>
+                                                            <button onClick={() => handleWishlist(pro._id)} className='flex items-center gap-2'>
+                                                                <Heart size={18} />
+                                                                <span className='text-sm' >Wishlist</span>
+                                                            </button>
+                                                        </>
+                                                    }
                                                 </div>
                                                 <div className='flex items-center gap-1 justify-end  cursor-pointer pt-1 hover:text-black text-gray-500 pb-2'>
                                                     <GitCompareArrows size={18} />
@@ -86,7 +124,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                             </div>
                                             <div className='flex flex-col justify-center items-center gap-3'>
                                                 <span className='text-gray-600'>Hurry Up! Offer ens in:</span>
-                                         {/* timer starts from here */}
+                                                {/* timer starts from here */}
                                                 <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4 font-inter flex-wrap sm:flex-nowrap md:mb-7 lg:mb-2">
 
                                                     {/* Days */}

@@ -4,7 +4,7 @@ import Container from './layouts/Container'
 import { useFetchData } from '../hooks/Fetchdata'
 import television from '../assets/images/television.webp'
 import { FaOpencart } from "react-icons/fa6";
-import { GitCompareArrows, Heart } from 'lucide-react';
+import { GitCompareArrows, Heart, ArrowBigRight } from 'lucide-react';
 import Tooltip from './ui/Tooltip'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -14,11 +14,30 @@ import { Pagination } from 'swiper/modules';
 import { Grid, Navigation } from "swiper/modules";
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
+import { useUpdateWishlist } from '../features/Wishlist/hooks/useUpdateWishlist'
+import { useWishlist } from '../features/Wishlist/hooks/useWishlist'
+import { Link } from 'react-router'
+import { useCart } from '../features/Cart/hooks/useCart.js'
 
 const PromotionalCat = () => {
     const addToCart = useAddToCart()
+    const { data: cartData } = useCart()
+    const { data: wishlistData } = useWishlist()
+    const cartItem = cartData?.data?.items || []
+    const wishListItem = wishlistData?.data || []
+    const addToWishlist = useUpdateWishlist()
+    
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
+    }
+    const handleWishlist = async (id) => {
+        await addToWishlist.mutateAsync({ productId: id })
+    }
+    const isInCart = (proId) => {
+        return cartItem?.some((item) => item?.product?._id === proId)
+    }
+    const isInWishlist = (proId) => {
+        return wishListItem.some((item) => item?._id === proId)
     }
     const { data: sec, loading, errs } = useFetchData('/api/home-v3')
     const section = sec?.data?.sections?.find(cat => cat.id === 'television-and-entertainment')
@@ -91,16 +110,36 @@ const PromotionalCat = () => {
                                                     {pro.price &&
                                                         <p className=' text-tcolor text-[20px] '>${pro.price}</p>
                                                     }
-                                                    <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center  cursor-pointer group-hover/card:bg-primary group relative mr-6' onClick={() => handleCart(pro._id || pro.id)}>
-                                                        <FaOpencart size={25} className='text-white' />
-                                                        <Tooltip title='Add to Cart' />
+                                                    <div className='group relative mr-6'>
+                                                        {isInCart(pro._id) ?
+                                                            <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
+                                                                <ArrowBigRight size={25} className='text-white' />
+                                                                <Tooltip title='Go to Cart' />
+                                                            </Link>
+                                                        :
+                                                            <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary group relative' onClick={() => handleCart(pro._id)}>
+                                                                <FaOpencart size={25} className='text-white' />
+                                                                <Tooltip title='Add to Cart' />
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
                                                 <div className='absolute left-0 right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-20 shadow-xl before:absolute before:top-0 before:right-1 before:w-48 before:border-t-2 before:border-primary before:content-[""]'>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
-                                                        <Heart size={18} />
-                                                        <span className='text-sm pl-2'>Wishlist</span>
+                                                        {isInWishlist(pro._id) ?
+                                                            <>
+                                                                <Heart className='text-black' fill="currentColor" />
+                                                                <Link to='/wishlist'>Added to Wishlist</Link>
+                                                            </>
+                                                            :
+                                                            <>
+                                                                <button onClick={() => handleWishlist(pro._id)} className='flex items-center gap-2'>
+                                                                    <Heart size={18} />
+                                                                    <span className='text-sm'>Wishlist</span>
+                                                                </button>
+                                                            </>
+                                                        }
                                                     </div>
                                                     <div className='flex items-center gap-1 mt-2 mr-10 justify-end  cursor-pointer hover:text-black text-gray-500 pb-1'>
                                                         <GitCompareArrows size={18}/>

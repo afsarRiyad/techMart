@@ -15,9 +15,10 @@ export function useAddToCart() {
     queryClient.invalidateQueries({ queryKey: ["cart"] });
     toast.success("Item added to cart!", {id: 'add-cart'})
   },
-  onError: () =>{
-    toast.error("Failed to add item", {id: 'add-cart'})
-  }
+  onError:(error)=>{
+             error.response?.data?.message || error.message,
+              { id: "add-cart" }
+        }
 });
 }
 

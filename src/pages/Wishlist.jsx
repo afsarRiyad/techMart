@@ -45,7 +45,7 @@ console.log(data);
             {/* ---------- Mobile / tablet card view ---------- */}
             <div className="md:hidden flex flex-col gap-6">
               {wishlistItems.map((item) => (
-                <div key={item._id} className="relative flex flex-col items-center text-center px-2">
+                <div key={item._id} className="relative flex flex-col items-center text-center px-2 ">
                   <button
                     type="button"
                     aria-label="Remove from wishlist"
@@ -68,7 +68,7 @@ console.log(data);
                   </span>
 
                   <div className="w-full flex items-center justify-between border-b border-gray-200 py-3 mt-3">
-                    <span className="text-[#f0aeae] font-semibold">Price:</span>
+                    <span className="text-red-500 font-semibold">Price:</span>
                     <span className="text-tcolor text-[16px] font-semibold">
                       ${item?.price.toFixed(2)}
                     </span>
@@ -84,13 +84,12 @@ console.log(data);
                       {item.stock > 0 ? 'In Stock' : 'Out of Stock'}
                     </span>
                   </div>
-
                   <button
-                  onClick={()=> handleCart(item._id)}
-                    className="mt-4 self-start text-tcolor font-semibold cursor-pointer hover:text-black hover:underline transition-colors duration-200 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:no-underline"
-                  >
-                    Add to cart
-                  </button>
+                onClick={() => handleCart(item._id)}
+                className="mt-4 ml-auto block text-tcolor bg-primary font-semibold cursor-pointer hover:text-black hover:underline transition-colors duration-200 border px-3 py-1 rounded-full border-gray-300"
+              >
+                  Add to cart
+                </button>
                 </div>
               ))}
             </div>
@@ -114,11 +113,11 @@ console.log(data);
                           className="text-gray-400 cursor-pointer hover:text-black"
                           onClick={() => handleRemove(item._id)}
                         />
-                        <Link>
+                        <Link className='border border-gray-300 h-22 w-24 flex items-center justify-center'>
                           <img
                             src={item?.image}
                             alt={item?.name}
-                            className="w-[80px] h-[80px] object-cover rounded"
+                            className="w-[80px] h-[80px]  object-cover rounded"
                           />
                         </Link>
                         <span className="text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold">
