@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Camera, X } from 'lucide-react';
-import { useProfileImageUpload, useProfileImageDelete } from '../../features/user/hooks/useProfileImageUpload';
+import { useProfileImageUpload } from '../../features/user/hooks/useProfileImageUpload';
 import { updateProfile } from '../../features/user/services/userServices';
 import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { useProfileRemove } from '../../features/user/hooks/useProfileRemove';
 
 const ProfileImageUpload = ({ currentImage, username }) => {
   const [preview, setPreview] = useState(currentImage || null);
   const [file, setFile] = useState(null);
   const uploadMutation = useProfileImageUpload();
-  const removeMutation = useProfileImageDelete();
+  const removeMutation = useProfileRemove();
   const queryClient = useQueryClient();
 
   const handleFileChange = (e) => {

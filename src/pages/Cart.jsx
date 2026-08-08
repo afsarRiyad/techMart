@@ -6,15 +6,16 @@ import { useRemoveFromCart } from "../features/Cart/hooks/useRemoveCart.js";
 import { useState } from "react";
 import { useUpdateCart } from "../features/Cart/hooks/useUpdateCart.js";
 import { Link } from "react-router";
-import { useApplyCoupon } from "../features/Cart/hooks/useApplyCoupon.js";
 import toast from "react-hot-toast";
+import CouponInput from '../components/ui/CouponInput.jsx';
+import { useApplyCoupon } from '../features/Cart/hooks/useApplyCoupon.js';
 
 const Cart = () => {
+  const couponMutation = useApplyCoupon();
   const [discount, setDiscount] = useState(() => {
   const stored = localStorage.getItem("cartCouponCode");
   return stored ? JSON.parse(stored) : null;
 });
-const [couponData, setCouponData] = useState({})
   const [cartData, setCartData] = useState({});
   const { data, isLoading, error } = useCart();
  const subTotal = data?.data?.totalAmount
@@ -22,13 +23,12 @@ const [couponData, setCouponData] = useState({})
 const cartItems = data?.data?.items
 const dis = discount?.discountAmount ?? 0
 const discountedSubTotal = subTotal - dis
-
-const couponMutation = useApplyCoupon()
 const removeMutation = useRemoveFromCart()
 const updateMutation = useUpdateCart()
 const handleRemove = (itemId)=>{
         removeMutation.mutateAsync(itemId)
 }
+
 const handleChange = (itemId, newQuantity) =>{
   setCartData(prev =>({...prev, [itemId]: newQuantity}))
 }
@@ -50,25 +50,12 @@ const handleUpdate = async () => {
   toast.success('Cart updated!');
 };
 
-const hanldleCoupon=(e)=>{
-     setCouponData({["code"]: e.target.value })
-}
+
 const cancleCoupon = () =>{
     localStorage.removeItem("cartCouponCode")
     setDiscount(null)
     toast.success('Coupon removed!')
 }
-const applyCoupon =async ()=>{
-     const payload = {
-      ...couponData,
-      orderTotal: Number(subTotal),
-     }
-    const res = await couponMutation.mutateAsync(payload)
-     setDiscount(res.data);
-      setCouponData({
-          code: "",
-        });
-      }
 
 
 
@@ -93,7 +80,7 @@ const applyCoupon =async ()=>{
                 <tr key={item._id} className='border-b border-b-gray-200'>
                   <td className="py-4 flex items-center gap-4">
                  <div className='flex items-center gap-8'>
-                   <X className='text-gray-400 cursor-pointer hover:text-black' onClick={ ()=>handleRemove(item._id) }/>
+                   <X className='text-gray-400 cursor-pointer hover:text-black' onClick={ ()=>handleRemove(item?.product?._id) }/>
                     <Link to={`/product/${item.product._id || item.product.id}`}>
                       <img src={item.product.image} alt={item.product.name} className="w-[80px] h-[80px] object-cover rounded" />
                     </Link>
@@ -126,13 +113,10 @@ const applyCoupon =async ()=>{
           }
            {/* button section  */}
            <div className='pb-10 pt-20 flex justify-between '>
-              <div className='w-full max-w-[480px] flex relative left-0 h-13'>
-                <input onChange={(e)=>hanldleCoupon(e)} value={couponData.code} type="text" className='w-full border border-gray-400 border-r-0 rounded-s-full rounded-e-none outline-none  pl-8 pr-15' placeholder='Coupon code ' />
-                <button onClick={applyCoupon} className='whitespace-normal w-60 bg-tcolor font-semibold rounded-e-full text-white cursor-pointer hover:bg-black transition-colors duration-200'>Apply coupon</button>
-              </div>
+              <CouponInput setDiscount={setDiscount} subTotal={subTotal}/>
               <div className='flex flex-col '>
                 <button onClick={handleUpdate} className='bg-gray-200 text-gray-500 font-semibold py-3 w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200 ml-15'>Update Cart</button>
-                <button className='bg-primary hover:text-white text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'>Procesed to checkout</button>
+                <Link to='/checkout' className='bg-primary hover:text-white text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'>Procesed to checkout</Link>
               </div>
            </div>
            {/* cart totals  */}
@@ -167,6 +151,7 @@ const applyCoupon =async ()=>{
                 title={'Change addresses'} 
                 titleCls={'text-[15px] text-tcolor font-bold cursor-pointer'} 
                 icon={<ChevronDown size={20} className='ml-2' />}
+                duration={'duration-1200'}
               >
                 <div className='pt-6 space-y-5 max-w-[400px]'>
                   {/* Country / Region */}

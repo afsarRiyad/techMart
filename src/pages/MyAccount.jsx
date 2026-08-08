@@ -37,7 +37,6 @@ const MyAccount = () => {
   
 console.log(data);
 
-
   return (
     <>
       <div className='font-inter'>

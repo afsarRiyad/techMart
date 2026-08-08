@@ -24,6 +24,7 @@ import Billing from "./pages/Billing"
 import Shipping from "./pages/Shipping"
 import Deals from "./components/Deals"
 import Recommendation from "./components/Recommendation"
+import Checkout from "./pages/Checkout"
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/account/login" element={<Login/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/account/signup" element={<Signup/>}/>
         <Route path="/account/forgot-password" element={<Forgot/>}/>
         <Route path="/account/otp-verification" element={<OtpVerification/>}/>

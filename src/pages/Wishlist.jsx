@@ -86,7 +86,7 @@ console.log(data);
                   </div>
                   <button
                 onClick={() => handleCart(item._id)}
-                className="mt-4 ml-auto block text-tcolor bg-primary font-semibold cursor-pointer hover:text-black hover:underline transition-colors duration-200 border px-3 py-1 rounded-full border-gray-300"
+                className="mt-4 ml-auto block text-tcolor bg-primary font-semibold cursor-pointer hover:text-black  transition-colors duration-200 border px-3 py-1 rounded-full border-gray-300"
               >
                   Add to cart
                 </button>
@@ -138,7 +138,7 @@ console.log(data);
                     <td className="py-4 text-left">
                       <button
                       onClick={()=> handleCart(item._id)}
-                        className="text-tcolor font-semibold cursor-pointer hover:text-black hover:underline transition-colors duration-200 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:no-underline"
+                        className="text-tcolor font-semibold cursor-pointer hover:text-black  transition-colors duration-200 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:no-underline"
                       >
                         Add to cart
                       </button>

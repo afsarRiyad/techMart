@@ -16,8 +16,8 @@ export function useAddToCart() {
     toast.success("Item added to cart!", {id: 'add-cart'})
   },
   onError:(error)=>{
-             error.response?.data?.message || error.message,
-              { id: "add-cart" }
+             toast.error(error.response?.data?.message || error.message,
+              { id: "add-cart" })
         }
 });
 }
