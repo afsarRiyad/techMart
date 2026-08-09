@@ -9,9 +9,12 @@ import { Link } from "react-router";
 import toast from "react-hot-toast";
 import CouponInput from '../components/ui/CouponInput.jsx';
 import { useApplyCoupon } from '../features/Cart/hooks/useApplyCoupon.js';
+import { useShippingAddress } from '../features/user/hooks/useShippingAddress.js';
 
 const Cart = () => {
   const couponMutation = useApplyCoupon();
+  const [deliveryArea, setDeliveryArea] = useState('inside')
+  const updateShippingAddress = useShippingAddress()
   const [discount, setDiscount] = useState(() => {
   const stored = localStorage.getItem("cartCouponCode");
   return stored ? JSON.parse(stored) : null;
@@ -19,10 +22,12 @@ const Cart = () => {
   const [cartData, setCartData] = useState({});
   const { data, isLoading, error } = useCart();
  const subTotal = data?.data?.totalAmount
- const totalAmount = subTotal + 50
-const cartItems = data?.data?.items
+ const flatCharge = deliveryArea === 'inside' ? 0 : 50;
+ const tax = subTotal * 0.15
+ const totalAmount = subTotal + flatCharge + tax
+ const cartItems = data?.data?.items
 const dis = discount?.discountAmount ?? 0
-const discountedSubTotal = subTotal - dis
+const discountedSubTotal = subTotal - dis 
 const removeMutation = useRemoveFromCart()
 const updateMutation = useUpdateCart()
 const handleRemove = (itemId)=>{
@@ -56,9 +61,9 @@ const cancleCoupon = () =>{
     setDiscount(null)
     toast.success('Coupon removed!')
 }
-
-
-
+const handleAdrsUpdate = async() =>{
+           await updateShippingAddress.mutate()
+}
   
   return(
     <section className="font-pop ">
@@ -139,9 +144,45 @@ const cancleCoupon = () =>{
              )}
              <div className='font-bold  pt-3 pb-4 text-[15px] text-tcolor'>Shipping: {`sara palson`}</div>
 
-             <div className='flex justify-between pb-2'>
-               <span className=' text-[15px] '>Flat rate:</span>
-               <span className='text-gray-900'>${(50).toFixed(2)}</span>
+               <div className='py-2 flex justify-between border-y border-y-gray-200'>
+                <span className='font-semibold'>Tax - 15%</span>
+                <span className='font-semibold text-red-800/70'>${tax.toFixed(2)}</span>
+               </div>
+               <div className='flex justify-between py-2 '>
+                <div className='flex gap-3'>
+                  <span className=' text-[15px] '>Flat rate:</span>
+                <Dropdown title={'Select shipping'}
+                          titleCls='font-semibold'
+                          icon={<ChevronDown size={19}/>}>
+                 <div>
+                        <label>
+                          <input
+                            type="radio"
+                            name="deliveryArea"
+                            value="inside"
+                            checked={deliveryArea === 'inside'}
+                            onChange={(e) => setDeliveryArea(e.target.value)}
+                          />
+                          <span className="pl-2">Inside Dhaka</span>
+                        </label>
+                      </div>
+
+                      <div>
+                        <label>
+                          <input
+                            type="radio"
+                            name="deliveryArea"
+                            value="outside"
+                            checked={deliveryArea === 'outside'}
+                            onChange={(e) => setDeliveryArea(e.target.value)}
+                          />
+                          <span className="pl-2">Outside Dhaka</span>
+                        </label>
+                      </div>
+                </Dropdown>
+                </div>
+               <span className='text-gray-900'>${flatCharge.toFixed(2)}</span>
+
              </div>
              <div className=' pt-1 pb-4 text-[15px] text-tcolor'>
               Shipping to <span className='font-bold'> {`sdfsad, asdfsd, CA 94102.`}</span> 
@@ -162,10 +203,7 @@ const cancleCoupon = () =>{
                     <select
                       className='w-full px-4 py-2 rounded-full border border-gray-300 outline-none text-gray-600 appearance-none cursor-pointer focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-[url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23666%27 stroke-width=%272%27%3e%3cpolyline points=%276 9 12 15 18 9%27/%3e%3c/svg%3e")] bg-no-repeat bg-[right_1rem_center]'
                     >
-                      <option>United States (US)</option>
                       <option>Bangladesh (BD)</option>
-                      <option>Canada (CA)</option>
-                      <option>United Kingdom (UK)</option>
                     </select>
                   </div>
 
@@ -177,10 +215,14 @@ const cancleCoupon = () =>{
                     <select
                       className='w-full px-4 py-2 rounded-full border border-gray-300 outline-none text-gray-600 appearance-none cursor-pointer focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-[url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23666%27 stroke-width=%272%27%3e%3cpolyline points=%276 9 12 15 18 9%27/%3e%3c/svg%3e")] bg-no-repeat bg-[right_1rem_center]'
                     >
-                      <option>California</option>
-                      <option>Texas</option>
-                      <option>New York</option>
-                      <option>Florida</option>
+                      <option>Dhaka</option>
+                      <option>Chattogram</option>
+                      <option>Rajshahi</option>
+                      <option>Khulna</option>
+                      <option>Barishal</option>
+                      <option>Sylhet</option>
+                      <option>Rangpur</option>
+                      <option>Mymensingh</option>
                     </select>
                   </div>
 
@@ -209,7 +251,7 @@ const cancleCoupon = () =>{
                   </div>
 
                   {/* Update button */}
-                  <button className='bg-gray-200 text-gray-500 font-semibold py-3 px-8 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200'>
+                  <button onClick={handleAdrsUpdate} className='bg-gray-200 text-gray-500 font-semibold py-3 px-8 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200'>
                     Update
                   </button>
                 </div>
@@ -217,7 +259,7 @@ const cancleCoupon = () =>{
                </div>
                <div className='flex justify-between pt-2 pb-2'>
                <span className='font-bold text-[15px] '>Total</span>
-               <span className='font-bold text-tcolor text-[17px]'>${(discountedSubTotal + 50).toFixed(2)}</span>
+               <span className='font-bold text-tcolor text-[17px]'>${(discountedSubTotal + flatCharge + tax).toFixed(2)}</span>
              </div>
             </div>
            </section>

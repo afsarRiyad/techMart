@@ -8,3 +8,7 @@ export const updateProfile = async(profileData)=>{
 export const changePassword = async(passwordData) =>{
     const {data} = await apiCustomer.put("/api/auth/change-password", passwordData)
 }
+export const getOrders = async() =>{
+  const {data} = await apiCustomer.get('/api/orders')
+  return data
+}

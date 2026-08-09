@@ -16,10 +16,7 @@ export const useApplyCoupon =()=>{
             localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(res.data))   
             toast.success('Coupon applied successfully!', {id : 'coupons'}) 
         },
-        onError:(error)=>{
-            toast.error(error.response?.data, {id : 'coupons'})
-        }
-    })
+       onError: (error) => { const message = error.response?.data?.message || error.response?.data?.error || error.response?.data || error.message || "Invalid coupon"; toast.error(String(message), { id: "coupons", }); }, });
    const apply = async({code, orderTotal})=>{
         const requestId = ++latestRequest.current
         try {

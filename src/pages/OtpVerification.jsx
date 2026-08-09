@@ -4,6 +4,7 @@ import { CircleAlertIcon, ArrowRight, Home } from 'lucide-react';
 import { resendOtp, verifyOtp } from '../hooks/Fetchdata';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAuth } from '../hooks/useAuth';
+import { useOtpVerify } from '../hooks/useOtpVerify';
 
 const OtpVerification = () => {
     const {data} = useAuth()
@@ -16,6 +17,7 @@ const OtpVerification = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [resendDisabled, setResendDisabled] = useState(false)
     const [countdown, setCountdown] = useState(30)
+    const verifyOtpMutation = useOtpVerify()
 
     const handleChange = (index, value) => {
         if (value.length > 1) {
@@ -87,29 +89,8 @@ const OtpVerification = () => {
             return
         }
 
-        try {
-            const data = await verifyOtp({ email, otp: otpValue })
-            
-            toast.success(data.message || 'OTP verified successfully!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            })
-
-            navigate('/account', { replace: true })
-        } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Invalid or expired OTP code'
-            setErrs({ otp: errorMessage })
-            toast.error(errorMessage)
-        } finally {
-            setIsLoading(false)
-        }
+            const data = await verifyOtpMutation.mutateAsync({ email, otp: otpValue })
+           
     }
 
     const handleResend = async () => {

@@ -49,9 +49,16 @@ const FormSelect = ({ label, required, hint, value, onChange, options = [] }) =>
 
 
 
-const COUNTRIES = ['Bangladesh', 'United States', 'United Kingdom', 'Canada', 'Germany', 'France'];
+const COUNTRIES = ['Bangladesh'];
 
-const COUNTIES = ['Bangladesh', 'Tirana', 'Durrës', 'Vlorë', 'Berat', 'Korçë'];
+const COUNTIES = [  'Dhaka',
+                  'Chattogram',
+                  'Rajshahi',
+                  'Khulna',
+                  'Barishal',
+                  'Sylhet',
+                  'Rangpur',
+                  'Mymensingh',];
 
 
 

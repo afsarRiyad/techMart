@@ -77,6 +77,7 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         notes: notes || '',
         couponCode: couponCode || ''
     }
+    console.log(payload);
     
     await placeOrderMutation.mutateAsync(payload)
   };

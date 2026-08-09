@@ -3,17 +3,13 @@ import Dashboard from './Dashboard'
 import Container from '../layouts/Container'
 import { Link } from 'react-router'
 import { Eye } from 'lucide-react'
+import { useOrders } from '../../features/user/hooks/useOrders'
 
 
 const Oders = () => {
-    const orders = [
-    {
-      id: "#9957",
-      date: "July 23, 2026",
-      status: "On hold",
-      total: "$250.00 for 1 item",
-    },
-  ];
+  const { data: order, isLoading, error } = useOrders()
+  console.log(order);
+  
   return (
     <>
        <div className="w-full hidden md:flex overflow-x-auto font-inter rounded-lg border-y border-y-gray-200 bg-white">
@@ -39,17 +35,17 @@ const Oders = () => {
         </thead>
 
         <tbody>
-          {orders.map((order) => (
+          {order?.data?.map((order) => (
             <tr
-              key={order.id}
-              className="border-b border-gray-200 last:border-none"
+              key={order._id}
+              className="border-b border-gray-200 last:border-none "
             >
-              <td className="px-8 py-6 font-semibold text-gray-800">
-                {order.id}
+              <td className="px-8 py-6 font-semibold text-gray-800 cursor-pointer">
+                {order.orderNumber}
               </td>
 
               <td className="px-8 py-6 text-gray-600">
-                {order.date}
+                {order.createdAt}
               </td>
 
               <td className="px-8 py-6 text-yellow-600 font-medium">
@@ -57,7 +53,7 @@ const Oders = () => {
               </td>
 
               <td className="px-8 py-6 text-gray-600">
-                {order.total}
+                ${order.totalAmount} for {order.items.length} items
               </td>
 
               <td className="">
@@ -75,9 +71,9 @@ const Oders = () => {
 
   {/* Mobile */}
   <div className="space-y-4 md:hidden font-inter">
-    {orders.map((order) => (
+    {order?.data?.map((order) => (
       <div
-        key={order.id}
+        key={order._id}
         className="rounded-lg border border-gray-200 bg-white p-4"
       >
         <div className="flex justify-between">
@@ -87,7 +83,7 @@ const Oders = () => {
 
         <div className="mt-3 flex justify-between">
           <span className="text-gray-500">Date</span>
-          <span>{order.date}</span>
+          <span>{order.createdAt}</span>
         </div>
 
         <div className="mt-3 flex justify-between">
@@ -99,7 +95,7 @@ const Oders = () => {
 
         <div className="mt-3 flex justify-between">
           <span className="text-gray-500">Total</span>
-          <span>{order.total}</span>
+          <span>{order.totalAmount}</span>
         </div>
 
         <button className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-gray-100 py-3 font-medium hover:bg-gray-200">

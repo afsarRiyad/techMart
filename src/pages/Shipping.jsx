@@ -121,19 +121,16 @@ const Shipping = ({ setShow , className = '' }) => {
       return;
     }
 
-    // Phone validation
     if (!phoneRegex.test(form.phone)) {
       toast.error('Please enter a valid phone number!');
       return;
     }
 
-    // ZIP validation
     if (!zipRegex.test(form.zipCode)) {
       toast.error('ZIP code is not valid!');
       return;
     }
 
-    // Required fields
     if (
       !form.firstName ||
       !form.lastName ||

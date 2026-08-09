@@ -15,9 +15,9 @@ import { Grid, Navigation } from "swiper/modules";
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
 import { useUpdateWishlist } from '../features/Wishlist/hooks/useUpdateWishlist'
-import { useWishlist } from '../features/Wishlist/hooks/useWishlist'
 import { Link } from 'react-router'
 import { useCart } from '../features/Cart/hooks/useCart.js'
+import { useWishlist } from './../features/wishlist/hooks/useWishlist';
 
 const PromotionalCat = () => {
     const addToCart = useAddToCart()
