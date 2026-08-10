@@ -1,14 +1,21 @@
 import React from 'react'
 import Dashboard from './Dashboard'
 import Container from '../layouts/Container'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { Eye } from 'lucide-react'
 import { useOrders } from '../../features/user/hooks/useOrders'
 
 
 const Oders = () => {
+  const navigate = useNavigate()
   const { data: order, isLoading, error } = useOrders()
-  console.log(order);
+  console.log(order?.data);
+
+  const handleNavigate =(orderId)=>{
+     const id = orderId.replace('#', '')
+       const targetOrder = order?.data?.filter((target)=> target.orderNumber === orderId)   
+       navigate(`/account/orders/${id}`, {state: {order: targetOrder}})
+  }
   
   return (
     <>
@@ -41,11 +48,17 @@ const Oders = () => {
               className="border-b border-gray-200 last:border-none "
             >
               <td className="px-8 py-6 font-semibold text-gray-800 cursor-pointer">
-                {order.orderNumber}
+                <button onClick={()=>handleNavigate(order.orderNumber)}>
+                  {order.orderNumber}
+                </button>
               </td>
 
               <td className="px-8 py-6 text-gray-600">
-                {order.createdAt}
+                {new Date(order.createdAt).toLocaleDateString("en-US", {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
               </td>
 
               <td className="px-8 py-6 text-yellow-600 font-medium">
@@ -53,11 +66,11 @@ const Oders = () => {
               </td>
 
               <td className="px-8 py-6 text-gray-600">
-                ${order.totalAmount} for {order.items.length} items
+                ${(order.totalAmount).toFixed(2)} for {order.items.length} items
               </td>
 
               <td className="">
-                <button className="flex items-center gap-2 rounded-full bg-gray-100 px-6 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200">
+                <button onClick={()=>handleNavigate(order.orderNumber)} className="flex items-center gap-2 rounded-full bg-gray-100 px-6 py-2 text-sm font-medium text-gray-700 transition hover:bg-black hover:text-white duration-200 cursor-pointer">
                   View
                   <Eye size={16} />
                 </button>

@@ -12,10 +12,10 @@ import 'swiper/css/pagination';
 import { Navigation } from "swiper/modules";
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
-import { useWishlist } from '../../features/Wishlist/hooks/useWishlist';
 import { useCart } from '../../features/Cart/hooks/useCart.js';
 import { Link } from 'react-router';
 import { useUpdateWishlist } from '../../features/wishlist/hooks/useUpdateWishlist.js';
+import { useWishlist } from '../../features/Wishlist/hooks/useWishlist.js';
 
 const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
     const addtoWishlist = useUpdateWishlist()
@@ -35,6 +35,8 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
         const isInCart = (proId) =>{
         return cartItem.some((item)=> item?.product?._id === proId)
     }
+    272875
+    2318652634
     const isInWishlist = (proId) => {
   return wishListItem.some((item) => item._id === proId);
     }

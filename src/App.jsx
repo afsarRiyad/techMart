@@ -19,12 +19,14 @@ import Details from "./components/dashboard/Details"
 import Dashboard from "./components/dashboard/Dashboard"
 import ProtectedRoute from "./routes/ProtectedRoute"
 import { Toaster } from "react-hot-toast"
-import Wishlist from './pages/Wishlist';
 import Billing from "./pages/Billing"
 import Shipping from "./pages/Shipping"
 import Deals from "./components/Deals"
 import Recommendation from "./components/Recommendation"
 import Checkout from "./pages/Checkout"
+import SignleOrderDetails from './components/ui/SignleOrderDetails';
+import Wishlist from './pages/Wishlist';
+import OrderReceived from "./pages/OrderReceived"
 
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/account/login" element={<Login/>}/>
+        <Route path="/order-received" element={<OrderReceived/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/account/signup" element={<Signup/>}/>
@@ -56,6 +59,7 @@ function App() {
         <Route path="/account/billing" element={<Billing/>}/>
         <Route path="/account/shipping" element={<Shipping/>}/>
         <Route path="/account/account-details" element={<Details/>}/>
+        <Route path="/account/orders/:orderId" element={<SignleOrderDetails/>}/>
       </Route>
      </Route>
         <Route path="/terms-and-conditions" element={<Terms/>}/>

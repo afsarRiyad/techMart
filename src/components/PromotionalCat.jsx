@@ -17,7 +17,7 @@ import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
 import { useUpdateWishlist } from '../features/Wishlist/hooks/useUpdateWishlist'
 import { Link } from 'react-router'
 import { useCart } from '../features/Cart/hooks/useCart.js'
-import { useWishlist } from './../features/wishlist/hooks/useWishlist';
+import { useWishlist } from '../features/Wishlist/hooks/useWishlist.js'
 
 const PromotionalCat = () => {
     const addToCart = useAddToCart()

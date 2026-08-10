@@ -5,18 +5,6 @@ import { Link } from 'react-router';
 import { useCreateOrder } from '../../features/user/hooks/useCreateOrder.js';
 import { useAddresses } from '../../features/user/hooks/useGetAddresses.js';
 
-const BkashIcon = () => (
-  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2136E] text-white font-extrabold italic text-[15px]">
-    b
-  </span>
-);
-
-const NagadIcon = () => (
-  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F42534] text-white font-extrabold text-[15px]">
-    N
-  </span>
-);
-
 const paymentMethods = [
   {
     id: 'cash_on_delivery',
@@ -53,23 +41,18 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
   const shippingFee = 50;
   const total = (subtotal + shippingFee) - discountAmount;
   const orderAddress = shipToDifferent ? address?.data?.shippingAddress : address?.data?.billingAddress
-  console.log(products);
-
   
   const [selectedPayment, setSelectedPayment] = useState( "cash_on_delivery");
   const [agreed, setAgreed] = useState(false);
   const [isPlacing, setIsPlacing] = useState(false);
-  console.log(orderAddress);
 
+  console.log(selectedPayment);
   const handlePlaceOrder = async () => {
     if (!agreed) return;
     const items = products.map((item)=> ({
           product: item?.product?._id,
           quantity: item.quantity
-    }))
-    console.log(items);
-
-    
+    })) 
     const payload = {
         items: items,
         shippingAddress: orderAddress,
@@ -77,7 +60,6 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         notes: notes || '',
         couponCode: couponCode || ''
     }
-    console.log(payload);
     
     await placeOrderMutation.mutateAsync(payload)
   };

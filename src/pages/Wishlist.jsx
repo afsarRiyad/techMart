@@ -7,7 +7,7 @@ import { FaFacebookF, FaWhatsapp  } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { TfiPinterest } from "react-icons/tfi";
 import { IoMail } from "react-icons/io5";
-import { useRemoveWishlist } from '../features/wishlist/hooks/useRemoveWishlist.js';
+import { useRemoveWishlist } from './../features/wishlist/hooks/useRemoveWishlist';
 
 const shareLinks = [
  {icon: FaFacebookF },
@@ -31,9 +31,28 @@ const Wishlist = () => {
                  quantity: 1
        })
   }
-console.log(data);
 
   return (
+    <>
+     {!wishlistItems || wishlistItems.length === 0 ? (
+      <div className="py-10">
+        <div className="relative overflow-hidden rounded bg-primary px-8 py-6 md:px-10">
+          <span className="absolute left-0 top-0 h-full w-1.5 bg-yellow-600" />
+          <p className="text-center text-[22px] text-tcolor md:text-[26px]">
+            Your wishlist is currently empty.
+          </p>
+        </div>
+    
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/"
+            className="rounded-full bg-gray-100 px-8 py-3 text-[15px] font-medium text-gray-700 transition-colors duration-200 hover:bg-black hover:text-white"
+          >
+            Return to shop
+          </Link>
+        </div>
+      </div>
+    ) : (
     <section className="font-pop">
       <Container>
         <h1 className="text-[28px] sm:text-[40px] text-tcolor w-full text-center pt-6 pb-6 sm:pb-10">
@@ -164,6 +183,8 @@ console.log(data);
         )}
       </Container>
     </section>
+      )}
+   </>
   );
 };
 

@@ -11,13 +11,17 @@ export const useCreateOrder = () =>{
         onMutate:()=>{
             toast.loading('placing order...', {id:'order'})
         },
-        onSuccess:()=>{
+        onSuccess:(data)=>{
             toast.success('order success', {id:'order'})
             clearCart()
             queryClient.invalidateQueries({queryKey:["cart"]})
             queryClient.invalidateQueries({queryKey:["me"]})
              localStorage.removeItem("cartCouponCode");
-             navigate('/account')
+             navigate("/order-received", {
+                        state: {
+                        order: data,
+                        },
+  });
         },
         onError:(error)=>{
             toast.error(error.message, {id:'order'})

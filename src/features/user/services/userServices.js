@@ -12,3 +12,11 @@ export const getOrders = async() =>{
   const {data} = await apiCustomer.get('/api/orders')
   return data
 }
+export const trackOrders = async ({orderId, email})=>{
+   const params = {};
+  if (email) {
+    params.email = email;
+  }
+  const {data} = await apiCustomer.get(`/api/orders/track/${orderId}`, {params})
+  return data
+}

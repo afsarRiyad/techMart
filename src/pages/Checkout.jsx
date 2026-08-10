@@ -27,7 +27,9 @@ const cancleCoupon = () =>{
     setDiscount(null)
     toast.success('Coupon removed!')
 }
-      
+console.log(data?.data?.items?.length);
+
+      if(data?.data?.items?.length <= 0) return navigate('/cart', {replace:true})
   return (
     <Container>
        <h2 className='font-pop text-[40px] pt-5 text-tcolor text-center pb-7'>Checkout</h2>
