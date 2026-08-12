@@ -27,6 +27,7 @@ import Checkout from "./pages/Checkout"
 import SignleOrderDetails from './components/ui/SignleOrderDetails';
 import Wishlist from './pages/Wishlist';
 import OrderReceived from "./pages/OrderReceived"
+import Products from "./pages/Products"
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/account/login" element={<Login/>}/>
         <Route path="/order-received" element={<OrderReceived/>}/>
+        <Route path="/products/:page" element={<Products/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/account/signup" element={<Signup/>}/>

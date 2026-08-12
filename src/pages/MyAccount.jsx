@@ -35,7 +35,6 @@ const MyAccount = () => {
     }
   };
   
-console.log(data);
 
   return (
     <>

@@ -15,7 +15,7 @@ import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
 import { useCart } from '../../features/Cart/hooks/useCart.js';
 import { Link } from 'react-router';
 import { useUpdateWishlist } from '../../features/wishlist/hooks/useUpdateWishlist.js';
-import { useWishlist } from '../../features/Wishlist/hooks/useWishlist.js';
+import { useWishlist } from '../../features/wishlist/hooks/useWishlist.js';
 
 const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
     const addtoWishlist = useUpdateWishlist()

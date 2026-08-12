@@ -26,6 +26,7 @@ const Searchbar = () => {
   useScrollBlocker(mobileSearch)
   let totalItem = data?.data?.totalItems
   let totalAmount = data?.data?.totalAmount
+ const baseURL = import.meta.env.VITE_API_URL;
   
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +46,7 @@ const Searchbar = () => {
 
        const fetchCat=async()=>{
          try { 
-            let res = await axios.get('https://electrobackend-1.onrender.com/api/categories')
+            let res = await axios.get(`${baseURL}/api/categories`)
             setCategories(res.data.data)   
          } catch (error) {
             setError('Failed to load categories')

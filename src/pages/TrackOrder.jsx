@@ -5,16 +5,21 @@ import toast from 'react-hot-toast'
 
 const TrackOrder = () => {
   const [orderData, setOrderData] = useState({ orderId: "", email: "", });
-   const handleTrack =async()=>{
-     console.log(orderData);
+   const handleTrack = async()=>{
+     console.log('Order data before validation:', orderData);
+     if (!orderData.orderId || orderData.orderId.trim() === '' || orderData.orderId === undefined || orderData.orderId === null) {
+      toast.error('Please enter an Order ID')
+      console.log('Validation failed - empty orderId');
+      return
+     }
      try {
-     const response = trackOrders(orderData)
-     console.log(response);
+     const response = await trackOrders({orderId: orderData.orderId.trim(), email: orderData.email})
+     console.log('Track response:', response);
      
-      toast.success('sdfs')
+      toast.success('Order found successfully')
      } catch (error) {
-      console.log(error.message);
-      toast.error('something')
+      console.log('Track error:', error);
+      toast.error(error.message || 'Order not found')
       
      }
    }

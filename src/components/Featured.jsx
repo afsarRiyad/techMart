@@ -14,7 +14,7 @@ import { useUpdateWishlist } from '../features/wishlist/hooks/useUpdateWishlist'
 import { useCart } from './../features/Cart/hooks/useCart.js';
 import { ArrowBigRight } from 'lucide-react';
 import { Link } from 'react-router';
-import { useWishlist } from '../features/Wishlist/hooks/useWishlist.js';
+import { useWishlist } from '../features/wishlist/hooks/useWishlist.js';
 
 const Featured = () => {
   const addToCart = useAddToCart()

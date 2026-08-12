@@ -3,7 +3,7 @@ import { FaOpencart } from "react-icons/fa6"
 import { Heart, GitCompareArrows } from 'lucide-react'
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
 import { useCart } from '../features/Cart/hooks/useCart.js'
-import { useWishlist } from '../features/Wishlist/hooks/useWishlist.js'
+import { useWishlist } from '../features/wishlist/hooks/useWishlist.js'
 
 const Deals = ({ product }) => {
     const addToCart = useAddToCart()

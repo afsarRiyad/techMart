@@ -13,10 +13,13 @@ export const getOrders = async() =>{
   return data
 }
 export const trackOrders = async ({orderId, email})=>{
+   if (!orderId || orderId.trim() === '' || orderId === undefined || orderId === null) {
+    throw new Error('Order ID is required');
+  }
    const params = {};
   if (email) {
     params.email = email;
   }
-  const {data} = await apiCustomer.get(`/api/orders/track/${orderId}`, {params})
+  const {data} = await apiCustomer.get(`/api/orders/track/${encodeURIComponent(orderId)}`, {params})
   return data
 }
