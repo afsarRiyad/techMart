@@ -1,53 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import ProSidebar from '../components/products/ProSidebar'
 import Container from '../components/layouts/Container'
-import { ChevronDown, Grid2X2, Grid3X3, List, Rows3 } from 'lucide-react'
+import { ChevronDown, ChevronsUpDown, Grid2X2, Grid3X3, List, MoveLeft, MoveRight, Rows3 } from 'lucide-react'
 import { useGetCatProducts } from '../features/products/hooks/useGetCatProducts'
 import Gridview from '../components/products/Gridview'
 import GridExtend from '../components/products/GridExtend'
 import Listview from '../components/products/ListView'
 import ListViewSmall from '../components/products/ListViewSmall'
+import { setPage,  setItemsPerPage,  setSort,  setView,  setSelectedBrands,  setSelectedColors,  setPriceRange,  setActiveCategory,  setActiveChildCategory, resetFilters,} from '../features/products/productPageSlice'
 
-const SORT_OPTIONS = [
-  {
-    value: 'default',
-    label: 'Default sorting',
-  },
-  {
-    value: 'price-asc',
-    label: 'Price: Low to High',
-  },
-  {
-    value: 'price-desc',
-    label: 'Price: High to Low',
-  },
-  {
-    value: 'rating-desc',
-    label: 'Highest Rated',
-  },
-]
+const SORT_OPTIONS = [{value: 'default', label: 'Default sorting',},
+                    { value: 'price-asc', label: 'Price: Low to High', },
+                      { value: 'price-desc', label: 'Price: High to Low', },
+                      { value: 'rating-desc', label: 'Highest Rated',},
+                      { value: 'latest', label: 'Latest Products',},
+                    ]
 
 const Products = () => {
+  const dispatch = useDispatch()
   const [active, setActive] = useState()
+  const [inputPage, setInputPage] = useState('1')
   const [activeChild, setActiveChild] = useState()
 
-  const [selectedBrands, setSelectedBrands] = useState([])
-  const [selectedColors, setSelectedColors] = useState([])
-  const [priceRange, setPriceRange] = useState([0, 1000])
-
-  const [itemsPerPage, setItemsPerPage] = useState(12)
-  const [page, setPage] = useState(1)
-  const [sort, setSort] = useState('default')
-  const [view, setView] = useState('grid')
-
   const {
-    data,
-    isLoading,
-    isError,
-  } = useGetCatProducts({
-    category: activeChild
-      ? activeChild
-      : active?.name,
+    page,
+    itemsPerPage,
+    sort,
+    view,
+    selectedBrands,
+    selectedColors,
+    priceRange,
+  } = useSelector((state) => state.productPage)
+
+  const { data, isLoading, isError } = useGetCatProducts({
+    category: activeChild ? activeChild : active?.name === 'View All Products' ? undefined : active?.name,
     brands: selectedBrands,
     colors: selectedColors,
     priceRange,
@@ -55,69 +42,95 @@ const Products = () => {
     page,
     sort,
   })
-
   const products = data?.data || []
 
   const meta = data?.meta || {
     total: 0,
     totalPages: 1,
   }
-  console.log(products);
+
+  useEffect(() => {
+    if (active) {
+      dispatch(setActiveCategory(active))
+    }
+  }, [active, dispatch])
+
+  useEffect(() => {
+    if (activeChild) {
+      dispatch(setActiveChildCategory(activeChild))
+    }
+  }, [activeChild, dispatch])
   
   const handleSortChange = (event) => {
-    setSort(event.target.value)
-    setPage(1)
+    dispatch(setSort(event.target.value))
   }
 
   const handleLimitChange = (event) => {
-    setItemsPerPage(Number(event.target.value))
-    setPage(1)
+    dispatch(setItemsPerPage(Number(event.target.value)))
   }
 
   const handleViewChange = (viewType) => {
-    setView(viewType)
+    dispatch(setView(viewType))
   }
+  
+  const firstResult = products.length ? (page - 1) * itemsPerPage + 1 : 0
+  const lastResult = Math.min( page * itemsPerPage, meta.total )
 
-  const isListView =
-    view === 'list' || view === 'list2'
-
-  const gridClass = isListView
-    ? 'grid grid-cols-1 gap-4'
-    : view === 'columns'
-      ? 'grid grid-cols-2 gap-4 md:grid-cols-3'
-      : 'grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4'
-
-  const firstResult = products.length
-    ? (page - 1) * itemsPerPage + 1
-    : 0
-  const lastResult = Math.min(
-    page * itemsPerPage,
-    meta.total
-  )
   const formatPrice = (price) => {
-    return `${Number(price || 0).toLocaleString()}`
+    return `${Number(price || 0).toLocaleString()}` 
   }
-
+  const handleGoToPage = (e) => {
+    const targetPage = Number(inputPage)
+    if (e.key === 'Enter') {
+      if (targetPage >= 1 && targetPage <= meta.totalPages) {
+        dispatch(setPage(targetPage))
+      }
+    }
+  }
+  useEffect(() => {
+  setInputPage(String(page))
+}, [page])
+  
+  const getPages = (currentPage, totalPage) =>{
+    let pages = []
+    if(totalPage <= 7){
+      for(let i = 1; i <= totalPage; i++){
+        pages.push(i)
+      }
+      return pages
+    }
+    pages.push(1)
+    if(currentPage >= 4){
+      pages.push('...')
+    }
+    let start = Math.max(2, currentPage - 1)
+    let end = Math.min(totalPage - 1 , currentPage + 1)
+    
+    for(let i = start; i <= end; i++){
+      pages.push(i)
+    }
+    if(currentPage < totalPage - 3){
+      pages.push('...')
+    }
+    pages.push(totalPage)
+    return pages
+  }
   return (
-    <Container className="py-3">
+    <Container className="py-3 font-inter">
       <div className="flex w-full gap-8">
        {/* sidebar  */}
-        <div className="w-[22%] shrink-0">
+        <div className="w-[20%] shrink-0">
           <ProSidebar
             active={active}
             setActive={setActive}
             activeChild={activeChild}
             setActiveChild={setActiveChild}
-            selectedBrands={selectedBrands}
-            setSelectedBrands={setSelectedBrands}
-            selectedColors={selectedColors}
-            setSelectedColors={setSelectedColors}
           />
         </div>
 
        {/* products section  */}
-        <div className="w-[78%]">
-          {/* ================= HEADER ================= */}
+        <div className="w-[79%]">
+          {/* header  */}
           <div className="flex items-end justify-between pb-4">
             <h1 className="text-[26px] font-medium text-tcolor dark:text-white">
               {active?.name}
@@ -127,15 +140,12 @@ const Products = () => {
                 Showing {firstResult}–{lastResult} of {meta.total} results
               </span>
             )}
-
           </div>
 
           <div className="flex flex-col gap-3 rounded bg-gray-100 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between dark:bg-white/5">
            <div className="flex items-center ">
                 {/* Columns */}
-                <button
-                  type="button"
-                  aria-label="Columns view"
+                <button type="button" aria-label="Columns view"
                   aria-pressed={view === 'columns'}
                   onClick={() => handleViewChange('columns')}
                   className={`rounded p-1 transition-all cursor-pointer duration-300 active:scale-90 ${
@@ -149,9 +159,7 @@ const Products = () => {
 
               {/* Grid */}
 
-              <button
-                type="button"
-                aria-label="Grid view"
+              <button type="button" aria-label="Grid view"
                 aria-pressed={view === 'grid'}
                 onClick={() => handleViewChange('grid')}
                 className={`rounded p-1 transition-all cursor-pointer duration-300 active:scale-90 ${
@@ -162,14 +170,9 @@ const Products = () => {
               >
                 <Grid2X2 size={18} />
               </button>
-
-
-
               {/* List */}
 
-              <button
-                type="button"
-                aria-label="List view"
+              <button type="button"aria-label="List view"
                 aria-pressed={view === 'list'}
                 onClick={() => handleViewChange('list')}
                 className={`rounded p-1 transition-all cursor-pointer duration-300 active:scale-90 ${
@@ -184,9 +187,7 @@ const Products = () => {
 
               {/* List 2 */}
 
-              <button
-                type="button"
-                aria-label="List view 2"
+              <button type="button" aria-label="List view 2"
                 aria-pressed={view === 'list2'}
                 onClick={() => handleViewChange('list2')}
                 className={`rounded p-1 transition-all cursor-pointer duration-300 active:scale-90 ${
@@ -201,25 +202,20 @@ const Products = () => {
 
               {/* products show and sort  */}
             <div className="flex items-center gap-2">
-              <label
-                htmlFor="product-limit"
-                className="text-sm text-gray-500 dark:text-gray-400"
-              >
-                Show
-              </label>
-              <select
-                id="product-limit"
-                value={itemsPerPage}
+             <div className='relative'>
+               <select id="product-limit"  value={itemsPerPage}
                 onChange={handleLimitChange}
-                className="cursor-pointer rounded border font-pop border-gray-300 bg-white px-2 py-2 text-sm text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
+                className="cursor-pointer border font-pop appearance-none border-gray-300 bg-white pl-4 pr-7 py-2 text-sm text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white rounded-full "
               >
-                <option value={12}>12</option>
-                <option value={24}> 24</option>
-                <option value={36}> 36</option>
-                <option value={48}>48</option>
-                <option value={100}>All</option>
+                <option value={10}>Show 10</option>
+                <option value={25}>Show 25</option>
+                <option value={35}>Show 35</option>
+                <option value={48}>Show 48</option>
+                <option value={100}>Show All</option>
               </select>
+              <ChevronsUpDown  size={16} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"/>
 
+             </div>
               {/* sort  */}
               <div className="relative">
                 <label
@@ -229,16 +225,11 @@ const Products = () => {
                   Sort products
                 </label>
 
-                <select
-                  id="product-sort"
-                  value={sort}
-                  onChange={handleSortChange}
+                <select  id="product-sort" value={sort} onChange={handleSortChange}
                   className="w-56 cursor-pointer appearance-none rounded-full border  border-gray-300 bg-white py-2 pl-4 pr-9 text-[14px] text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white"
                 >
                   {SORT_OPTIONS.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
+                    <option key={option.value} value={option.value}
                     >
                       {option.label}
                     </option>
@@ -250,9 +241,27 @@ const Products = () => {
                 />
               </div>
             </div>
+            <div>
+              {meta.totalPages > 1 &&
+              <div className='flex'>
+                {page !== 1 &&
+                 <button onClick={() => dispatch(setPage(Math.max(1, page - 1)))} disabled={page === 1} className={`cursor-pointer text-gray-600`}>
+                  <MoveLeft />
+                </button>
+                }
+                  <input value={inputPage} onChange={(e)=> setInputPage(e.target.value)} onKeyDown={handleGoToPage} min="1" max={meta.totalPages}
+                   type="number" className='border border-gray-400 rounded-full text-center  w-12 py-1 mx-3 outline-none focus:ring-2 focus:ring-blue-400/20'
+                   />
+              {page !== meta.totalPages &&
+                <button onClick={() => dispatch(setPage(Math.min(meta.totalPages, page + 1)))} disabled={page === meta.totalPages} className={`cursor-pointer text-gray-600`}>
+                  <MoveRight />
+                </button>
+              }
+              </div>
+              }
+            </div>
           </div>
-          {/* ================= LOADING ================= */}
-
+         {/* loading  */}
           {isLoading && (
             <div className="py-16 text-center">
               <p className="text-gray-500">
@@ -260,7 +269,7 @@ const Products = () => {
               </p>
             </div>
           )}
-          {/* ================= ERROR ================= */}
+          {/* error  */}
           {isError && !isLoading && (
             <div className="py-16 text-center">
               <p className="text-red-500">
@@ -268,7 +277,7 @@ const Products = () => {
               </p>
             </div>
           )}
-          {/* ================= PRODUCTS ================= */}
+          {/* products  */}
           {!isLoading && !isError && (
             <>
               <div >
@@ -286,50 +295,74 @@ const Products = () => {
               {view === 'list2' && <ListViewSmall products={products} />}
                   </>
                 )}
-
               </div>
-              {/* ================= PAGINATION ================= */}
+             {/* pagination  */}
+             {meta.totalPages > 1 && (
+   <div className="mt-8 flex items-center justify-center gap-2">
+    {/* Previous */}
+    <button
+      type="button"
+      onClick={() => dispatch(setPage(page - 1))}
+      disabled={page === 1}
+      className=" rounded border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:hover:bg-white/5 "
+        >
+      Previous
+    </button>
 
-              {meta.totalPages > 1 && (
+    {/* Page info */}
+    <span className="mx-1 text-sm text-gray-500 dark:text-gray-400">
+      Page {page} of {meta.totalPages}
+    </span>
 
-                <div className="mt-8 flex items-center justify-center gap-3">
-                  {/* Previous */}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setPage(
-                        (current) =>
-                          current - 1
-                      )
-                    }
-                    disabled={page === 1}
-                    className="rounded border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:hover:bg-white/5"
-                  >
-                    Previous
-                  </button>
-                  {/* Current Page */}
-                  <span className="self-center text-sm text-gray-500 dark:text-gray-400">
-                    Page {page} of {meta.totalPages}
-                  </span>
-                  {/* Next */}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setPage(
-                        (current) =>
-                          current + 1
-                      )
-                    }
-                    disabled={
-                      page >=
-                      meta.totalPages
-                    }
-                    className="rounded border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:hover:bg-white/5"
-                  >
-                    Next
-                  </button>
-                </div>
-              )}
+    {/* Page numbers */}
+    <div className="flex items-center gap-2">
+      {getPages(page, meta.totalPages).map((item, index) => {
+        if (item === '...') {
+          return (
+            <span
+              key={`ellipsis-${index}`}
+              className="flex h-10 w-6 items-center justify-center text-gray-500"
+            >
+              ...
+            </span>
+          );
+        }
+        return (
+          <button
+            key={`page-${item}`}
+            type="button"
+            onClick={() => dispatch(setPage(item))}
+            className={`
+              h-10 w-10
+              rounded-full
+              border
+              border-gray-300
+              text-sm
+              transition
+              cursor-pointer
+              ${
+                page === item
+                  ? 'bg-yellow-400 text-black'
+                  : 'hover:bg-gray-200 dark:hover:bg-white/10'
+              }
+            `}
+          >
+            {item}
+          </button>
+        );
+      })}
+    </div>
+    {/* Next */}
+    <button type="button" onClick={() => dispatch(setPage(page + 1))}
+      disabled={page >= meta.totalPages}
+      className="rounded border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-100 disabled:cursor-not-alloweddisabled:opacity-40 dark:border-white/10 dark:hover:bg-white/5
+      "
+    >
+      Next
+    </button>
+
+  </div>
+)}
             </>
           )}
         </div>

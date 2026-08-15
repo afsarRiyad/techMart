@@ -55,7 +55,9 @@ const ListViewSmall = ({ products }) => {
                         {/* image */}
                         <div className='w-40 shrink-0 flex items-center justify-center'>
                             {pro.image &&
+                            <Link to={`/products/${pro.slug || pro._id}`} >
                                 <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal' />
+                            </Link>
                             }
                         </div>
 
@@ -72,7 +74,7 @@ const ListViewSmall = ({ products }) => {
 
                             {/* name */}
                             {pro.name &&
-                                <Link to={`/product/${pro.slug || pro._id}`} className='text-[#0062BD] text-[17px] pt-1 font-semibold leading-tight block hover:underline'>
+                                <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[17px] pt-1 font-semibold leading-tight block hover:underline'>
                                     {pro.name}
                                 </Link>
                             }

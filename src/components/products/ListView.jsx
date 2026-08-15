@@ -54,7 +54,9 @@ const getBullets = (description) => {
                         {/* image */}
                         <div className='w-60 shrink-0 flex items-center justify-center'>
                             {pro.image &&
-                                <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal' />
+                               <Link to={`/product/${pro.slug || pro._id}`}>
+                                  <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal' />
+                               </Link>
                             }
                         </div>
 

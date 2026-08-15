@@ -4,7 +4,7 @@ import { FaOpencart } from "react-icons/fa6";
 import { ArrowBigRight, GitCompareArrows, Heart } from 'lucide-react';
 import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
 import { useCart } from '../../features/Cart/hooks/useCart.js';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useUpdateWishlist } from '../../features/wishlist/hooks/useUpdateWishlist.js';
 import { useWishlist } from '../../features/wishlist/hooks/useWishlist.js';
 import Tooltip from '../ui/Tooltip.jsx';
@@ -14,6 +14,7 @@ const Gridview = ({ products }) => {
     const { data: cartData } = useCart()
     const addToCart = useAddToCart()
     const { data: wishlistData } = useWishlist()
+    const navigate = useNavigate()
 
     const handleWishlist = (id) => {
         addtoWishlist.mutate({
@@ -35,13 +36,16 @@ const Gridview = ({ products }) => {
         return wishListItem.some((item) => item._id === proId);
     }
 
+console.log(products);
 
     return (
-        <div className='w-full min-w-0'>
+        <div className='w-full min-w-0 font-inter'>
             <div className='grid grid-cols-5'>
                 {products && products.map((pro, index) => (
                     <div key={pro._id || pro.id || index} className='group/card min-w-0 mb-5'>
-                        <div className={`relative py-3 bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)]  mb-2 cursor-pointer ${(index + 1) % 5 == 0 ? 'border-none' : 'border-r border-r-gray-300'}`}>
+                        <div 
+                            className={`relative py-3 bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)]  mb-2 ${(index + 1) % 5 == 0 ? 'border-none' : 'border-r border-r-gray-300'}`}
+                        >
                             <div className='px-5'>
                                 <div className='flex items-center pt-1'>
                                                     {pro?.categories?.map((tag, index) => (
@@ -49,10 +53,12 @@ const Gridview = ({ products }) => {
                                                     ))}
                                                 </div>
                                 {pro.name &&
-                                    <span className='text-[#0062BD] text-[16px] min-h-12 leading-tight pt-2 font-semibold line-clamp-2'>{pro.name}</span>
+                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] hover:underline text-[16px] min-h-12 leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
                                 }
                                 {pro.image &&
-                                    <img loading="lazy" src={pro.image} alt='img' className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                <Link to={`/products/${pro.slug || pro._id}`} >
+                                    <img onClick={() => navigate(`/products/${pro.slug || pro._id}`)} loading="lazy" src={pro.image} alt='img' className='md:w-full w-30 md:h-full cursor-pointer object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                </Link>
                                 }
                                 <div className='flex items-center justify-between pb-3'>
                                     {pro.price &&
@@ -60,11 +66,11 @@ const Gridview = ({ products }) => {
                                     }
                                     <div className='group relative'>
                                         {isInCart(pro._id) ?
-                                            <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
+                                            <Link to='/cart' onClick={(e) => e.stopPropagation()} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
                                                 <ArrowBigRight size={25} className='text-white' />
                                             </Link>
                                             :
-                                            <button onClick={() => handleCart(pro._id)} disabled={addToCart.isPending} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
+                                            <button onClick={(e) => { e.stopPropagation(); handleCart(pro._id); }} disabled={addToCart.isPending} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
                                                 <FaOpencart size={25} className='text-white' />
                                             </button>
                                         }
@@ -74,16 +80,16 @@ const Gridview = ({ products }) => {
                                     </div>
                                 </div>
                                 {/* Hover wishlist and compare */}
-                                <div  className='absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 opacity-0 invisible group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-47 lg:before:w-40 before:border-t-2 before:border-gray-200 before:content-[""]'>
+                                <div  className='absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 opacity-0 invisible group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]'>
                                     <div className='flex items-center gap-1 justify-center cursor-pointer hover:text-black text-gray-500'>
                                         {isInWishlist(pro._id) ?
                                             <>
-                                                <Heart className='text-black' fill="currentColor" />
-                                                <Link to='/wishlist'>Added to Wishlist</Link>
+                                                <Heart size={18} className='text-black' fill="currentColor" />
+                                                <Link to='/wishlist' onClick={(e) => e.stopPropagation()} className='text-[14px]'>Added to Wishlist</Link>
                                             </>
                                             :
                                             <>
-                                                <button onClick={() => handleWishlist(pro._id)} className='flex items-center gap-2'>
+                                                <button onClick={(e) => { e.stopPropagation(); handleWishlist(pro._id); }} className='flex items-center gap-2'>
                                                     <Heart size={18} />
                                                     <span className='text-sm'>Wishlist</span>
                                                 </button>

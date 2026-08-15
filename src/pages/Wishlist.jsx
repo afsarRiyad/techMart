@@ -1,7 +1,7 @@
 import Container from './../components/layouts/Container';
 import { X } from 'lucide-react';
 import { Link } from "react-router";
-import { useWishlist } from '../features/Wishlist/hooks/useWishlist.js';
+import { useWishlist } from '../features/wishlist/hooks/useWishlist.js';
 import { useAddToCart } from '../features/Cart/hooks/useAddToCart.js';
 import { FaFacebookF, FaWhatsapp  } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";

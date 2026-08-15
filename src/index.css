@@ -337,3 +337,8 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
   width: 30px !important;
   border-radius: 5px !important;
 }
+
+
+.swiper-thumbs .swiper-slide-thumb-active {
+  border-bottom: 3px solid #FED700;
+}

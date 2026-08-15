@@ -1,45 +1,114 @@
-
 import React from 'react'
-import { Link, useLocation } from 'react-router'
-import Container from './layouts/Container';
-import { House, ChevronRight  } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router'
+import Container from './layouts/Container'
+import { House, ChevronRight } from 'lucide-react'
 
-const Breadcrumbs = () => {
-    let direction = useLocation().pathname.split('/')
-    let arr = direction.filter(item => item !== '')
-    const capitalize = (text = '') =>{
-      return  (
-          text.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+const Breadcrumbs = ({ items = [] }) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const hasBackendBreadcrumbs = items.length > 0
+
+  const pathItems = location.pathname
+    .split('/')
+    .filter(Boolean)
+    .filter((item) => item !== 'category')
+
+  const capitalize = (text = '') => {
+    return text
+      .split('-')
+      .map(
+        (word) =>
+          word.charAt(0).toUpperCase() + word.slice(1)
       )
-    }
-  return (
-    <>
-  <div className='dark:border-b  dark:border-gray-700 border-b border-b-gray-200 text-[15px]'>
-      <Container >
-        <div className='flex py-4 gap-5 px-3 lg:px-5'>
-        <ul className='flex items-center gap-3'>
-            <li className='hover:bg-black/10 rounded'><Link aria-label='go to home page'  to='/' className='font-inter flex items-center tracking-widest dark:text-white'><House size={20} /></Link></li>
-            {arr.map((item, index)=>{
-                let isLast = index === arr.length - 1;
-                let href = '/' + arr.slice(0, index + 1).join('/')
-                
-                
-            return(
-               <li key={href} className='flex gap-2 items-center'>
-                 <span className='font-bold dark:text-white'><ChevronRight size={20}/></span>
-            {isLast ? 
-                <span className='font-inter text-[#29323A] tracking-widest dark:text-white'>{capitalize(item)}</span> :
-                <Link to={href} className='cursor-pointer bg-gray-200 text-[#29323A] px-3 py-2 rounded-md font-inter hover:bg-black/20 dark:hover:bg-white/10 dark:bg-white/20 transition-all tracking-widest dark:text-white'>{capitalize(item)}</Link>
-              }
-               </li>
+      .join(' ')
+  }
+  const urlBreadcrumbs = pathItems.map((item, index) => {
+    const originalSegments = location.pathname.split('/').filter(Boolean)
 
-            ) 
-        })}
-        </ul>
+    const originalIndex =
+      originalSegments.indexOf(item)
+
+    const url =
+      '/' +
+      originalSegments
+        .slice(0, originalIndex + 1)
+        .join('/')
+
+    return {
+      name: capitalize(item),
+      slug: item,
+      url,
+    }
+  })
+
+  const breadcrumbs = hasBackendBreadcrumbs
+    ? items.map((item, index) => {
+        // Build hierarchical URL: /category/parent/child
+        const pathSegments = items.slice(0, index + 1).map(i => i.slug)
+        const url = `/category/${pathSegments.join('/')}`
+        return {
+          name: item.name,
+          slug: item.slug,
+          url,
+        }
+      })
+    : urlBreadcrumbs
+
+  return (
+    <div className="border-b border-gray-200 text-[15px] dark:border-gray-700">
+      <Container>
+        <div className="flex gap-5 px-3 py-4 lg:px-5">
+          <ul className="flex items-center gap-3">
+            {/* HOME */}
+            <li className="rounded hover:bg-black/10">
+              <Link
+                aria-label="go to home page"
+                to="/"
+                className="font-inter flex items-center tracking-widest dark:text-white"
+              >
+                <House size={20} />
+              </Link>
+            </li>
+
+            {/* BREADCRUMBS */}
+            {breadcrumbs.map((item, index) => {
+
+              const isLast =
+                index === breadcrumbs.length - 1
+
+              return (
+
+                <li
+                  key={`${item.slug}-${index}`}
+                  className="flex items-center gap-2"
+                >
+                  <span className="font-bold dark:text-white">
+                    <ChevronRight size={20} />
+                  </span>
+                  {isLast ? (
+                    <span className="font-inter tracking-widest text-[#29323A] dark:text-white">
+                      {item.name}
+                    </span>
+
+                  ) : (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        navigate(item.url)
+                      }}
+                      className="cursor-pointer rounded-md bg-gray-200 px-3 py-2 font-inter tracking-widest text-[#29323A] transition-all hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/10"
+                    >
+                      {item.name}
+                    </button>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </Container>
     </div>
-    </Container>
-  </div>
-    </>
   )
 }
 

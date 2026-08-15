@@ -1,22 +1,19 @@
 import axios from "axios";
 import { crateTokenStore } from "./tokenStore";
 
-export function createApiInstance({
-  baseURL,
-  refreshPath,
-  authPath,
-  loginPath,
-  onSessionExpired,
-}) {
+export function createApiInstance({ baseURL,  refreshPath, authPath,  loginPath,  onSessionExpired,}) {
   const {
     getAccessToken,
     setAccessToken,
     clearAccessToken,
     getOrCreateRefresh,
   } = crateTokenStore();
+  
   const instance = axios.create({
     baseURL,
     withCredentials: true,
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
   });
 
   instance.interceptors.request.use((config) => {

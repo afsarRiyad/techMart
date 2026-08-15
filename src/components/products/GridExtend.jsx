@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from '../layouts/Container'
-import { FaOpencart } from "react-icons/fa6";
+import { FaOpencart,FaRegStarHalfStroke, FaStar } from "react-icons/fa6";
 import { ArrowBigRight, GitCompareArrows, Heart, Star } from 'lucide-react';
 import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
 import { useCart } from '../../features/Cart/hooks/useCart.js';
@@ -29,7 +29,20 @@ const GridExtend = ({ products }) => {
     const isInCart = (proId) => cartItem.some((item) => item?.product?._id === proId)
     const isInWishlist = (proId) => wishListItem.some((item) => item._id === proId);
 
-    // turn description into 2 short bullet points
+    const rating = (rate) =>{
+        const fullRating = Math.floor(rate)
+        let rateVisual = []
+        for(let i = 0; i < 5; i++){
+            if(i<fullRating){
+                rateVisual.push(<FaStar  className='text-primary' key={i} />)
+            }else{
+                rateVisual.push(<FaRegStarHalfStroke className='text-primary' key={i}/>)
+            }
+        }
+        
+        return rateVisual
+    }
+
 const getBullets = (description) => {
     if (!description) return [];
 
@@ -51,7 +64,7 @@ const getBullets = (description) => {
                     const displayPrice = pro.salePrice ?? pro.price;
 
                     return (
-                        <div key={pro._id || pro.id || index} className='group/card min-w-0 mb-5'>
+                        <div key={pro._id || pro.id || index} className='font-inter group/card min-w-0 mb-5'>
                             <div className={`relative py-3 bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] mb-2 cursor-pointer ${(index + 1) % 5 == 0 ? 'border-none' : 'border-r border-r-gray-300'}`}>
                                 <div className='px-5'>
 
@@ -59,7 +72,9 @@ const getBullets = (description) => {
 
                                     {/* image */}
                                     {pro.image &&
-                                        <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                        <Link to={`/products/${pro.slug}`}>
+                                          <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                        </Link>
                                     }
 
                                     {/* categories */}
@@ -71,28 +86,21 @@ const getBullets = (description) => {
                                         ))}
                                     </div>
                                         {/* name */}
-                                        {pro.name &&
-                                    <span className="block w-full h-10 overflow-hidden text-[#0062BD] text-[16px] leading-5 font-semibold line-clamp-2">
+                                  {pro.name &&
+                                    <Link to={`/products/${pro.slug}`} className="block w-full h-10 overflow-hidden text-[#0062BD] text-[16px] leading-5 font-semibold line-clamp-2 hover:underline">
                                     {pro.name}
-                                    </span>
+                                    </Link>
                                         }
                                     {/* rating */}
                                     <div className='flex items-center gap-1 pt-3'>
                                         <div className='flex items-center'>
-                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                <Star
-                                                key={star}
-                                                size={14}
-                                                className={star <= Math.round(pro.rating || 0) ? 'text-primary' : 'text-gray-300'}
-                                                fill='currentColor'
-                                                />
-                                            ))}
+                                           {rating(pro.rating || 0)}
                                         </div>
                                         <span className='text-[12px] text-gray-500 font-inter'>({pro.reviews ?? 0})</span>
                                     </div>
                                     {/* description bullets */}
                                     {bullets.length > 0 &&
-                                        <ul className='py-6'>
+                                        <ul className='py-6 h-35'>
                                             {bullets.map((b, i) => (
                                                 <li key={i} className='flex items-start gap-2  text-[13px] text-gray-500 font-inter'>
                                                     <span className='mt-[7px] w-1 h-1 rounded-full bg-gray-400 shrink-0 ' />
@@ -104,17 +112,17 @@ const getBullets = (description) => {
 
                                     {/* sku */}
                                     {pro.sku &&
-                                        <p className='text-[12px] text-gray-400 font-inter pb-1 line-clamp-1 pb-2'>SKU: {pro.sku}</p>
+                                        <p className='min-w-0 truncate  w-full overflow-hidden pb-3 font-inter text-[12px] text-gray-400'>SKU: {pro.sku}</p>
                                     }
 
                                     {/* price + cart */}
                                     <div className='flex items-center justify-between pb-3'>
-                                        <div className='flex items-baseline gap-2'>
+                                        <div className='flex items-baseline '>
                                             {displayPrice != null &&
                                                 <p className='text-tcolor font-medium text-[20px]'>${displayPrice}</p>
                                             }
                                             {hasSale &&
-                                                <p className='text-gray-400 font-medium text-[13px] line-through'>${pro.regularPrice}</p>
+                                                <p className='text-red-400 font-medium text-[13px] line-through'>${pro.regularPrice}</p>
                                             }
                                         </div>
                                         <div className='group relative'>
@@ -132,7 +140,7 @@ const getBullets = (description) => {
                                     </div>
 
                                     {/* hover wishlist and compare */}
-                                    <div className='absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 opacity-0 invisible group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-47 lg:before:w-40 before:border-t-2 before:border-gray-200 before:content-[""]'>
+                                    <div className='absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 opacity-0 invisible group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]'>
                                         <div className='flex items-center gap-1 justify-center cursor-pointer hover:text-black text-gray-500'>
                                             {isInWishlist(pro._id) ?
                                                 <>

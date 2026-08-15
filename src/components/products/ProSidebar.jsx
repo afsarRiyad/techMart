@@ -1,26 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, } from 'lucide-react';
-import { Link } from 'react-router';
-import { useGetCategories } from './../../features/products/hooks/useGetCategories';
-import Dropdown from './../ui/Dropdown';
-import { apiCustomer } from '../../api/apiCustomer';
-import { FaStar } from "react-icons/fa";
-import { FaRegStarHalfStroke } from "react-icons/fa6";
-import sidebarAd from '../../assets/images/sidebar-ad.webp' 
+import { useDispatch, useSelector } from 'react-redux'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import { Link, useNavigate } from 'react-router'
+import { useGetCategories } from './../../features/products/hooks/useGetCategories'
+import { apiCustomer } from '../../api/apiCustomer'
+import Dropdown from './../ui/Dropdown'
+import { FaStar, FaRegStarHalfStroke } from "react-icons/fa6"
+import sidebarAd from '../../assets/images/sidebar-ad.webp'
+import { setSelectedBrands, setSelectedColors, setPriceRange } from '../../features/products/productPageSlice' 
 
-const CheckBox = ( {filter, selectedItems, setSelectedItems} ) => {
+const CheckBox = ({ filter, selectedItems, setSelectedItems, isBrand = true }) => {
    const filterName = typeof filter === 'string' ? filter : filter?.name || '';
    const filterId = filterName.replace(/\s+/g, '-').toLowerCase();
- const checked = selectedItems?.includes(filterName) || false
+ const dispatch = useDispatch()
 
   const handleChange = () => {
     setSelectedItems((current) => {
       if (current.includes(filterName)) {
-        return current.filter(
-          (item) => item !== filterName
-        )
+        const newItems = current.filter((item) => item !== filterName)
+        if (isBrand) {
+          dispatch(setSelectedBrands(newItems))
+        } else {
+          dispatch(setSelectedColors(newItems))
+        }
+        return newItems
       }
-      return [...current, filterName]
+      const newItems = [...current, filterName]
+      if (isBrand) {
+        dispatch(setSelectedBrands(newItems))
+      } else {
+        dispatch(setSelectedColors(newItems))
+      }
+      return newItems
     })
   }
 
@@ -35,22 +46,7 @@ const CheckBox = ( {filter, selectedItems, setSelectedItems} ) => {
 
         <label
             htmlFor={filterId}
-            className="
-      w-4 h-4
-      border-1 border-gray-400
-      rounded-sm
-      bg-white
-      cursor-pointer
-      flex items-center justify-center
-      group-hover:text-yellow-400
-      text-transparent
-      peer-checked:bg-yellow-400
-      peer-checked:text-white
-      group-hover:border-yellow-400
-      peer-checked:border-yellow-400
-      transition-all duration-200
-    "
-        >
+            className=" w-4 h-4 border-1 border-gray-400 rounded-sm bg-white cursor-pointer flex items-center justify-center group-hover:text-yellow-400 text-transparent peer-checked:bg-yellow-400 peer-checked:text-white group-hover:border-yellow-400 peer-checked:border-yellow-400 transition-all duration-200">
             ✓
         </label>
 
@@ -69,28 +65,40 @@ const CheckBox = ( {filter, selectedItems, setSelectedItems} ) => {
    )
 }
 
-const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBrands, setSelectedBrands, selectedColors, setSelectedColors}) => {
+const ProSidebar = ({active, setActive, activeChild, setActiveChild}) => {
+    const dispatch = useDispatch()
     const [latest, setLatest] = useState()
     const [expanded, setExpanded] = useState(false);
     const [expandedColors, setExpandeColors] = useState(false);
     const { data: cat, isLoading, isError, error } = useGetCategories()
+    const navigate = useNavigate()
+
+    const { selectedBrands, selectedColors, priceRange } = useSelector((state) => state.productPage)
 
     const brands = active?.filters?.brands
     const colors = active?.filters?.colors
     const visibleBrands = expanded ? brands : brands?.slice(0, 5);
 
-    const handleClick = (name) => {
+    const handleClick = (name, slug) => {
         const clicked = cat?.data?.find((item) => item.name === name)
         setActive(clicked)
         setActiveChild(undefined);
-        setSelectedBrands([]);
-        setSelectedColors([]);
+        dispatch(setSelectedBrands([]));
+        dispatch(setSelectedColors([]));
+        if (slug) {
+            navigate(`/category/${slug}`)
+        }
     }
     
     useEffect(()=>{
         const fetchData = async()=>{
             try {
-                const res = await apiCustomer.get('/api/products')
+                const res = await apiCustomer.get('/api/products',{
+        params: {
+          limit: 5,
+          sort: 'latest',
+        },
+      } )
                 setLatest(res.data);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -117,7 +125,7 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
     if (isLoading) return ' loading....'
 
     return (
-        <div className=' w-full'>
+        <div className=' w-full '>
             <div className='border-[2px]  pt-3 border-gray-300 rounded '>
                 <Dropdown title={'Show All Categories'}
                     icon={<ChevronDown size={20} />}
@@ -128,9 +136,14 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                     <div className='px-3'>
                         {cat?.data
                             ?.filter((category) => category.name !== active?.name).map((cat) => (
-                                <Link key={cat._id} onClick={() => handleClick(cat.name)} className='font-pop flex text-[15px] items-center gap-2  text-tcolor border-b border-b-gray-200 pl-6 py-2'>{cat.name}
+                                <div 
+                                    key={cat._id} 
+                                    onClick={() => handleClick(cat.name, cat.slug)}
+                                    className='font-pop flex text-[15px] items-center gap-2 text-tcolor border-b border-b-gray-200 pl-6 py-2 cursor-pointer hover:bg-gray-50'
+                                >
+                                    {cat.name}
                                     <span className='font-pop text-[12px] text-gray-400 font-normal'>({cat.count})</span>
-                                </Link>
+                                </div>
                             ))}
                     </div>
                 </Dropdown>
@@ -141,8 +154,19 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                         </div>
                         {active.children &&
                             active.children.map((child) => (
-                                <div key={child._id} onClick={()=>{setActiveChild(child.name); setSelectedBrands([]); setSelectedColors([]);}} className='font-pop flex text-[15px] items-center gap-2  text-tcolor border-b mx-3 border-b-gray-200 pl-7 py-2 cursor-pointer'>{child.name}
-                                    <span className='font-pop  text-[12px] text-gray-400 font-normal pl-2'>({child.count})</span>
+                                <div
+                                    key={child._id}
+                                    onClick={() => {
+                                        setActiveChild(child.name)
+                                        dispatch(setSelectedBrands([]))
+                                        if (active.slug && child.slug) {
+                                            navigate(`/category/${active.slug}/${child.slug}`)
+                                        }
+                                    }}
+                                    className={`font-pop flex text-[15px] items-center gap-2  border-b mx-3 border-b-gray-200 pl-7 py-2 cursor-pointer hover:bg-gray-50 ${activeChild === child.name ? 'text-black font-medium' : 'text-tcolor'}`}
+                                >
+                                    {child.name}
+                                    <span className='font-pop text-[12px] text-gray-400 font-normal pl-2'>({child.count})</span>
                                 </div>
                             ))
                         }
@@ -164,7 +188,7 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                         </h2>
 
                         {brands.slice(0, 5).map((filter) => (
-                           <CheckBox key={filter.name || filter} filter={filter} selectedItems={selectedBrands} setSelectedItems={setSelectedBrands}/>
+                           <CheckBox key={filter.name || filter} filter={filter} selectedItems={selectedBrands} setSelectedItems={setSelectedBrands} isBrand={true}/>
                         ))}
 
                         <div
@@ -177,7 +201,7 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                                     }`}
                             >
                                 {brands.slice(5).map((filter) => (
-                                   <CheckBox key={filter.name || filter} filter={filter} selectedItems={selectedBrands} setSelectedItems={setSelectedBrands}/>
+                                   <CheckBox key={filter.name || filter} filter={filter} selectedItems={selectedBrands} setSelectedItems={setSelectedBrands} isBrand={true}/>
                                 ))}
                             </div>
                             </div>
@@ -203,7 +227,7 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                                 Colors
                             </h2>
                             {colors?.slice(0, 5).map((color) => (
-                               <CheckBox key={color.name || color} filter={color} selectedItems={selectedColors} setSelectedItems={setSelectedColors}/>
+                               <CheckBox key={color.name || color} filter={color} selectedItems={selectedColors} setSelectedItems={setSelectedColors} isBrand={false}/>
                             ))}
 
                             <div
@@ -212,7 +236,7 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                             >
                                 <div className="overflow-hidden">
                                     {colors.slice(5).map((color) => (
-                                       <CheckBox key={color.name || color} filter={color} selectedItems={selectedColors} setSelectedItems={setSelectedColors}/>
+                                       <CheckBox key={color.name || color} filter={color} selectedItems={selectedColors} setSelectedItems={setSelectedColors} isBrand={false}/>
                                     ))}
                                 </div>
                             </div>
@@ -229,14 +253,14 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                         </>
                     }
                 </div>
-                        <img src={sidebarAd} alt="sidebar-Ad" className='pt-6' />
+                        <img src={sidebarAd} alt="sidebar-Ad" className='pt-6 w-full' />
               <div className='pt-10 font-pop'>
                  <div className="border-b border-b-gray-300 pb-3 mb-8 ">
                             <span className="font-medium text-[18px] text-tcolor border-b-[2px] border-b-primary pb-[13px]">
                                 Latest Products
                             </span>
                         </div>
-                {latest?.data?.slice(0,5).map(item =>(
+                {latest?.data.map(item =>(
                     <div key={item._id} className='flex gap-4 leading-none pb-5'>
                         <img src={item.image} alt={item.image} loading='lazy' className='w-20 h-auto' />
                          <div>
@@ -244,7 +268,7 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild, selectedBra
                             {item.rating && 
                              <div className='flex py-2'>{rating(item?.rating)}</div>
                             }
-                         <span className='font-semibold text-[15px]'>${item.price}</span>
+                         <span className='font-medium text-[15px]'>${item.price}</span>
                          </div>
                     </div>
                 ))}

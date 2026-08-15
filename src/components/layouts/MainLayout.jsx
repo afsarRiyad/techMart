@@ -15,13 +15,14 @@ import FooterWidget from '../FooterWidget'
 
 const  MainLayout= () => {
   let direction = useLocation()
+  const dontShow = ['/']
   return (
     <>
     <Topbar/>
     <Searchbar/>
      <Navbar />
      <DarkMode/>
-    {direction.pathname !== '/' &&  <Breadcrumbs/>}
+     {!dontShow.includes(location.pathname) && <Breadcrumbs />}
      <Outlet/>
      <SponsorLogo/>
      <FooterWidget/>

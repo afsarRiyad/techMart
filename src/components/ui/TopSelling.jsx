@@ -6,8 +6,8 @@ import { FaOpencart } from "react-icons/fa6";
 import { GitCompareArrows, Heart, ArrowBigRight } from 'lucide-react';
 import Tooltip from './Tooltip'
 import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
-import { useUpdateWishlist } from '../../features/Wishlist/hooks/useUpdateWishlist'
-import { useWishlist } from '../../features/Wishlist/hooks/useWishlist'
+import { useUpdateWishlist } from '../../features/wishlist/hooks/useUpdateWishlist'
+import { useWishlist } from '../../features/wishlist/hooks/useWishlist'
 import { Link } from 'react-router'
 import { useCart } from '../../features/Cart/hooks/useCart.js';
 

@@ -23,10 +23,9 @@ const Login = () => {
        try {
         const data = await apiCustomer.post('/api/auth/login',formData)
         setCustomerToken(data.data?.data?.accessToken)
-        
         toast.success(data.data?.message || 'Login successful!');
                     setTimeout(() => {
-  navigate("/account", { replace: true });
+  navigate("/account");
 }, 1500);
                   
        } catch (error) {
