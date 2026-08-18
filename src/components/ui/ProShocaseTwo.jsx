@@ -35,8 +35,6 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
         const isInCart = (proId) =>{
         return cartItem.some((item)=> item?.product?._id === proId)
     }
-    272875
-    2318652634
     const isInWishlist = (proId) => {
   return wishListItem.some((item) => item._id === proId);
     }
@@ -84,10 +82,12 @@ const ProShocaseTwo = ({data, loading=false, errs='', type=''}) => {
                                                     ))}
                                                 </div>
                                                 {pro.name &&
-                                                    <span className='text-[#0062BD] text-[16px] min-h-12 leading-tight  pt-2  font-semibold line-clamp-2'>{pro.name}</span>
+                                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[16px] min-h-12 leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
                                                 }
                                                  {pro.image &&
-                                                <img  loading="lazy" src={pro.image} alt='img' className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                                    <Link to={`/products/${pro.slug || pro._id}`}>
+                                                        <img loading="lazy" src={pro.image} alt={pro.name} className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105 cursor-pointer' />
+                                                    </Link>
                                         }
                                                 <div className='flex items-center justify-between pb-3'>
                                                     {pro.price &&

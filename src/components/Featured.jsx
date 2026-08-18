@@ -22,8 +22,7 @@ const Featured = () => {
   const {data: wishlistData} = useWishlist()
   const cartItem = data?.data?.items || []
   const wishListItem = wishlistData?.data || []
-  console.log(wishListItem);
-  
+
   const addToWishlist = useUpdateWishlist()
     const [show, setShow]= useState('on-sale')
     const {data:sections, loading, errs:errors} = useFetchData('/api/home-v3')
@@ -89,9 +88,11 @@ const Featured = () => {
                             </p>
                         ))}
                         </div>
-                        <p className='text-[#0062BD] text-[16px] leading-tight min-h-[45px] pt-1 line-clamp-2 font-semibold'>{pro.name}</p>
+                        <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[16px] leading-tight min-h-[45px] pt-1 line-clamp-2 font-semibold cursor-pointer'>{pro.name}</Link>
                       <div className='h-50 flex items-center justify-center overflow-hidden'>
-                        <img loading="lazy" src={pro.image} alt="" className='max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                        <Link to={`/products/${pro.slug || pro._id}`}>
+                            <img loading="lazy" src={pro.image} alt={pro.name} className='max-w-full max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105 cursor-pointer' />
+                        </Link>
                       </div>
                      <div className='flex justify-between items-center pb-2'>
                         <div className='flex justify-center items-center md:gap-2'>

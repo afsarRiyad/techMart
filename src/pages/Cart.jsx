@@ -1,17 +1,20 @@
-import { ChevronDown, X } from 'lucide-react';
+import { ChevronDown, LockKeyhole, X } from 'lucide-react';
 import Container from './../components/layouts/Container';
 import Dropdown from '../components/ui/Dropdown';
 import { useCart } from '../features/Cart/hooks/useCart.js';
 import { useRemoveFromCart } from "../features/Cart/hooks/useRemoveCart.js";
 import { useState } from "react";
 import { useUpdateCart } from "../features/Cart/hooks/useUpdateCart.js";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import CouponInput from '../components/ui/CouponInput.jsx';
 import { useApplyCoupon } from '../features/Cart/hooks/useApplyCoupon.js';
 import { useShippingAddress } from '../features/user/hooks/useShippingAddress.js';
+import { useAuth } from '../hooks/useAuth.js';
 
 const Cart = () => {
+  const [showVerifyAlert, setShowVerifyAlert] = useState(false);
+  const navigate = useNavigate();
   const couponMutation = useApplyCoupon();
   const [deliveryArea, setDeliveryArea] = useState('inside')
   const updateShippingAddress = useShippingAddress()
@@ -20,6 +23,7 @@ const Cart = () => {
   return stored ? JSON.parse(stored) : null;
 });
   const [cartData, setCartData] = useState({});
+  const {data: userData} = useAuth()
   const { data, isLoading, error } = useCart();
  const subTotal = data?.data?.totalAmount
  const flatCharge = deliveryArea === 'inside' ? 0 : 50;
@@ -33,6 +37,7 @@ const updateMutation = useUpdateCart()
 const handleRemove = (itemId)=>{
         removeMutation.mutateAsync(itemId)
 }
+console.log(userData?.data?.isVerified);
 
 const handleChange = (itemId, newQuantity) =>{
   setCartData(prev =>({...prev, [itemId]: newQuantity}))
@@ -63,12 +68,39 @@ const cancleCoupon = () =>{
 const handleAdrsUpdate = async() =>{
            await updateShippingAddress.mutate()
 }
-
-
-
+const handleCheckoutClick = () => {
+  if (!userData?.data?.isVerified) {
+    setShowVerifyAlert(true);
+    return;
+  }
+  navigate('/checkout');
+};
 
 return(
   <>
+  {showVerifyAlert && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 text-center relative">
+      <X
+        className="absolute top-4 right-4 text-gray-400 cursor-pointer hover:text-black"
+        onClick={() => setShowVerifyAlert(false)}
+      />
+      <h2 className="text-[20px] font-semibold text-tcolor mb-2">
+        Verify your account
+      </h2>
+      <p className="text-gray-500 mb-6">
+        You need to verify your account before proceeding to checkout.
+      </p>
+      <Link
+        to="/account/otp-verification"
+        onClick={() => setShowVerifyAlert(false)}
+        className="inline-block bg-primary text-tcolor font-semibold py-3 px-8 rounded-full hover:bg-black hover:text-white transition-colors duration-200"
+      >
+        Go to Verify Page
+      </Link>
+    </div>
+  </div>
+)}
     {!cartItems || cartItems.length === 0 ? (
       <div className="py-10">
         <div className="relative overflow-hidden rounded bg-primary px-8 py-6 md:px-10">
@@ -108,10 +140,10 @@ return(
                   <td className="py-4 flex items-center gap-4">
                  <div className='flex items-center gap-8'>
                    <X className='text-gray-400 cursor-pointer hover:text-black' onClick={ ()=>handleRemove(item?.product?._id) }/>
-                    <Link to={`/product/${item.product._id || item.product.id}`}>
-                      <img src={item.product.image} alt={item.product.name} className="w-[80px] h-[80px] object-cover rounded" />
+                    <Link to={`/products/${item.product.slug || item.product._id}`}>
+                      <img src={item.product.image} alt={item.product.name} className="w-[80px] h-[80px] object-cover rounded cursor-pointer" />
                     </Link>
-                    <span className='text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold'> {item.product.name}</span>
+                    <Link to={`/products/${item.product.slug || item.product._id}`} className='text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold'>{item.product.name}</Link>
                  </div>
                    </td>
                    <td className="py-4 text-left text-tcolor text-[17px] font-semibold">${(item.product.price).toFixed(2)}</td>
@@ -143,7 +175,12 @@ return(
               <CouponInput setDiscount={setDiscount} subTotal={subTotal}/>
               <div className='flex flex-col '>
                 <button onClick={handleUpdate} className='bg-gray-200 text-gray-500 font-semibold py-3 w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200 ml-15'>Update Cart</button>
-                <Link to='/checkout' className='bg-primary hover:text-white text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'>Procesed to checkout</Link>
+                <button
+                  onClick={handleCheckoutClick}
+                  className='bg-primary hover:text-white text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'
+                >
+                  Procesed to checkout
+                </button>
               </div>
            </div>
            {/* cart totals  */}

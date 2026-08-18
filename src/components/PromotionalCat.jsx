@@ -94,7 +94,9 @@ const PromotionalCat = () => {
                                     <div className='relative flex py-3 bg-white mr-1 mb-2 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] '>
                                         {pro.image &&
                                             <div className='w-[35%] h-full flex items-center'>
-                                                <img src={pro.image} className=' object-cover pl-1 ' />
+                                                <Link to={`/products/${pro.slug || pro._id}`}>
+                                                    <img src={pro.image} alt={pro.name} className='object-cover pl-1 cursor-pointer' />
+                                                </Link>
                                             </div>
                                         }
                                             <div className='xl:px-2 px-1 w-[65%]'>
@@ -104,7 +106,7 @@ const PromotionalCat = () => {
                                                     ))}
                                                 </div>
                                                 {pro.name &&
-                                                    <span className='text-[#0062BD] text-[16px] leading-tight min-h-[45px] pt-2  font-semibold line-clamp-2'>{pro.name}</span>
+                                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[16px] leading-tight min-h-[45px] pt-2 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
                                                 }
                                                 <div className='flex items-center justify-between py-3'>
                                                     {pro.price &&

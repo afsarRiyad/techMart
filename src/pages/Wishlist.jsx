@@ -74,17 +74,17 @@ const Wishlist = () => {
                     <X className="w-5 h-5" />
                   </button>
 
-                  <Link className="w-full flex justify-center">
+                  <Link to={`/products/${item.slug || item._id}`} className="w-full flex justify-center">
                     <img
                       src={item?.image}
                       alt={item?.name}
-                      className="w-[220px] h-[220px] object-cover rounded"
+                      className="w-[220px] h-[220px] object-cover rounded cursor-pointer"
                     />
                   </Link>
 
-                  <span className="mt-4 text-[18px] font-pop text-gray-600 font-semibold cursor-pointer hover:text-black">
+                  <Link to={`/products/${item.slug || item._id}`} className="mt-4 text-[18px] font-pop text-gray-600 font-semibold cursor-pointer hover:text-black">
                     {item.name}
-                  </span>
+                  </Link>
 
                   <div className="w-full flex items-center justify-between border-b border-gray-200 py-3 mt-3">
                     <span className="text-red-500 font-semibold">Price:</span>
@@ -132,16 +132,16 @@ const Wishlist = () => {
                           className="text-gray-400 cursor-pointer hover:text-black"
                           onClick={() => handleRemove(item._id)}
                         />
-                        <Link className='border border-gray-300 h-22 w-24 flex items-center justify-center'>
+                        <Link to={`/products/${item.slug || item._id}`} className='border border-gray-300 h-22 w-24 flex items-center justify-center'>
                           <img
                             src={item?.image}
                             alt={item?.name}
-                            className="w-[80px] h-[80px]  object-cover rounded"
+                            className="w-[80px] h-[80px] object-cover rounded cursor-pointer"
                           />
                         </Link>
-                        <span className="text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold">
+                        <Link to={`/products/${item.slug || item._id}`} className="text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold">
                           {item.name}
-                        </span>
+                        </Link>
                       </div>
                     </td>
                     <td className="py-4 text-left text-tcolor text-[17px] font-semibold">

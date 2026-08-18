@@ -74,7 +74,7 @@ const ListViewSmall = ({ products }) => {
 
                             {/* name */}
                             {pro.name &&
-                                <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[17px] pt-1 font-semibold leading-tight block hover:underline'>
+                                <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[17px] pt-1 font-semibold leading-tight block '>
                                     {pro.name}
                                 </Link>
                             }

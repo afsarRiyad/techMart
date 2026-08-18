@@ -262,9 +262,11 @@ const ProSidebar = ({active, setActive, activeChild, setActiveChild}) => {
                         </div>
                 {latest?.data.map(item =>(
                     <div key={item._id} className='flex gap-4 leading-none pb-5'>
-                        <img src={item.image} alt={item.image} loading='lazy' className='w-20 h-auto' />
+                        <Link to={`/products/${item.slug || item._id}`}>
+                            <img src={item.image} alt={item.name} loading='lazy' className='w-20 h-auto cursor-pointer' />
+                        </Link>
                          <div>
-                            <span className='text-[14px] line-clamp-2 text-gray-500 font-medium'>{item.name}</span>
+                            <Link to={`/products/${item.slug || item._id}`} className='text-[14px] line-clamp-2 text-gray-500 font-medium cursor-pointer hover:text-black'>{item.name}</Link>
                             {item.rating && 
                              <div className='flex py-2'>{rating(item?.rating)}</div>
                             }

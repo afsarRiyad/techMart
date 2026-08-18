@@ -9,7 +9,7 @@ import { useUpdateWishlist } from '../../features/wishlist/hooks/useUpdateWishli
 import { useWishlist } from '../../features/wishlist/hooks/useWishlist.js';
 import Tooltip from '../ui/Tooltip.jsx';
 
-const Gridview = ({ products }) => {
+const Gridview = ({ products , grid= 5}) => {
     const addtoWishlist = useUpdateWishlist()
     const { data: cartData } = useCart()
     const addToCart = useAddToCart()
@@ -36,11 +36,9 @@ const Gridview = ({ products }) => {
         return wishListItem.some((item) => item._id === proId);
     }
 
-console.log(products);
-
     return (
         <div className='w-full min-w-0 font-inter'>
-            <div className='grid grid-cols-5'>
+            <div className={`grid grid-cols-${grid}`}>
                 {products && products.map((pro, index) => (
                     <div key={pro._id || pro.id || index} className='group/card min-w-0 mb-5'>
                         <div 
@@ -53,11 +51,11 @@ console.log(products);
                                                     ))}
                                                 </div>
                                 {pro.name &&
-                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] hover:underline text-[16px] min-h-12 leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
+                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[16px] min-h-12 leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
                                 }
                                 {pro.image &&
-                                <Link to={`/products/${pro.slug || pro._id}`} >
-                                    <img onClick={() => navigate(`/products/${pro.slug || pro._id}`)} loading="lazy" src={pro.image} alt='img' className='md:w-full w-30 md:h-full cursor-pointer object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                <Link to={`/products/${pro.slug || pro._id}`}>
+                                    <img loading="lazy" src={pro.image} alt={pro.name} className='md:w-full w-30 md:h-full cursor-pointer object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
                                 </Link>
                                 }
                                 <div className='flex items-center justify-between pb-3'>

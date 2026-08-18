@@ -87,17 +87,19 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                                     <div className={`relative flex py-3 bg-white  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-b border-b-gray-300 md:border-b-0 md:border-r md:border-r-gray-300 ${trending ? 'mb-6' : 'mb-2'}`}>
                                         {pro.image &&
                                             <div className='w-[35%]'>
-                                                <img src={pro.image} alt='img' className='  object-cover pl-2 ' />
+                                                <Link to={`/products/${pro.slug || pro._id}`}>
+                                                    <img src={pro.image} alt={pro.name} className='object-cover pl-2 cursor-pointer' />
+                                                </Link>
                                             </div>
                                         }
                                             <div className=' px-5 w-[65%]'>
                                                 <div className='flex items-center pt-1'>
                                                     {pro?.categories?.map((tag, index) => (
-                                                        <p key={index} className='truncate text-[12px] block text-gray-500 font-inter cursor-pointer hover:text-gray-500 hover:font-semibold '>{tag}{index < pro.categories.length - 1 && ','}</p>
+                                                        <p key={index} className='truncate text-[12px] block text-gray-500 font-inter cursor-pointer  hover:text-black '>{tag}{index < pro.categories.length - 1 && ','}</p>
                                                     ))}
                                                 </div>
                                                 {pro.name &&
-                                                    <span className='text-[#0062BD] text-[16px]  leading-tight  pt-2  font-semibold line-clamp-2'>{pro.name}</span>
+                                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[16px] leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
                                                 }
                                                 <div className='flex items-center justify-between py-3'>
                                                     {pro.price &&

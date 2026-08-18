@@ -39,13 +39,13 @@ const Signup = () => {
            try {
             const data = await apiCustomer.post('/api/auth/signup',formData)
             
-            toast.success(data.data.message || "Account created. Please verify your email.");
+            toast.success(data.data.message || "Account created. Please verify your email.", {id: 'signup'});
             
             navigate("/account/otp-verification", { replace: true, state: { email: formData.email } });
                     
            } catch (error) {
             const data = error.response?.data;
-                    toast.error(data?.message || "Something went wrong");
+                    toast.error(data?.message || "Something went wrong", {id: 'signup'});
                    
               data?.errors?.forEach((err) => {
                   setErrs((prev) => (

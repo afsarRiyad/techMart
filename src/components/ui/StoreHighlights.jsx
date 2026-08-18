@@ -1,5 +1,6 @@
 import React from 'react'
 import Container from '../layouts/Container'
+import { Link } from 'react-router'
 
 const StoreHighlights = ({data, sale=false}) => {
   return (
@@ -10,13 +11,15 @@ const StoreHighlights = ({data, sale=false}) => {
                       </div>
                      {data?.products?.slice(0,3).map((pro, index)=>(
                           <div key={index} className='w-[270px] flex gap-6 items-center pb-5 cursor-pointer'>
-                        <img src={pro.image} alt=""  className='w-22'/>
+                        <Link to={`/products/${pro.slug || pro._id}`}>
+                            <img src={pro.image} alt={pro.name} className='w-22 cursor-pointer' />
+                        </Link>
                         <div className='flex flex-col gap-3'>
-                            <p className='font-bold text-[14px] text-[#0062BD]  line-clamp-2'>
+                            <Link to={`/products/${pro.slug || pro._id}`} className='font-bold text-[14px] text-[#0062BD] line-clamp-2 cursor-pointer '>
                                 {pro.name}
-                            </p>
+                            </Link>
                             <div className='flex gap-1'>
-                                {sale && 
+                                {sale &&
                               <p className='text-red-700'>${pro.salePrice}</p>
                             }
                             <span className={`text-[15px] text-tcolor ${sale && 'line-through' }`}>

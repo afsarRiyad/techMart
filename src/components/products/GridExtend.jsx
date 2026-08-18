@@ -87,7 +87,7 @@ const getBullets = (description) => {
                                     </div>
                                         {/* name */}
                                   {pro.name &&
-                                    <Link to={`/products/${pro.slug}`} className="block w-full h-10 overflow-hidden text-[#0062BD] text-[16px] leading-5 font-semibold line-clamp-2 hover:underline">
+                                    <Link to={`/products/${pro.slug}`} className="block w-full h-10 overflow-hidden text-[#0062BD] text-[16px] leading-5 font-semibold line-clamp-2 ">
                                     {pro.name}
                                     </Link>
                                         }

@@ -2,26 +2,47 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router'
 import SidebarLayout from '../components/layouts/SidebarLayout'
 import { useGetCategories } from '../features/products/hooks/useGetCategories'
-import { ChevronRight, Plus, Minus, Heart, ShoppingCart, GitCompareArrows, Search } from 'lucide-react'
+import { ChevronRight, Plus, Minus, Heart, ShoppingCart, GitCompareArrows, Search, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useGetProduct } from './../features/products/hooks/useGetProduct';
 import { useUpdateWishlist } from '../features/wishlist/hooks/useUpdateWishlist';
 import { useWishlist } from '../features/wishlist/hooks/useWishlist';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { FaOpencart } from "react-icons/fa6";
+import { FaApple } from 'react-icons/fa'
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+import { useAddToCart } from '../features/Cart/hooks/useAddToCart'
+import Accessories from './../components/products/Accessories';
+import Reviews from '../components/products/Reviews'
+import TechnicalSpecifications from '../components/products/TechnicalSpecifications '
+import MoreProducts from '../components/products/MoreProducts'
+import Gridview from '../components/products/Gridview'
 
+const buttons = [
+             {id:1, title:'Accessories', name:'randomCombo'},
+             {id:2, title:'Description', name: 'description'},
+             {id:3, title:'Specifications', name: 'specifications'},
+             {id:4, title:'Reviews', name: 'reviews'},
+             {id:5, title:'More Products', name: 'moreProducts'},
+]
 
 const ProductDetail = () => {
   const { slug } = useParams()
+  const [show, setShow] = useState('randomCombo')
+  const updateQuantity = useAddToCart()
   const { data: product, isLoading, isError } = useGetProduct(slug)
   const addtoWishlist = useUpdateWishlist()
   const { data: wishlistData } = useWishlist()
-  const discountPrice = product?.salePrice ?? product?.price
+  const [proQuantity, setProQuantity] = useState('1')
+  const price = product?.salePrice ?? product?.price
+  const discountPercent = (product?.regularPrice - price) / product?.regularPrice * 100
+  console.log(show);
+   
   
   const productImages = product?.images && product.images.length > 0 ? product.images
   : product?.image ? [product.image]  : [];
@@ -33,15 +54,16 @@ const ProductDetail = () => {
     return wishListItem.some((item) => item._id === proId);
   }
   
-  const handleQuantityChange = (change) => {
-    const newQuantity = quantity + change
-    if (newQuantity >= 1 && newQuantity <= (product?.stock || 10)) {
-      setQuantity(newQuantity)
+  const handleQuantityChange = async(id) => {
+    const data = {
+           product : id,
+           quantity : Number(proQuantity)
     }
+    await updateQuantity.mutate(data)
   }
+  console.log(product?._id);
   
   const handleAddToCart = () => {
-    // Add cart logic here
     toast.success('Added to cart!')
   }
   
@@ -90,13 +112,31 @@ const getPoints = (data) => {
 
     setPosition({ x, y });
   };
+  const activeButtons = buttons.filter(button =>{
+     switch (button.name) {
+      case 'randomCombo':
+        return product?.randomCombo && product?.randomCombo.length > 0;
+        case 'description':
+          return Boolean(product?.description.trim());
+          case 'specifications':
+          return product?.specifications && product?.specifications.length > 0;
+          case 'reviews':
+          return true;
+          case 'moreProducts':
+          return true;
+      default:
+        true;
+     }}
+  )
+
 
     return (
       <>
         <div className="flex flex-col md:flex-row gap-8 font-inter">
           {/* Product Images */}
           <div className="max-w-[395px]  w-full">
-       <Swiper
+      <div className='relative'>
+         <Swiper
         style={{
           '--swiper-navigation-color': '#fff',
           '--swiper-pagination-color': '#fff',
@@ -114,7 +154,7 @@ const getPoints = (data) => {
             {productImages.map((img, index) => (
                   <SwiperSlide
                     key={index}
-                    className=" overflow-hidden cursor-pointer relative "
+                    className=" overflow-hidden cursor-pointer "
                   >
                     <img onMouseEnter={()=>setZoom(true)} onMouseLeave={()=>setZoom(false)}
                     onMouseMove={handleMouseMove}
@@ -124,10 +164,14 @@ const getPoints = (data) => {
                       alt={`${product?.name || 'Product'} ${index + 1}`}
                       className={`w-full mb-5 object-cover `}
                     />
-                    <Search size={18} className='absolute z-20 right-0 top-0 text-gray-400'/>
                   </SwiperSlide>
                 ))}
          </Swiper>
+                <Search size={18} className='absolute pointer-events-none z-20 right-1 top-1 text-gray-400'/>
+               {product?.salePrice && 
+                  <span className={`bg-[#DC3545] px-3 py-1 text-white rounded-sm absolute top-3 left-3 font-semibold z-20 pointer-events-none`}>-{Math.floor(discountPercent)}%</span>
+               }
+      </div>
             {/* Thumbnail images for slider */}
              <Swiper
         onSwiper={setThumbsSwiper}
@@ -187,102 +231,98 @@ const getPoints = (data) => {
             </div>
 
             {product.description && 
-             <ul className='flex flex-col gap-1 list-disc pl-7 pt-2 font-inter'>
+             <ul className='flex flex-col gap-[1px] list-disc pl-7 pt-1 font-inter'>
               {getPoints(product.description).map((point, index) => (
                  <li key={index} className='text-[14px] font-medium text-gray-500 font-inter'>{point}</li>
                   ))}
              </ul>
             }
-          
-
-            {/* Rating */}
-            <div className="flex items-center gap-2">
-              <div className="flex text-yellow-400">
-                {'★'.repeat(Math.floor(product?.rating || 0))}
-                {'☆'.repeat(5 - Math.floor(product?.rating || 0))}
-              </div>
-              <span className="text-gray-500">({product?.reviews || 0} reviews)</span>
+             {/* price and discount  */}
+            <div className='pt-9'>
+               <span className={`${product?.salePrice ? 'text-[#DC3545]' : 'text-gray-600'} font-medium text-[35px]`}>${price.toFixed(2)}</span>
+               {/* discount regular price  */}
+              {product?.salePrice && 
+                <span className='text-[21px] text-gray-400 line-through pl-1'>${product?.regularPrice.toFixed(2)}</span>
+              }
             </div>
-
-            {/* Description */}
-            <div className="prose prose-sm text-gray-600">
-              <p>{product?.description}</p>
-            </div>
-
-            {/* Stock Status */}
-            <div className="flex items-center gap-2">
-              <span className={`w-3 h-3 rounded-full ${product?.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
-              <span className="text-sm">
-                {product?.stock > 0 ? `${product?.stock} in stock` : 'Out of stock'}
-              </span>
-            </div>
-
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center border rounded-lg">
-                <button 
-                  onClick={() => handleQuantityChange(-1)}
-                  className="px-4 py-2 hover:bg-gray-100 transition-colors"
-                  disabled={quantity <= 1}
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="px-4 py-2 font-medium">{quantity}</span>
-                <button 
-                  onClick={() => handleQuantityChange(1)}
-                  className="px-4 py-2 hover:bg-gray-100 transition-colors"
-                  disabled={quantity >= (product?.stock || 10)}
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-4">
+                {/* quantity input field  */}
+                <div className='pt-6 flex gap-3'>
+                  <input type="number" className='border border-gray-300 rounded-full w-32 py-3     outline-none focus:ring-2 ring-blue-400/20 px-6'
+                      value={proQuantity}
+                      onChange={(e)=>setProQuantity(e.target.value)}
+                      min={1}
+                      max={product?.stock}
+                          />
+                  <button onClick={()=>handleQuantityChange(product?._id)} className='flex  gap-2 items-center justify-center px-10 py-3 bg-primary rounded-full text-white text-[16px] font-bold hover:bg-black cursor-pointer transition-all duration-150'><FaOpencart size={20}/> Add to cart</button>
+                </div>
+                <div className="flex flex-wrap gap-4 font-inter">
+              {/* Apple Pay button */}
+              <div className='pt-5 flex gap-4 w-full'>
               <button
-                onClick={handleAddToCart}
-                disabled={product?.stock === 0}
-                className="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                type="button"
+                aria-label="Pay with Apple Pay"
+                className="flex items-center justify-center gap-1.5 h-12 px-8 flex-1 rounded-sm bg-black text-white cursor-pointer transition-transform duration-150 hover:opacity-90 ]"
               >
-                <ShoppingCart size={20} />
-                Add to Cart
+                <FaApple size={22} />
+                <span className="text-[21px]  tracking-tight "> Pay</span>
               </button>
+
+              {/* Link button */}
               <button
-                onClick={handleAddToWishlist}
-                className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                type="button"
+                aria-label="Pay securely with Link"
+                className="flex items-center justify-center gap-2 h-12 px-8 flex-1  rounded-msm bg-[#00D66F] text-black cursor-pointer transition-transform duration-150 hover:brightness-95"
               >
-                <Heart size={20} />
+                <span className="text-[18px] font-medium">Pay securely with</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-black shrink-0">
+                    <ArrowRight size={11} color="#00D66F" strokeWidth={3} />
+                  </span>
+                  <span className="text-[17px] font-semibold ">link</span>
+                </span>
               </button>
             </div>
-
-            {/* Product Details */}
-            <div className="border-t pt-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-500">SKU:</span>
-                  <span className="ml-2 font-medium">{product?.sku}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Brand:</span>
-                  <span className="ml-2 font-medium">{product?.brand}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Category:</span>
-                  <span className="ml-2 font-medium">
-                    {product?.categories?.join(', ')}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Tags:</span>
-                  <span className="ml-2 font-medium">
-                    {product?.tags?.join(', ')}
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
+            <div className='pt-32 flex gap-8 justify-center  text-tcolor text-[18px]'>
+              {activeButtons.map(item =>(
+               <button
+            key={item.id}
+            value={show}
+            onClick={() => setShow(item.name)}
+            className={`relative pb-3 cursor-pointer ${
+              show === item.name ? 'border-b-2 border-b-primary font-medium after:content-[""] after:absolute after:left-1/2 after:-bottom-[11px] after:-translate-x-1/2 after:border-l-[7px] after:border-r-[12px] after:border-t-[8px] after:border-l-transparent after:border-r-transparent after:border-t-primary' : '' }`}
+          >
+            {item.title}
+          </button>
+              ))}  
+            </div>
+            <div className='border rounded-lg border-gray-300 py-10 px-10 min-h-[300px] w-full '>
+              {show === 'randomCombo' &&
+                 <Accessories data={product?.randomCombo}/> 
+                }
+               {show === 'reviews' &&
+                 <Reviews data={product?.reviews}/> 
+                }
+               {show === 'specifications' &&
+                 <TechnicalSpecifications data={product?.specifications}/> 
+                }
+               {show === 'moreProducts' &&
+                 <MoreProducts data={product?.moreProducts}/> 
+                }
+               {show === 'description' &&
+                 <p >{product.description}</p>
+                }
+            </div>
+            <div className='pt-10'>
+             <div className="border-b border-b-gray-300 pb-3 mb-8 ">
+                            <span className=" text-[26px] text-tcolor border-b-[2px] border-b-primary pb-[13px]">
+                                Related Products
+                            </span>
+                        </div>
+              <Gridview products={product?.relatedProducts} grid={'4'}/>
+            </div>
       </>
     )
   }
@@ -295,3 +335,4 @@ const getPoints = (data) => {
 }
 
 export default ProductDetail
+

@@ -54,11 +54,13 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                             </div>
                                             <div className='min-h-12'>
                                                 {pro.name &&
-                                                    <span className='text-[#0062BD] text-[16px]  leading-tight  pt-1  font-semibold line-clamp-2'>{pro.name}</span>
+                                                    <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[16px] leading-tight pt-1 font-semibold line-clamp-2 cursor-pointer'>{pro.name}</Link>
                                                 }
                                             </div>
                                             {pro.image &&
-                                                <img loading="lazy" src={pro.image} alt='img' className='md:w-42 w-30  md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                                <Link to={`/products/${pro.slug || pro._id}`}>
+                                                    <img loading="lazy" src={pro.image} alt={pro.name} className='md:w-42 w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105 cursor-pointer' />
+                                                </Link>
                                             }
                                             <div className='flex items-center justify-between pb-3'>
                                                 {pro.price &&
@@ -105,7 +107,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                             </div>
                             <div className='lg:w-[40%] bg-white border-3 rounded-xl border-primary mb-2 py-5 px-10 '>
                                 {discount?.products?.slice(2, 3).map((pro, index) => (
-                                    <>
+                                    <Link to={`/products/${pro.slug || pro._id}`} className='block'>
                                         <div className='flex justify-between items-center'>
                                             <p className='font-inter text-tcolor text-[22px]'>Special Offer</p>
                                             <div className='font-inter flex flex-col justify-center items-center border rounded-full border-transparent p-3 bg-primary'>
@@ -114,12 +116,12 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                             </div>
                                         </div>
                                         <div className='flex justify-center items-center cursor-pointer'>
-                                            <img src={pro.image} alt="" className='w-75 h-auto' />
+                                            <img src={pro.image} alt={pro.name} className='w-75 h-auto' />
                                         </div>
                                         <div className='flex flex-col items-center justify-center gap-4'>
-                                            <p className='text-[#0062BD] text-[16px]  leading-tight  pt-1  font-semibold line-clamp-2 text-center'>{pro.name}</p>
+                                            <p className='text-[#0062BD] text-[16px] leading-tight pt-1 font-semibold line-clamp-2 text-center'>{pro.name}</p>
                                             <div className=' font-inter'>
-                                                <span className='text-[#DC3545]  text-[30px]'>${(pro.salePrice).toFixed(2)}</span>
+                                                <span className='text-[#DC3545] text-[30px]'>${(pro.salePrice).toFixed(2)}</span>
                                                 <span className='line-through text-[18px] text-gray-500 pl-2'>${(pro.regularPrice).toFixed(2)}</span>
                                             </div>
                                             <div className='flex flex-col justify-center items-center gap-3'>
@@ -191,7 +193,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                                 {/* timers ends here */}
                                             </div>
                                         </div>
-                                    </>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
