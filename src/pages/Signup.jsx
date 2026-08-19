@@ -39,7 +39,9 @@ const Signup = () => {
            try {
             const data = await apiCustomer.post('/api/auth/signup',formData)
             
-            toast.success(data.data.message || "Account created. Please verify your email.", {id: 'signup'});
+            toast.success(
+                data.data.message || "Account created. Please verify your email."
+              );
             
             navigate("/account/otp-verification", { replace: true, state: { email: formData.email } });
                     
@@ -67,7 +69,6 @@ const handleGoogleLogin  = () =>{
   
   return (
     <main className="flex items-center justify-center mx-auto max-w-[424px] px-4 w-full">
-      <Toaster position="top-right" />
       <form className='flex flex-col  shadow-lg max-w-[424px] w-full  rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10' onSubmit={handleSubmit}>
         <div className='flex justify-around w-full font-robot text-[20px] font-bold text-tcolor border-b border-b-gray-200 '>
           <Link to='/account/login' className='lg:w-[212px] flex justify-center cursor-pointer py-4 text-gray-500 dark:text-gray-400 select-none'>Sign In</Link>

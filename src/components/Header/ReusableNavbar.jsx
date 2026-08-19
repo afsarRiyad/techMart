@@ -3,7 +3,7 @@ import Container from '../layouts/Container'
 import { Link } from 'react-router';
 import { memo } from 'react'
 
-const ReusableNavbar = memo(( {data = []} ) => {
+const ReusableNavbar = memo(( {data = [], setActiveMenu} ) => {
 
   const Img = data.filter(item => item.type == 'img')
   const textLink = data.filter(item => item.type !== 'img')
@@ -23,7 +23,7 @@ const ReusableNavbar = memo(( {data = []} ) => {
                         {
                             item.links.map((link, index)=>(
                                   <li key={link.label} className='  pb-1.5 text-[13px] '>
-                                     <Link to={link.url || '#'} className='relative dark:text-gray-300 text-gray-700 font-inter cursor-pointer after:absolute after:content-[""] font-medium after:w-0 after:h-[1px] after:bg-black dark:after:bg-white after:-bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 hover:text-black dark:hover:text-white'>
+                                     <Link to={'*'} onClick={()=>setActiveMenu(null)} className='relative dark:text-gray-300 text-gray-700 font-inter cursor-pointer after:absolute after:content-[""] font-medium after:w-0 after:h-[1px] after:bg-black dark:after:bg-white after:-bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 hover:text-black dark:hover:text-white'>
                                        {link.label}
                                     </Link>
                                  </li>

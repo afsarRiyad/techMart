@@ -209,6 +209,7 @@ const getPoints = (data) => {
               ))}
               </div>
               <h1 className="text-[25px] font-medium  text-tcolor mb-2 border-b border-b-gray-300 pb-3">{product?.name || 'Product Name'}</h1>
+               <div className='text-[15px] text-gray-600'> Availability: <span className='font-semibold text-[16px] text-green-700'>{product.stock} in stocks.</span> </div>
               {/* wishlist and compare  */}
                 <div className='flex gap-4 mb-4 pt-5'>
                   {isInWishlist(product?._id || product?.id) ? (
@@ -253,7 +254,7 @@ const getPoints = (data) => {
                       min={1}
                       max={product?.stock}
                           />
-                  <button onClick={()=>handleQuantityChange(product?._id)} className='flex  gap-2 items-center justify-center px-10 py-3 bg-primary rounded-full text-white text-[16px] font-bold hover:bg-black cursor-pointer transition-all duration-150'><FaOpencart size={20}/> Add to cart</button>
+                  <button onClick={()=>handleQuantityChange(product?._id)} className='flex  gap-2 items-center justify-center px-10 py-3 bg-primary text-black rounded-full text-[16px] font-bold hover:bg-black cursor-pointer transition-all duration-150 hover:text-white'><FaOpencart size={20}/> Add to cart</button>
                 </div>
                 <div className="flex flex-wrap gap-4 font-inter">
               {/* Apple Pay button */}

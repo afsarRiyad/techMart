@@ -5,7 +5,7 @@ import { CircleAlert, CircleAlertIcon, Eye, EyeOff   } from 'lucide-react';
 import Apple from '../assets/images/apple-logo.svg?react'
 import Goolgle from '../assets/images/google.svg?react'
 import { apiCustomer, setCustomerToken } from '../api/apiCustomer';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const Login = () => {
 
@@ -52,7 +52,6 @@ const handleGoogleLogin  = () =>{
 }
   return (
     <main className="flex items-center justify-center px-4">
-      <Toaster/>
     <form className='flex flex-col  shadow-lg max-w-[424px] w-full  rounded-md mx-auto border border-gray-100 dark:border-primary lg:my-22 my-10' onSubmit={(e)=>handleSubmit(e)}>
          <div className='flex justify-around w-full font-robot text-[20px] font-bold text-tcolor border-b border-b-gray-200 '>
             <span className='lg:w-[212px] flex justify-center border-b-[3px] cursor-pointer border-b-primary py-4 dark:text-gray-300 dark:border-b-yellow-500'>Sign In</span> 

@@ -18,7 +18,6 @@ import Payments from "./components/dashboard/Payments"
 import Details from "./components/dashboard/Details"
 import Dashboard from "./components/dashboard/Dashboard"
 import ProtectedRoute from "./routes/ProtectedRoute"
-import { Toaster } from "react-hot-toast"
 import Billing from "./pages/Billing"
 import Shipping from "./pages/Shipping"
 import Deals from "./components/Deals"
@@ -29,13 +28,15 @@ import Wishlist from './pages/Wishlist';
 import OrderReceived from "./pages/OrderReceived"
 import Products from "./pages/Products"
 import ProductDetail from "./pages/ProductDetail"
+import ScrollToTop from "./components/ScrollToTop"
+import NotFound from "./pages/NotFound"
 
 
 function App() {
 
   return (
     <>
-      <Toaster  />
+    <ScrollToTop />
     <Routes>
       <Route element={<MainLayout/>}>
       
@@ -69,6 +70,7 @@ function App() {
       </Route>
      </Route>
         <Route path="/terms-and-conditions" element={<Terms/>}/>
+        <Route path="*" element={<NotFound/>}/>
       </Route>
     </Routes>
     </>
