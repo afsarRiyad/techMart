@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link, Navigate, replace, useNavigate } from 'react-router'
 
-import Container from '../components/layouts/Container';
-import Dashboard from '../components/dashboard/Dashboard';
-import ProfileImageUpload from '../components/ui/ProfileImageUpload';
-import { apiCustomer, clearCustomerToken } from '../api/apiCustomer';
-import { useAuth } from '../hooks/useAuth';
+import Container from '@/components/layout/Container';
+import Dashboard from '@/components/dashboard/Dashboard';
+import ProfileImageUpload from '@/components/ui/ProfileImageUpload';
+import { apiCustomer, clearCustomerToken } from '@/api/apiCustomer';
+import { useAuth } from '@/hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
 
 

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteProfileImage } from "../services/uploadService"
+import { deleteProfileImage } from "@/features/user/services/uploadService"
 import toast from "react-hot-toast"
 
 export const useProfileRemove = () => {

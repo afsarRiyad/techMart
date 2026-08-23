@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router';
 import { Eye, EyeOff } from 'lucide-react';
-import Apple from '../assets/images/apple-logo.svg?react'
-import Goolgle from '../assets/images/google.svg?react'
+import Apple from '@/assets/images/apple-logo.svg?react'
+import Google from '@/assets/images/google.svg?react'
 
 
 const Reset = () => {

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import Container from './../components/layouts/Container';
+import Container from '@/components/layout/Container';
 import { Link, Navigate, useNavigate  } from 'react-router';
 import { CircleAlert, CircleAlertIcon, Eye, EyeOff   } from 'lucide-react';
-import Apple from '../assets/images/apple-logo.svg?react'
-import Goolgle from '../assets/images/google.svg?react'
-import { apiCustomer, setCustomerToken } from '../api/apiCustomer';
+import Apple from '@/assets/images/apple-logo.svg?react'
+import Google from '@/assets/images/google.svg?react'
+import { apiCustomer, setCustomerToken } from '@/api/apiCustomer';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -100,7 +100,7 @@ const handleGoogleLogin  = () =>{
          </div>
        <div className='select-none'>
          <div onClick={handleGoogleLogin} className='border border-gray-200 py-2 w-full flex font-inter items-center cursor-pointer mb-3 hover:shadow-md transition-all duration-300 ease-in-out'>
-           <Goolgle fill='currentColor' className='w-8 h-auto ml-3' />
+           <Google fill='currentColor' className='w-8 h-auto ml-3' />
            <span className='text-gray-500 text-[15px] w-full pl-20 darkH '>Login with Google</span>
         </div>
 

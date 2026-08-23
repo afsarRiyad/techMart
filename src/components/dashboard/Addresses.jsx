@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Billing from './../../pages/Billing';
-import Shipping from './../../pages/Shipping';
+import Billing from '@/pages/Billing';
+import Shipping from '@/pages/Shipping';
 import { useNavigate } from 'react-router';
 
 const AdressHeading =({setShow})=>{

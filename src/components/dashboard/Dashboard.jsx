@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { LayoutDashboard, Package, Download, MapPin, CreditCard, UserRound, LogOut } from "lucide-react";
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
-import Container from '../layouts/Container';
-import { logout } from '../../hooks/Fetchdata';
-import { clearCustomerToken } from '../../api/apiCustomer';
+import Container from '@/components/layout/Container';
+import { logout } from '@/hooks/useFetchData';
+import { clearCustomerToken } from '@/api/apiCustomer';
 import {  useQueryClient } from '@tanstack/react-query';
 
 const dashboardNav = [

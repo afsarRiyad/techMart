@@ -1,16 +1,16 @@
 import { ChevronDown, LockKeyhole, X } from 'lucide-react';
-import Container from './../components/layouts/Container';
-import Dropdown from '../components/ui/Dropdown';
-import { useCart } from '../features/Cart/hooks/useCart.js';
-import { useRemoveFromCart } from "../features/Cart/hooks/useRemoveCart.js";
+import Container from '@/components/layout/Container';
+import Dropdown from '@/components/ui/Dropdown';
+import { useCart } from '@/features/cart/hooks/useCart';
+import { useRemoveFromCart } from "@/features/cart/hooks/useRemoveCart";
 import { useState } from "react";
-import { useUpdateCart } from "../features/Cart/hooks/useUpdateCart.js";
+import { useUpdateCart } from "@/features/cart/hooks/useUpdateCart";
 import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import CouponInput from '../components/ui/CouponInput.jsx';
-import { useApplyCoupon } from '../features/Cart/hooks/useApplyCoupon.js';
-import { useShippingAddress } from '../features/user/hooks/useShippingAddress.js';
-import { useAuth } from '../hooks/useAuth.js';
+import CouponInput from '@/components/ui/CouponInput';
+import { useApplyCoupon } from '@/features/cart/hooks/useApplyCoupon';
+import { useShippingAddress } from '@/features/user/hooks/useShippingAddress';
+import { useAuth } from '@/hooks/useAuth';
 
 const Cart = () => {
   const [showVerifyAlert, setShowVerifyAlert] = useState(false);

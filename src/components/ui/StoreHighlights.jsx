@@ -1,5 +1,5 @@
 import React from 'react'
-import Container from '../layouts/Container'
+import Container from '@/components/layout/Container'
 import { Link } from 'react-router'
 
 const StoreHighlights = ({data, sale=false}) => {

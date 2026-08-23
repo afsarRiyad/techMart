@@ -1,17 +1,17 @@
 import React from 'react'
-import Container from './../layouts/Container';
+import Container from '@/components/layout/Container';
 import { Phone, Mail } from 'lucide-react';
 import { Link } from 'react-router';
-import Facebook from '../../assets/iconsSocial/facebook.svg?react';
-import Twitter from '../../assets/iconsSocial/twitter.svg?react';
-import Instagram from '../../assets/iconsSocial/instagram.svg?react';
-import Pinterest from '../../assets/iconsSocial/pinterest.svg?react';
-import Whatsap from '../../assets/iconsSocial/whatsap.svg?react';
-import Youtube from '../../assets/iconsSocial/youtube.svg?react';
-import Linkedin from '../../assets/iconsSocial/linkedin.svg?react';
-import Rss from '../../assets/iconsSocial/rss.svg?react';
-import Appstore from '../../assets/iconsStore/appstore.svg?react';
-import Googleplay from '../../assets/iconsStore/googleplay.svg?react';
+import Facebook from '@/assets/icons/social/facebook.svg?react';
+import Twitter from '@/assets/icons/social/twitter.svg?react';
+import Instagram from '@/assets/icons/social/instagram.svg?react';
+import Pinterest from '@/assets/icons/social/pinterest.svg?react';
+import Whatsap from '@/assets/icons/social/whatsapp.svg?react';
+import Youtube from '@/assets/icons/social/youtube.svg?react';
+import Linkedin from '@/assets/icons/social/linkedin.svg?react';
+import Rss from '@/assets/icons/social/rss.svg?react';
+import Appstore from '@/assets/icons/store/appstore.svg?react';
+import Googleplay from '@/assets/icons/store/googleplay.svg?react';
 
 
 

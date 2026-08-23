@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router"
-import { verifyOtp } from "./Fetchdata"
+import { verifyOtp } from "@/hooks/useFetchData"
 
 export const useOtpVerify = ()=>{
     const queryClinet = useQueryClient()

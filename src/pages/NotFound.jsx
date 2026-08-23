@@ -1,5 +1,5 @@
 import React from 'react'
-import Container from './../components/layouts/Container';
+import Container from '@/components/layout/Container';
 import { Link } from 'react-router';
 import { Home } from 'lucide-react';
 

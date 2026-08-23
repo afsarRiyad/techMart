@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router';
 import { CircleAlertIcon, ArrowRight, Home } from 'lucide-react';
-import { resendOtp, verifyOtp } from '../hooks/Fetchdata';
+import { resendOtp, verifyOtp } from '@/hooks/useFetchData';
 import toast, { Toaster } from 'react-hot-toast';
-import { useAuth } from '../hooks/useAuth';
-import { useOtpVerify } from '../hooks/useOtpVerify';
+import { useAuth } from '@/hooks/useAuth';
+import { useOtpVerify } from '@/hooks/useOtpVerify';
 
 const OtpVerification = () => {
     const {data} = useAuth()

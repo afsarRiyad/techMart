@@ -1,31 +1,5 @@
 import { useLocation, useNavigate } from 'react-router';
-import Container from '../components/layouts/Container';
-
-const demoOrder = {
-  orderNumber: '9964',
-  placedOn: 'August 10, 2026',
-  email: 'asdff@gmail.com',
-  paymentMethod: 'Direct bank transfer',
-  shippingFee: 50,
-  items: [
-    { id: 1, name: 'Smartphone 6S 128GB LTE', quantity: 1, total: 750 },
-  ],
-  billingAddress: {
-    lines: ['sdfsa fsadfs', 'sadfsadf', 'sadfsadf', 'sadfasdf', 'asdfsadff'],
-    city: 'Gjirokastër',
-    zip: '94102',
-    country: 'Albania',
-    phone: '(310) 555-0199',
-    email: 'asdff@gmail.com',
-  },
-  shippingAddress: {
-    lines: ['sdfsasdfsf fsadfssdf', 'sadfsadfsdfsdf', 'sadfsadf', 'sadfasdf', 'asdfsadff'],
-    city: 'Gjirokastër',
-    zip: '94102',
-    country: 'Albania',
-    phone: '(310) 555-0199',
-  },
-};
+import Container from '@/components/layout/Container';
 
 const SectionHeading = ({ children }) => (
   <h2 className="inline-block border-b-2 border-b-primary pb-3 text-[30px] text-tcolor">

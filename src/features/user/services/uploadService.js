@@ -1,4 +1,4 @@
-import { apiCustomer } from '../../../api/apiCustomer';
+import { apiCustomer } from '@/api/apiCustomer';
 
 export const uploadProfileImage = async (file) => {
   const formData = new FormData();

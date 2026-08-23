@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import FormInput from './../features/user/components/FormInput';
-import Container from '../components/layouts/Container';
+import FormInput from '@/features/user/components/FormInput';
+import Container from '@/components/layout/Container';
 import { Undo2 } from 'lucide-react';
-import { useBillingAddress } from '../features/user/hooks/useBillingAddress';
-import { useAuth } from '../hooks/useAuth';
+import { useBillingAddress } from '@/features/user/hooks/useBillingAddress';
+import { useAuth } from '@/hooks/useAuth';
 import toast from 'react-hot-toast';
-import { useAddresses } from '../features/user/hooks/useGetAddresses';
+import { useAddresses } from '@/features/user/hooks/useGetAddresses';
 
 
 

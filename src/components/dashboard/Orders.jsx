@@ -1,20 +1,44 @@
 import React from 'react'
-import Dashboard from './Dashboard'
-import Container from '../layouts/Container'
+import Dashboard from '@/components/dashboard/Dashboard'
+import Container from '@/components/layout/Container'
 import { Link, useNavigate } from 'react-router'
 import { Eye } from 'lucide-react'
-import { useOrders } from '../../features/user/hooks/useOrders'
+import { useOrders } from '@/features/user/hooks/useOrders'
 
 
-const Oders = () => {
+const Orders = () => {
   const navigate = useNavigate()
   const { data: order, isLoading, error } = useOrders()
-  console.log(order?.data);
 
   const handleNavigate =(orderId)=>{
      const id = orderId.replace('#', '')
        const targetOrder = order?.data?.filter((target)=> target.orderNumber === orderId)   
        navigate(`/account/orders/${id}`, {state: {order: targetOrder}})
+  }
+  if (isLoading) {
+    return <div>Loading orders...</div>
+  }
+  if (!order?.data?.length) {
+    return (
+      <div className="py-10">
+        <div className="relative overflow-hidden rounded bg-primary px-8 py-6 md:px-10">
+          <span className="absolute left-0 top-0 h-full w-1.5 bg-yellow-600" />
+
+          <p className="text-center text-[22px] text-tcolor md:text-[26px]">
+            Your orders are currently empty.
+          </p>
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/"
+            className="rounded-full bg-gray-100 px-8 py-3 text-[15px] font-medium text-gray-700 transition-colors duration-200 hover:bg-black hover:text-white"
+          >
+            Return to shop
+          </Link>
+        </div>
+      </div>
+    )
   }
   
   return (
@@ -123,4 +147,4 @@ const Oders = () => {
   )
 }
 
-export default Oders
+export default Orders

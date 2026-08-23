@@ -1,6 +1,6 @@
 import React from 'react'
-import Dashboard from './Dashboard'
-import Container from '../layouts/Container'
+import Dashboard from '@/components/dashboard/Dashboard'
+import Container from '@/components/layout/Container'
 
 const Downloads = () => {
   return (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { crateTokenStore } from "./tokenStore";
+import { createTokenStore } from "@/api/tokenStore";
 
 export function createApiInstance({ baseURL,  refreshPath, authPath,  loginPath,  onSessionExpired,}) {
   const {
@@ -7,7 +7,7 @@ export function createApiInstance({ baseURL,  refreshPath, authPath,  loginPath,
     setAccessToken,
     clearAccessToken,
     getOrCreateRefresh,
-  } = crateTokenStore();
+  } = createTokenStore();
   
   const instance = axios.create({
     baseURL,

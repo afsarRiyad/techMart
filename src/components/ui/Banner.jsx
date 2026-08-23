@@ -1,7 +1,7 @@
 import React from 'react'
-import banner1 from '../../assets/images/banner1.webp'
-import banner2 from '../../assets/images/banner2.webp'
-import Container from '../layouts/Container'
+import banner1 from '@/assets/images/banner1.webp'
+import banner2 from '@/assets/images/banner2.webp'
+import Container from '@/components/layout/Container'
 
 const Banner = () => {
   return (

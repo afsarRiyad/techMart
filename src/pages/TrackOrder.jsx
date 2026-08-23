@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Container from '../components/layouts/Container'
-import { trackOrders } from '../features/user/services/userServices'
+import Container from '@/components/layout/Container'
+import { trackOrders } from '@/features/user/services/userService'
 import toast from 'react-hot-toast'
 import { CheckCircle, Circle, Package, Truck, Home } from 'lucide-react'
 

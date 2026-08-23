@@ -1,4 +1,4 @@
-import { createApiInstance } from './createApiInstance';
+import { createApiInstance } from '@/api/createApiInstance';
  
 const API = import.meta.env.VITE_API_URL;
 const notifySessionExpired = (msg) => {

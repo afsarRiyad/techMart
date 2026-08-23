@@ -1,6 +1,6 @@
 import React from 'react'
-import Container from './../components/layouts/Container';
-import { data } from '../data/TermsData';
+import Container from '@/components/layout/Container';
+import { data } from '@/data/termsData';
 import { Link } from 'react-router';
 
 const Terms = () => {

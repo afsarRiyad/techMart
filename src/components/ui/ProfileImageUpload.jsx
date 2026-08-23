@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Camera, X } from 'lucide-react';
-import { useProfileImageUpload } from '../../features/user/hooks/useProfileImageUpload';
-import { updateProfile } from '../../features/user/services/userServices';
+import { useProfileImageUpload } from '@/features/user/hooks/useProfileImageUpload';
+import { updateProfile } from '@/features/user/services/userService';
 import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { useProfileRemove } from '../../features/user/hooks/useProfileRemove';
+import { useProfileRemove } from '@/features/user/hooks/useProfileRemove';
 
 const ProfileImageUpload = ({ currentImage, username }) => {
   const [preview, setPreview] = useState(currentImage || null);

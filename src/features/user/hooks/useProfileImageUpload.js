@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { uploadProfileImage, deleteProfileImage } from "../services/uploadService";
+import { uploadProfileImage, deleteProfileImage } from "@/features/user/services/uploadService";
 
 export const useProfileImageUpload = () => {
   const queryClient = useQueryClient();

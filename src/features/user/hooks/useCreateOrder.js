@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { clearCart, createOrder } from "../services/checkoutService"
+import { clearCart, createOrder } from "@/features/user/services/checkoutService"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router"
 

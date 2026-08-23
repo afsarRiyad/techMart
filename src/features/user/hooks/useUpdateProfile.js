@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { changePassword, updateProfile } from "../services/userServices";
+import { changePassword, updateProfile } from "@/features/user/services/userService";
 
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();

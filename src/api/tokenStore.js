@@ -1,6 +1,6 @@
 const TOKEN_KEY = "techmart_customer_access_token";
 
-export function crateTokenStore() {
+export function createTokenStore() {
   let accessToken = sessionStorage.getItem(TOKEN_KEY);
   let refreshInFlight = null;
 

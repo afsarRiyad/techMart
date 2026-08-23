@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Banknote, LocateFixed } from 'lucide-react';
-import { useCart } from '../../features/Cart/hooks/useCart.js';
+import { useCart } from '@/features/cart/hooks/useCart';
 import { Link } from 'react-router';
-import { useCreateOrder } from '../../features/user/hooks/useCreateOrder.js';
-import { useAddresses } from '../../features/user/hooks/useGetAddresses.js';
+import { useCreateOrder } from '@/features/user/hooks/useCreateOrder';
+import { useAddresses } from '@/features/user/hooks/useGetAddresses';
 
 const paymentMethods = [
   {

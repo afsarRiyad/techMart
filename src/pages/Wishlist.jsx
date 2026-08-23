@@ -1,13 +1,13 @@
-import Container from './../components/layouts/Container';
+import Container from '@/components/layout/Container';
 import { X } from 'lucide-react';
 import { Link } from "react-router";
-import { useWishlist } from '../features/wishlist/hooks/useWishlist.js';
-import { useAddToCart } from '../features/Cart/hooks/useAddToCart.js';
+import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
+import { useAddToCart } from '@/features/cart/hooks/useAddToCart';
 import { FaFacebookF, FaWhatsapp  } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { TfiPinterest } from "react-icons/tfi";
 import { IoMail } from "react-icons/io5";
-import { useRemoveWishlist } from './../features/wishlist/hooks/useRemoveWishlist';
+import { useRemoveWishlist } from '@/features/wishlist/hooks/useRemoveWishlist';
 
 const shareLinks = [
  {icon: FaFacebookF },
@@ -59,7 +59,6 @@ const Wishlist = () => {
           My wishlist
         </h1>
 
-        {wishlistItems?.length > 0 ? (
           <>
             {/* ---------- Mobile / tablet card view ---------- */}
             <div className="md:hidden flex flex-col gap-6">
@@ -178,9 +177,7 @@ const Wishlist = () => {
               </div>
             </div>
           </>
-        ) : (
-          <h1>Wishlist is empty</h1>
-        )}
+        )
       </Container>
     </section>
       )}

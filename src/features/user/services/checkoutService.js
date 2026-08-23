@@ -1,4 +1,4 @@
-import { apiCustomer } from "../../../api/apiCustomer"
+import { apiCustomer } from "@/api/apiCustomer"
 
 export const createOrder = async(formData)=>{
     const {data} = await apiCustomer.post('/api/orders', formData)

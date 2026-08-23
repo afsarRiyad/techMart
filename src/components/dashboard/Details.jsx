@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import ToggleSwitch from '../../features/user/components/ToggleSwitcth'
-import getPasswordStrength from '../../features/user/components/GetPasswordStrength'
-import FormInput from '../../features/user/components/FormInput'
-import { useUpdateProfile } from '../../features/user/hooks/useUpdateProfile'
-import { useAuth } from '../../hooks/useAuth'
+import ToggleSwitch from '@/features/user/components/ToggleSwitch'
+import getPasswordStrength from '@/features/user/components/GetPasswordStrength'
+import FormInput from '@/features/user/components/FormInput'
+import { useUpdateProfile } from '@/features/user/hooks/useUpdateProfile'
+import { useAuth } from '@/hooks/useAuth'
 
 
 

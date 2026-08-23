@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateWishlist } from './../services/wishlistServices';
+import { updateWishlist } from '@/features/wishlist/services/wishlistService';
 import toast from 'react-hot-toast';
 
 export const useUpdateWishlist = ()=>{

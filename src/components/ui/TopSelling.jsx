@@ -1,15 +1,15 @@
 import React from 'react'
-import background from '../../assets/images/ProductBackground.webp'
-import Container from '../layouts/Container'
-import { useFetchData } from '../../hooks/Fetchdata'
+import background from '@/assets/images/ProductBackground.webp'
+import Container from '@/components/layout/Container'
+import { useFetchData } from '@/hooks/useFetchData'
 import { FaOpencart } from "react-icons/fa6";
 import { GitCompareArrows, Heart, ArrowBigRight } from 'lucide-react';
-import Tooltip from './Tooltip'
-import { useAddToCart } from '../../features/Cart/hooks/useAddToCart'
-import { useUpdateWishlist } from '../../features/wishlist/hooks/useUpdateWishlist'
-import { useWishlist } from '../../features/wishlist/hooks/useWishlist'
+import Tooltip from '@/components/ui/Tooltip'
+import { useAddToCart } from '@/features/cart/hooks/useAddToCart'
+import { useUpdateWishlist } from '@/features/wishlist/hooks/useUpdateWishlist'
+import { useWishlist } from '@/features/wishlist/hooks/useWishlist'
 import { Link } from 'react-router'
-import { useCart } from '../../features/Cart/hooks/useCart.js';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 const ProductCard = ({ data, loading = false, errs = '', type = '', discount, timers }) => {
     const addToCart = useAddToCart()

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
-import { setCustomerToken } from '../api/apiCustomer'
+import { setCustomerToken } from '@/api/apiCustomer'
 import toast, { Toaster } from 'react-hot-toast'
 
 const AuthCallback = () => {

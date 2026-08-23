@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Container from './../components/layouts/Container';
+import Container from '@/components/layout/Container';
 import { Link, useNavigate } from 'react-router';
-import { apiCustomer } from '../api/apiCustomer';
+import { apiCustomer } from '@/api/apiCustomer';
 import toast, { Toaster } from 'react-hot-toast';
 
 

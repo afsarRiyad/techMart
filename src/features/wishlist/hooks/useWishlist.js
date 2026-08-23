@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getWishlist } from "../services/wishlistServices"
+import { getWishlist } from "@/features/wishlist/services/wishlistService"
 
 export const useWishlist = ()=>{
     return useQuery({

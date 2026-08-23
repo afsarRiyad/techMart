@@ -1,5 +1,5 @@
 import React from 'react'
-import Container from '../layouts/Container'
+import Container from '@/components/layout/Container'
 import { Send } from 'lucide-react';
 
 const FooterTopbar = () => {

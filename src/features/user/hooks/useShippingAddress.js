@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { shippingAddress } from "../services/addressService"
+import { shippingAddress } from "@/features/user/services/addressService"
 import toast from "react-hot-toast"
 
 export const useShippingAddress = () =>{

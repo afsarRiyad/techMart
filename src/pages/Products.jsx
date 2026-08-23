@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import ProSidebar from '../components/products/ProSidebar'
-import Container from '../components/layouts/Container'
+import ProductSidebar from '@/components/product/ProductSidebar'
+import Container from '@/components/layout/Container'
 import { ChevronDown, ChevronsUpDown, Grid2X2, Grid3X3, List, MoveLeft, MoveRight, Rows3 } from 'lucide-react'
-import { useGetCatProducts } from '../features/products/hooks/useGetCatProducts'
-import Gridview from '../components/products/Gridview'
-import GridExtend from '../components/products/GridExtend'
-import Listview from '../components/products/ListView'
-import ListViewSmall from '../components/products/ListViewSmall'
-import { setPage,  setItemsPerPage,  setSort,  setView,  setSelectedBrands,  setSelectedColors,  setPriceRange,  setActiveCategory,  setActiveChildCategory, resetFilters,} from '../features/products/productPageSlice'
+import { useGetCatProducts } from '@/features/product/hooks/useGetCatProducts'
+import Gridview from '@/components/product/Gridview'
+import GridExtend from '@/components/product/GridExtend'
+import Listview from '@/components/product/ListView'
+import ListViewSmall from '@/components/product/ListViewSmall'
+import { setPage,  setItemsPerPage,  setSort,  setView,  setSelectedBrands,  setSelectedColors,  setPriceRange,  setActiveCategory,  setActiveChildCategory, resetFilters,} from '@/features/product/productPageSlice'
 
 const SORT_OPTIONS = [{value: 'default', label: 'Default sorting',},
                     { value: 'price-asc', label: 'Price: Low to High', },
@@ -120,7 +120,7 @@ const Products = () => {
       <div className="flex w-full gap-8">
        {/* sidebar  */}
         <div className="w-[20%] shrink-0">
-          <ProSidebar
+          <ProductSidebar
             active={active}
             setActive={setActive}
             activeChild={activeChild}
@@ -130,7 +130,7 @@ const Products = () => {
 
        {/* products section  */}
         <div className="w-[79%]">
-          {/* header  */}
+          {/* header  */} 
           <div className="flex items-end justify-between pb-4">
             <h1 className="text-[26px] font-medium text-tcolor dark:text-white">
               {active?.name}
@@ -143,7 +143,8 @@ const Products = () => {
           </div>
 
           <div className="flex flex-col gap-3 rounded bg-gray-100 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between dark:bg-white/5">
-           <div className="flex items-center ">
+          {/* grid views icons  */}
+           <div className="lg:flex items-center hidden ">
                 {/* Columns */}
                 <button type="button" aria-label="Columns view"
                   aria-pressed={view === 'columns'}

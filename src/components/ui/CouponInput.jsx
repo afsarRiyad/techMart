@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useApplyCoupon } from '../../features/Cart/hooks/useApplyCoupon'
+import { useApplyCoupon } from '@/features/cart/hooks/useApplyCoupon'
 
 const CouponInput = ({setDiscount, subTotal}) => {
     const couponMutation = useApplyCoupon()

@@ -1,16 +1,16 @@
-import BestSellers from '../components/BestSellers';
-import Featured from '../components/Featured';
-import Features from '../components/Features/Features';
-import HeroSlider from '../components/HeroSlider/HeroSlider';
-import LaptopsPc from '../components/LaptopsPc';
-import PromotionalCat from '../components/PromotionalCat';
-import Recommendation from '../components/Recommendation';
-import TopCategories from '../components/TopCategories';
-import TrendingPro from '../components/TrendingPro';
-import Banner from '../components/ui/Banner';
-import ValueProps from '../components/ValueProps';
-import Container from './../components/layouts/Container';
-import Reset from './Reset';
+import BestSellers from '@/components/home/BestSellers';
+import Featured from '@/components/home/Featured';
+import Features from '@/components/home/features/Features';
+import HeroSlider from '@/components/home/HeroSlider';
+import LaptopsPc from '@/components/home/LaptopsPc';
+import PromotionalCat from '@/components/home/PromotionalCat';
+import Recommendation from '@/components/home/Recommendation';
+import TopCategories from '@/components/home/TopCategories';
+import TrendingPro from '@/components/home/TrendingPro';
+import Banner from '@/components/ui/Banner';
+import ValueProps from '@/components/home/ValueProps';
+import Container from '@/components/layout/Container';
+import Reset from '@/pages/Reset';
 
 const Home = () => {
   return (

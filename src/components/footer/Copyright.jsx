@@ -1,7 +1,7 @@
 import React from 'react'
-import Container from './../layouts/Container';
+import Container from '@/components/layout/Container';
 import { CopyrightIcon } from 'lucide-react';
-import paymentIcon from '../../assets/images/patment-icon.webp';
+import paymentIcon from '@/assets/images/payment-icon.webp';
 
 const Copyright = () => {
   return (

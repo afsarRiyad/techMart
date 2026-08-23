@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import FormInput from './../features/user/components/FormInput';
+import FormInput from '@/features/user/components/FormInput';
 import { Undo2 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import toast from 'react-hot-toast';
-import { useAddresses } from '../features/user/hooks/useGetAddresses';
-import { useShippingAddress } from '../features/user/hooks/useShippingAddress';
+import { useAddresses } from '@/features/user/hooks/useGetAddresses';
+import { useShippingAddress } from '@/features/user/hooks/useShippingAddress';
 
 const COUNTRIES = ['Bangladesh'];
 

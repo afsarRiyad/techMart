@@ -1,35 +1,35 @@
 import { Route, Routes } from "react-router"
-import Home from "./pages/Home"
-import MainLayout from "./components/layouts/MainLayout"
-import MyAccount from "./pages/MyAccount"
-import Login from "./pages/Login"
-import Cart from "./pages/Cart"
-import Signup from "./pages/Signup"
-import Forgot from "./pages/Forgot"
-import Reset from "./pages/Reset"
-import OtpVerification from "./pages/OtpVerification"
-import TrackOrder from "./pages/TrackOrder"
-import Terms from "./pages/Terms"
-import AuthCallback from "./pages/AuthCallback"
-import Oders from "./components/dashboard/Orders"
-import Downloads from "./components/dashboard/Downloads"
-import Addresses from "./components/dashboard/Addresses"
-import Payments from "./components/dashboard/Payments"
-import Details from "./components/dashboard/Details"
-import Dashboard from "./components/dashboard/Dashboard"
-import ProtectedRoute from "./routes/ProtectedRoute"
-import Billing from "./pages/Billing"
-import Shipping from "./pages/Shipping"
-import Deals from "./components/Deals"
-import Recommendation from "./components/Recommendation"
-import Checkout from "./pages/Checkout"
-import SignleOrderDetails from './components/ui/SignleOrderDetails';
-import Wishlist from './pages/Wishlist';
-import OrderReceived from "./pages/OrderReceived"
-import Products from "./pages/Products"
-import ProductDetail from "./pages/ProductDetail"
-import ScrollToTop from "./components/ScrollToTop"
-import NotFound from "./pages/NotFound"
+import Home from "@/pages/Home"
+import MainLayout from "@/components/layout/MainLayout"
+import MyAccount from "@/pages/MyAccount"
+import Login from "@/pages/Login"
+import Cart from "@/pages/Cart"
+import Signup from "@/pages/Signup"
+import Forgot from "@/pages/Forgot"
+import Reset from "@/pages/Reset"
+import OtpVerification from "@/pages/OtpVerification"
+import TrackOrder from "@/pages/TrackOrder"
+import Terms from "@/pages/Terms"
+import AuthCallback from "@/pages/AuthCallback"
+import Orders from "@/components/dashboard/Orders"
+import Downloads from "@/components/dashboard/Downloads"
+import Addresses from "@/components/dashboard/Addresses"
+import Payments from "@/components/dashboard/Payments"
+import Details from "@/components/dashboard/Details"
+import Dashboard from "@/components/dashboard/Dashboard"
+import ProtectedRoute from "@/routes/ProtectedRoute"
+import Billing from "@/pages/Billing"
+import Shipping from "@/pages/Shipping"
+import Deals from "@/components/home/Deals"
+import Recommendation from "@/components/home/Recommendation"
+import Checkout from "@/pages/Checkout"
+import SingleOrderDetails from '@/components/ui/SingleOrderDetails';
+import Wishlist from '@/pages/Wishlist';
+import OrderReceived from "@/pages/OrderReceived"
+import Products from "@/pages/Products"
+import ProductDetail from "@/pages/ProductDetail"
+import ScrollToTop from "@/components/common/ScrollToTop"
+import NotFound from "@/pages/NotFound"
 
 
 function App() {
@@ -59,14 +59,14 @@ function App() {
      <Route element={<ProtectedRoute/>}>
        <Route element={<Dashboard/>}>
         <Route path="/account" element={<MyAccount/>}/>
-        <Route path="/account/orders" element={<Oders/>}/>
+        <Route path="/account/orders" element={<Orders/>}/>
         <Route path="/account/downloads" element={<Downloads/>}/>
         <Route path="/account/addresses" element={<Addresses/>}/>
         <Route path="/account/payments-methods" element={<Payments/>}/>
         <Route path="/account/billing" element={<Billing/>}/>
         <Route path="/account/shipping" element={<Shipping/>}/>
         <Route path="/account/account-details" element={<Details/>}/>
-        <Route path="/account/orders/:orderId" element={<SignleOrderDetails/>}/>
+        <Route path="/account/orders/:orderId" element={<SingleOrderDetails/>}/>
       </Route>
      </Route>
         <Route path="/terms-and-conditions" element={<Terms/>}/>

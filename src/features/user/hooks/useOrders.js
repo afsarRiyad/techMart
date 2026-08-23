@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getOrders } from "../services/userServices"
+import { getOrders } from "@/features/user/services/userService"
 
 export const useOrders = ()=>{
   return  useQuery({

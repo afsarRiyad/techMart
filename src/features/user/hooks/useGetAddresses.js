@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getAddress } from "../services/addressService"
+import { getAddress } from "@/features/user/services/addressService"
 
 export const useAddresses = ()=>{
     return useQuery({
