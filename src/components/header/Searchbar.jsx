@@ -57,7 +57,7 @@ const Searchbar = () => {
 
   return (
     <>
-      <div className={`z-50 lg:dark:bg-darkBg transition-all duration-300 lg: ${sticky
+      <div className={`z-80 lg:dark:bg-darkBg transition-all duration-300 lg: ${sticky
           ? 'fixed  w-full top-0 left-0 shadow-md  bg-white animate-sticky lg:animate-none z-[999]'
           : 'relative bg-primary lg:bg-white'}`}>
         <Container>
@@ -90,7 +90,7 @@ const Searchbar = () => {
                     {
                       categories?.map((item, index) => (
                         <li key={index} className={`level0 dark:text-gray-100 ${category === item.name && 'bg-blue-500 text-white'}`} onClick={() => { setCategory(item.name); setCatOpen(false) }}>
-                          <Link to={item.url || '#'}>{item.name}</Link>
+                          <Link to={'*'}>{item.name}</Link>
                         </li>
                       ))
                     }

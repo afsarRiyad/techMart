@@ -5,13 +5,9 @@ import { getProduct } from "@/features/product/services/productService";
 export const useGetProduct = (productIdOrSlug) => {
   return useQuery({
     queryKey: ["product", productIdOrSlug],
-
     queryFn: () => getProduct(productIdOrSlug),
-
     enabled: !!productIdOrSlug,
-
     staleTime: 5 * 60 * 1000,
-
     retry: 1,
 
     onError: (error) => {

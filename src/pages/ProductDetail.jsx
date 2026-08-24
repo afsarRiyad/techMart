@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useParams, Link } from 'react-router'
 import SidebarLayout from '@/components/layout/SidebarLayout'
-import { useGetCategories } from '@/features/product/hooks/useGetCategories'
-import { ChevronRight, Plus, Minus, Heart, ShoppingCart, GitCompareArrows, Search, ArrowRight } from 'lucide-react'
-import toast from 'react-hot-toast'
+import { Heart, GitCompareArrows, Search, ArrowRight, SlidersHorizontal } from 'lucide-react'
 import { useGetProduct } from '@/features/product/hooks/useGetProduct';
 import { useUpdateWishlist } from '@/features/wishlist/hooks/useUpdateWishlist';
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
@@ -45,13 +43,9 @@ const ProductDetail = () => {
   const [proQuantity, setProQuantity] = useState('1')
   const price = product?.salePrice ?? product?.price
   const discountPercent = (product?.regularPrice - price) / product?.regularPrice * 100
-  console.log(show);
-   
-  
   const productImages = product?.images && product.images.length > 0 ? product.images
   : product?.image ? [product.image]  : [];
   
-  const [quantity, setQuantity] = useState(1)
   const wishListItem = wishlistData?.data || [];
   
   const isInWishlist = (proId) => {
@@ -65,33 +59,12 @@ const ProductDetail = () => {
     }
     await updateQuantity.mutate(data)
   }
-  console.log(product?._id);
-  
-  const handleAddToCart = () => {
-    toast.success('Added to cart!')
-  }
-  
   const handleAddToWishlist = () => {
     addtoWishlist.mutate({
       productId: product?._id || product?.id
     })
   }
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="text-gray-500">Loading product...</div>
-      </div>
-    )
-  }
-  console.log(product);
-  
-  if (isError || !product) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="text-red-500">Product not found</div>
-      </div>
-    )
-  }
+
 const getPoints = (data) => {
   const words = data.split(' ');
   const points = [];
@@ -102,8 +75,23 @@ const getPoints = (data) => {
   return points;
 };
 
-  
-  const ProductDetailContent = ({ active, setActive }) => {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="text-gray-500">Loading product...</div>
+      </div>
+    )
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="text-red-500">Product not found</div>
+      </div>
+    )
+  }
+
+  const ProductDetailContent = ({ onOpenSidebar }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [zoom, setZoom] = useState(false)
       const [position, setPosition] = useState({ x: 50, y: 50 });
@@ -136,6 +124,18 @@ const getPoints = (data) => {
 
     return (
       <>
+        {/* Mobile filter button */}
+        <div className="lg:hidden pb-4">
+          <button
+            type="button"
+            onClick={onOpenSidebar}
+            className="flex items-center gap-2 cursor-pointer rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            <SlidersHorizontal size={18} />
+            <span>Browse Categories</span>
+          </button>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 font-inter w-full">
           {/* Product Images */}
           <div className="w-full flex flex-col items-center lg:items-start lg:block lg:w-[320px] xl:w-[395px] lg:shrink-0">
@@ -206,11 +206,6 @@ const getPoints = (data) => {
 
           {/* Product Info */}
           <div className="w-full min-w-0">
-            <div className='flex gap-2'>
-            {product?.categories?.map(item =>(
-                <span key={item} className='text-[14px] hover:text-gray-800 text-gray-400 cursor-pointer'>{item}</span>
-              ))}
-              </div>
               <h1 className="text-[22px] sm:text-[25px] font-medium  text-tcolor mb-2 border-b border-b-gray-300 pb-3">{product?.name || 'Product Name'}</h1>
                <div className='text-[15px] text-gray-600'> Availability: <span className='font-semibold text-[16px] text-green-700'>{product.stock} in stocks.</span> </div>
               {/* wishlist and compare  */}
@@ -334,7 +329,7 @@ const getPoints = (data) => {
 
   return (
     <SidebarLayout>
-      {({ active, setActive }) => <ProductDetailContent active={active} setActive={setActive} />}
+      {({ onOpenSidebar }) => <ProductDetailContent onOpenSidebar={onOpenSidebar} />}
     </SidebarLayout>
   )
 }

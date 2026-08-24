@@ -57,7 +57,7 @@ const getBullets = (description) => {
 }
     return (
         <div className='w-full min-w-0'>
-            <div className='grid grid-cols-5'>
+            <div className={`grid lg:grid-cols-5 sm:grid-cols-3 grid-cols-2`}>
                 {products && products.map((pro, index) => {
                     const bullets = getBullets(pro.description);
                     const hasSale = pro.regularPrice && pro.salePrice && pro.regularPrice > pro.salePrice;

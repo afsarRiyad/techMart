@@ -39,7 +39,6 @@ function App() {
     <ScrollToTop />
     <Routes>
       <Route element={<MainLayout/>}>
-      
         <Route path="/" element={<Home/>}/>
         <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/account/login" element={<Login/>}/>
