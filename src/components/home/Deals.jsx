@@ -4,21 +4,33 @@ import { Heart, GitCompareArrows } from 'lucide-react'
 import { useAddToCart } from '@/features/cart/hooks/useAddToCart'
 import { useCart } from '@/features/cart/hooks/useCart'
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist'
+import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
+import { useCompare } from '@/features/compare/hooks/useCompare'
+import { Link } from 'react-router';
 
 const Deals = ({ product }) => {
     const addToCart = useAddToCart()
     const {data: cartData} = useCart()
     const {data: wishlistData} = useWishlist()
+    const {data: compareData} = useCompare()
+    const addToCompare = useUpdateCompare()
     const cartItem = cartData?.data?.items || []
     const wishListItem = wishlistData?.data || []
+    const compareListItem = compareData?.data || []
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
+    }
+    const handleCompare = (id) => {
+        addToCompare.mutate({ productId: id })
     }
     const isInCart = (proId) =>{
         return cartItem.some((item)=> item?.product?._id === proId)
     }
     const isInWishlist = (proId) => {
   return wishListItem.some((item) => item._id === proId);
+};
+    const isInCompare = (proId) => {
+  return compareListItem.some((item) => item._id === proId);
 };
     return (
         <div className="relative after:content-[''] after:absolute after:top-5 after:right-0 after:h-75 after:w-[1px] after:bg-gray-200 last:after:hidden px-4 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] py-2 rounded-md transition-all duration-10 hover:text-black0 bg-white dark:bg-neutral-900">
@@ -79,8 +91,17 @@ const Deals = ({ product }) => {
                     <span>sdfsdf</span>
                 </div>
                 <div className='flex items-center gap-1 cursor-pointer hover:text-black dark:hover:text-white'>
-                  <span className="text-current"><GitCompareArrows /></span>
-                    <span>Compare</span>
+                    {isInCompare(product._id) ?
+                        <>
+                            <span className="text-current"><GitCompareArrows /></span>
+                            <Link to='/compare'>Added to Compare</Link>
+                        </>
+                        :
+                        <button onClick={() => handleCompare(product._id)} className='flex items-center gap-1'>
+                            <span className="text-current"><GitCompareArrows /></span>
+                            <span>Compare</span>
+                        </button>
+                    }
                 </div>
             </div>
         </div>

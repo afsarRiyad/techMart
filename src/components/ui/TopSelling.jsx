@@ -8,6 +8,8 @@ import Tooltip from '@/components/ui/Tooltip'
 import { useAddToCart } from '@/features/cart/hooks/useAddToCart'
 import { useUpdateWishlist } from '@/features/wishlist/hooks/useUpdateWishlist'
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist'
+import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
+import { useCompare } from '@/features/compare/hooks/useCompare'
 import { Link } from 'react-router'
 import { useCart } from '@/features/cart/hooks/useCart';
 
@@ -15,9 +17,12 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
     const addToCart = useAddToCart()
     const { data: cartData } = useCart()
     const { data: wishlistData } = useWishlist()
+    const { data: compareData } = useCompare()
     const cartItem = cartData?.data?.items || []
     const wishListItem = wishlistData?.data || []
+    const compareListItem = compareData?.data || []
     const addToWishlist = useUpdateWishlist()
+    const addToCompare = useUpdateCompare()
 
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
@@ -25,11 +30,17 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
     const handleWishlist = async (id) => {
         await addToWishlist.mutateAsync({ productId: id })
     }
+    const handleCompare = async (id) => {
+        await addToCompare.mutateAsync({ productId: id })
+    }
     const isInCart = (proId) => {
         return cartItem?.some((item) => item?.product?._id === proId)
     }
     const isInWishlist = (proId) => {
         return wishListItem.some((item) => item?._id === proId)
+    }
+    const isInCompare = (proId) => {
+        return compareListItem.some((item) => item?._id === proId)
     }
     if (loading) return <p className='text-center p-10 text-gray-500 font-inter'>Loading items...</p>
     if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
@@ -97,8 +108,17 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                                     }
                                                 </div>
                                                 <div className='flex items-center gap-1 justify-end  cursor-pointer pt-1 hover:text-black text-gray-500 pb-2'>
-                                                    <GitCompareArrows size={18} />
-                                                    <span className='text-sm '>Compare</span>
+                                                    {isInCompare(pro._id) ?
+                                                        <>
+                                                            <GitCompareArrows size={18} className='text-black' />
+                                                            <Link to='/compare' className='text-[14px]'>Added to Compare</Link>
+                                                        </>
+                                                        :
+                                                        <button onClick={() => handleCompare(pro._id)} className='flex items-center gap-2'>
+                                                            <GitCompareArrows size={18} />
+                                                            <span className='text-sm '>Compare</span>
+                                                        </button>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>

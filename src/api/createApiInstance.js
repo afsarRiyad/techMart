@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createTokenStore } from "@/api/tokenStore";
+import { getGuestId } from "@/api/guestSession";
 
 export function createApiInstance({ baseURL,  refreshPath, authPath,  loginPath,  onSessionExpired,}) {
   const {
@@ -21,6 +22,10 @@ export function createApiInstance({ baseURL,  refreshPath, authPath,  loginPath,
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // Identify the guest session so cart/wishlist/compare work without an
+    // account. Logged-in users are resolved by token first on the backend, so
+    // sending this header alongside a token is harmless.
+    config.headers["x-guest-id"] = getGuestId();
     return config;
   });
   const refreshToken = async () => {

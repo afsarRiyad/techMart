@@ -6,20 +6,28 @@ import { useCart } from '@/features/cart/hooks/useCart';
 import { Link } from 'react-router';
 import { useUpdateWishlist } from '@/features/wishlist/hooks/useUpdateWishlist';
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
+import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
+import { useCompare } from '@/features/compare/hooks/useCompare';
 import Tooltip from '@/components/ui/Tooltip';
 
 const ListViewSmall = ({ products }) => {
     const addtoWishlist = useUpdateWishlist()
+    const addToCompare = useUpdateCompare()
     const { data: cartData } = useCart()
     const addToCart = useAddToCart()
     const { data: wishlistData } = useWishlist()
+    const { data: compareData } = useCompare()
 
     const handleWishlist = (id) => {
         addtoWishlist.mutate({ productId: id })
     }
+    const handleCompare = (id) => {
+        addToCompare.mutate({ productId: id })
+    }
 
     const cartItem = cartData?.data?.items || [];
     const wishListItem = wishlistData?.data || [];
+    const compareListItem = compareData?.data || [];
 
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
@@ -27,6 +35,7 @@ const ListViewSmall = ({ products }) => {
 
     const isInCart = (proId) => cartItem.some((item) => item?.product?._id === proId)
     const isInWishlist = (proId) => wishListItem.some((item) => item._id === proId);
+    const isInCompare = (proId) => compareListItem.some((item) => item._id === proId);
 
     const getBullets = (description) => {
         if (!description) return [];
@@ -158,8 +167,17 @@ const ListViewSmall = ({ products }) => {
                                     }
                                 </div>
                                 <div className='flex items-center gap-1 cursor-pointer hover:text-black text-gray-500'>
-                                    <GitCompareArrows size={16} />
-                                    <span className='text-sm'>Compare</span>
+                                    {isInCompare(pro._id) ?
+                                        <>
+                                            <GitCompareArrows size={16} className='text-black' />
+                                            <Link to='/compare' className='text-sm'>Compare</Link>
+                                        </>
+                                        :
+                                        <button onClick={() => handleCompare(pro._id)} className='flex items-center gap-1'>
+                                            <GitCompareArrows size={16} />
+                                            <span className='text-sm'>Compare</span>
+                                        </button>
+                                    }
                                 </div>
                             </div>
                         </div>

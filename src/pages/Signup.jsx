@@ -5,6 +5,7 @@ import Apple from '@/assets/images/apple-logo.svg?react'
 import Google from '@/assets/images/google.svg?react'
 import { CircleAlert } from "lucide-react";
 import { apiCustomer } from '@/api/apiCustomer';
+import { getGuestId } from '@/api/guestSession';
 import toast, { Toaster } from "react-hot-toast";
 
 
@@ -37,7 +38,9 @@ const Signup = () => {
            e.preventDefault();
            setErrs({})
            try {
-            const data = await apiCustomer.post('/api/auth/signup',formData)
+            // Send the guest session id so the backend merges the guest's cart,
+            // wishlist, and compare list into the new account.
+            const data = await apiCustomer.post('/api/auth/signup', {...formData, guestId: getGuestId()})
             
             toast.success(
                 data.data.message || "Account created. Please verify your email."
@@ -64,7 +67,10 @@ const Signup = () => {
   }));
   }
 const handleGoogleLogin  = () =>{
-             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?guestId=${encodeURIComponent(getGuestId())}`;
+}
+const handleAppleLogin = () => {
+             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/apple?guestId=${encodeURIComponent(getGuestId())}`;
 }
   
   return (
@@ -157,7 +163,7 @@ const handleGoogleLogin  = () =>{
               <span className='text-gray-500 text-[15px] w-full pl-20 darkH'>Login with Google</span>
             </div>
 
-            <div className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer hover:shadow-md transition-all duration-300 ease-in-out'>
+            <div onClick={handleAppleLogin} className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer hover:shadow-md transition-all duration-300 ease-in-out'>
               <Apple fill='currentColor' className='w-8 dark:text-white h-auto ml-3' />
               <span className='text-gray-500 text-[15px] w-full pl-21 darkH'>Login with Apple</span>
             </div>

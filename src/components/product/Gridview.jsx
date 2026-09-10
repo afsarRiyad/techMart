@@ -7,6 +7,8 @@ import { useCart } from '@/features/cart/hooks/useCart';
 import { Link, useNavigate } from 'react-router';
 import { useUpdateWishlist } from '@/features/wishlist/hooks/useUpdateWishlist';
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
+import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
+import { useCompare } from '@/features/compare/hooks/useCompare';
 import Tooltip from '@/components/ui/Tooltip';
 
 // Tailwind can't detect dynamically-built class names (e.g. `grid-cols-${grid}`),
@@ -18,9 +20,11 @@ const GRID_CLASSES = {
 
 const Gridview = ({ products , grid= 5}) => {
     const addtoWishlist = useUpdateWishlist()
+    const addToCompare = useUpdateCompare()
     const { data: cartData } = useCart()
     const addToCart = useAddToCart()
     const { data: wishlistData } = useWishlist()
+    const { data: compareData } = useCompare()
     const navigate = useNavigate()
 
     const handleWishlist = (id) => {
@@ -28,8 +32,14 @@ const Gridview = ({ products , grid= 5}) => {
             productId: id
         })
     }
+    const handleCompare = (id) => {
+        addToCompare.mutate({
+            productId: id
+        })
+    }
     const cartItem = cartData?.data?.items || [];
     const wishListItem = wishlistData?.data || [];
+    const compareListItem = compareData?.data || [];
 
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
@@ -41,6 +51,10 @@ const Gridview = ({ products , grid= 5}) => {
 
     const isInWishlist = (proId) => {
         return wishListItem.some((item) => item._id === proId);
+    }
+
+    const isInCompare = (proId) => {
+        return compareListItem.some((item) => item._id === proId);
     }
 
     const cols = Number(grid) || 5
@@ -104,8 +118,17 @@ const Gridview = ({ products , grid= 5}) => {
                                         }
                                     </div>
                                     <div className='flex items-center gap-1 mt-2 justify-center cursor-pointer hover:text-black text-gray-500 pb-1'>
-                                        <GitCompareArrows size={18} />
-                                        <span className='text-sm'>Compare</span>
+                                        {isInCompare(pro._id) ?
+                                            <>
+                                                <GitCompareArrows size={18} className='text-black' />
+                                                <Link to='/compare' onClick={(e) => e.stopPropagation()} className='text-[14px]'>Added to Compare</Link>
+                                            </>
+                                            :
+                                            <button onClick={(e) => { e.stopPropagation(); handleCompare(pro._id); }} className='flex items-center gap-2'>
+                                                <GitCompareArrows size={18} />
+                                                <span className='text-sm'>Compare</span>
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             </div>

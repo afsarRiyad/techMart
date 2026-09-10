@@ -25,6 +25,7 @@ import Recommendation from "@/components/home/Recommendation"
 import Checkout from "@/pages/Checkout"
 import SingleOrderDetails from '@/components/ui/SingleOrderDetails';
 import Wishlist from '@/pages/Wishlist';
+import Compare from '@/pages/Compare';
 import OrderReceived from "@/pages/OrderReceived"
 import Products from "@/pages/Products"
 import ProductDetail from "@/pages/ProductDetail"
@@ -41,6 +42,7 @@ function App() {
       <Route element={<MainLayout/>}>
         <Route path="/" element={<Home/>}/>
         <Route path="/wishlist" element={<Wishlist/>}/>
+        <Route path="/compare" element={<Compare/>}/>
         <Route path="/account/login" element={<Login/>}/>
         <Route path="/order-received" element={<OrderReceived/>}/>
         <Route path="/products" element={<Products />} />

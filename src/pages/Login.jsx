@@ -5,6 +5,7 @@ import { CircleAlert, CircleAlertIcon, Eye, EyeOff   } from 'lucide-react';
 import Apple from '@/assets/images/apple-logo.svg?react'
 import Google from '@/assets/images/google.svg?react'
 import { apiCustomer, setCustomerToken } from '@/api/apiCustomer';
+import { getGuestId } from '@/api/guestSession';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -21,7 +22,7 @@ const Login = () => {
     setErrs({})
     e.preventDefault()
        try {
-        const data = await apiCustomer.post('/api/auth/login',formData)
+        const data = await apiCustomer.post('/api/auth/login', {...formData, guestId: getGuestId()})
         setCustomerToken(data.data?.data?.accessToken)
         toast.success(data.data?.message || 'Login successful!');
                     setTimeout(() => {
@@ -48,7 +49,10 @@ const handleBlur = (e) =>{
        setTouched(prev =>({...prev, [name]: true}))
 }
 const handleGoogleLogin  = () =>{
-             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?guestId=${encodeURIComponent(getGuestId())}`;
+}
+const handleAppleLogin = () => {
+             window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/apple?guestId=${encodeURIComponent(getGuestId())}`;
 }
   return (
     <main className="flex items-center justify-center px-4">
@@ -104,7 +108,7 @@ const handleGoogleLogin  = () =>{
            <span className='text-gray-500 text-[15px] w-full pl-20 darkH '>Login with Google</span>
         </div>
 
-         <div className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer hover:shadow-md transition-all duration-300 ease-in-out'>
+         <div onClick={handleAppleLogin} className='border border-gray-200 py-2 flex font-inter items-center cursor-pointer hover:shadow-md transition-all duration-300 ease-in-out'>
            <Apple fill='currentColor' className='w-8 dark:text-white h-auto ml-3' />
            <span className='text-gray-500 text-[15px] w-full pl-21 darkH'>Login with Apple</span>
         </div>
