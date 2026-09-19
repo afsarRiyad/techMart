@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import Container from '@/components/layout/Container';
-import { Link, Navigate, useNavigate  } from 'react-router';
+import { Link, useLocation, useNavigate  } from 'react-router';
 import { CircleAlert, CircleAlertIcon, Eye, EyeOff   } from 'lucide-react';
 import Apple from '@/assets/images/apple-logo.svg?react'
 import Google from '@/assets/images/google.svg?react'
 import { apiCustomer, setCustomerToken } from '@/api/apiCustomer';
 import { getGuestId } from '@/api/guestSession';
+import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 const Login = () => {
 
   const navigate = useNavigate()
+  const location = useLocation()
+  const queryClient = useQueryClient()
   const [errs, setErrs] = useState({})
   const [touched, setTouched] = useState({})
   const [formData, setFormData] = useState({
@@ -24,9 +27,14 @@ const Login = () => {
        try {
         const data = await apiCustomer.post('/api/auth/login', {...formData, guestId: getGuestId()})
         setCustomerToken(data.data?.data?.accessToken)
+        // tell the app who is signed in, the layout moves local picks over
+        queryClient.invalidateQueries({queryKey: ['me']})
+        // unverified accounts only get partial access, so send them to the code
+        const isVerified = data.data?.data?.isVerified
+        const nextPage = isVerified ? (location.state?.from || "/account") : "/account/otp-verification"
         toast.success(data.data?.message || 'Login successful!');
                     setTimeout(() => {
-  navigate("/account");
+  navigate(nextPage);
 }, 1500);
                   
        } catch (error) {

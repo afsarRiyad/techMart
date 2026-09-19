@@ -19,6 +19,7 @@ import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
 import { useCompare } from '@/features/compare/hooks/useCompare'
 import { Link } from 'react-router'
 import { useCart } from '@/features/cart/hooks/useCart';
+import useTouchReveal from '@/hooks/useTouchReveal';
 
 const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
     const addToCart = useAddToCart()
@@ -30,6 +31,8 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
     const compareListItem = compareData?.data || []
     const addToWishlist = useUpdateWishlist()
     const addToCompare = useUpdateCompare()
+    // touch screens get no hover, a tap opens the wishlist/compare row
+    const { openId, reveal, blockOpeningTap } = useTouchReveal()
     
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
@@ -95,7 +98,11 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                         >
                             {data?.products && data.products.map((pro, index) => (
                                 <SwiperSlide key={index} className='hover:z-30 '>
-                                    <div className={`relative flex py-3 bg-white  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-b border-b-gray-300 md:border-b-0 md:border-r md:border-r-gray-300 ${trending ? 'mb-6' : 'mb-2'}`}>
+                                    <div
+                                        onTouchStart={() => reveal(pro._id)}
+                                        onClickCapture={blockOpeningTap}
+                                        className={`relative flex py-3 bg-white  group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-b border-b-gray-300 md:border-b-0 md:border-r md:border-r-gray-300 ${trending ? 'mb-6' : 'mb-2 pointer-coarse:mb-14'}`}
+                                    >
                                         {pro.image &&
                                             <div className='w-[35%]'>
                                                 <Link to={`/products/${pro.slug || pro._id}`}>
@@ -130,7 +137,7 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
-                                                <div className={`absolute left-0 ${!trending ? 'flex' : ''}  justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-1  ${trending ? 'before:w-40' : 'before:w-65'} before:border-t-2 before:border-primary before:content-[""]`}>
+                                                <div className={`absolute left-0 ${!trending ? 'flex' : ''}  justify-end right-0 bottom-4 translate-y-full  bg-white  p-3  ${openId === pro._id ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-1  ${trending ? 'before:w-40' : 'before:w-65'} before:border-t-2 before:border-primary before:content-[""]`}>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
                                                         {isInWishlist(pro._id) ? 
                                                         <>

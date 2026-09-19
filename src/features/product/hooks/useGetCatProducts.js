@@ -8,20 +8,18 @@ export const useGetCatProducts = ({
                     page,
                     sort = 'default',
                     priceRange,
-                    limit = 12
+                    search,
+                    limit = 12,
+                    enabled = true
 }) => {
    return useQuery({
         queryKey:([
-            'products', category, brands, colors, priceRange, limit, sort,  priceRange, page
+            'products', category, brands, colors, priceRange, limit, sort,  priceRange, page, search
         ]),
         queryFn: async()=>{
              const params = {};
 
-              if (category) {
-                        params.category = category
-                    }
-             
-             if (category && category !== 'View All Products') {
+              if (category && category !== 'View All Products') {
                  params.category = category;
              }
              
@@ -31,6 +29,10 @@ export const useGetCatProducts = ({
              
              if (colors.length) {
                  params.color = colors.join(',');
+             }
+
+             if (search) {
+                 params.search = search;
              }
              
             
@@ -43,6 +45,6 @@ export const useGetCatProducts = ({
              const {data} = await apiCustomer.get('/api/products', { params });
              return data;
         },
-        enabled: true 
+        enabled
     })
 }

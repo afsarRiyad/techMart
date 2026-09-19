@@ -10,6 +10,7 @@ import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
 import { useCompare } from '@/features/compare/hooks/useCompare';
 import Tooltip from '@/components/ui/Tooltip';
+import useTouchReveal from '@/hooks/useTouchReveal';
 
 // Tailwind can't detect dynamically-built class names (e.g. `grid-cols-${grid}`),
 // so map the column count to full responsive class strings instead.
@@ -25,6 +26,8 @@ const Gridview = ({ products , grid= 5}) => {
     const addToCart = useAddToCart()
     const { data: wishlistData } = useWishlist()
     const { data: compareData } = useCompare()
+    // touch screens get no hover, a tap opens the wishlist/compare row
+    const { openId, reveal, blockOpeningTap } = useTouchReveal()
     const navigate = useNavigate()
 
     const handleWishlist = (id) => {
@@ -63,7 +66,12 @@ const Gridview = ({ products , grid= 5}) => {
         <div className='w-full min-w-0 font-inter'>
             <div className={`grid ${GRID_CLASSES[cols] || GRID_CLASSES[5]}`}>
                 {products && products.map((pro, index) => (
-                    <div key={pro._id || pro.id || index} className='group/card min-w-0 mb-5'>
+                    <div
+                        key={pro._id || pro.id || index}
+                        onTouchStart={() => reveal(pro._id)}
+                        onClickCapture={blockOpeningTap}
+                        className='group/card min-w-0 mb-5'
+                    >
                         <div
                             className={`relative py-3 bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)]  mb-2 ${(index + 1) % cols === 0 ? 'border-none' : 'border-r border-r-gray-300'}`}
                         >
@@ -101,7 +109,7 @@ const Gridview = ({ products , grid= 5}) => {
                                     </div>
                                 </div>
                                 {/* Hover wishlist and compare */}
-                                <div  className='absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 opacity-0 invisible group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]'>
+                                <div className={`absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 ${openId === pro._id ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]`}>
                                     <div className='flex items-center gap-1 justify-center cursor-pointer hover:text-black text-gray-500'>
                                         {isInWishlist(pro._id) ?
                                             <>

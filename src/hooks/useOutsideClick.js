@@ -1,11 +1,14 @@
 // Renamed from hooks/outsideClick.js to follow the useXxx hook naming convention.
 import { useEffect } from "react"
 
-const useOutsideClick = (ref, callback, enable) =>{
+// refs can be a single ref or an array of refs (a panel split across two boxes)
+const useOutsideClick = (refs, callback, enable) =>{
     useEffect(()=>{
              if(!enable )return
             const handleCLick = (e)=>{
-               if(ref.current && !ref.current.contains(e.target)){
+               const list = Array.isArray(refs) ? refs : [refs]
+               const inside = list.some((ref) => ref.current?.contains(e.target))
+               if(!inside){
                 callback()
                }
             }
@@ -13,7 +16,7 @@ const useOutsideClick = (ref, callback, enable) =>{
         return(()=>
          document.removeEventListener('mousedown', handleCLick)
         )
-    },[ref, callback, enable])
+    },[refs, callback, enable])
 }
 
 

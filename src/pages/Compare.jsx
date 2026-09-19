@@ -1,164 +1,269 @@
-import Container from '@/components/layout/Container';
-import { X } from 'lucide-react';
-import { Link } from "react-router";
-import { useCompare } from '@/features/compare/hooks/useCompare';
-import { useRemoveCompare } from '@/features/compare/hooks/useRemoveCompare';
-import { useAddToCart } from '@/features/cart/hooks/useAddToCart';
+import { useCallback, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router'
+import { X } from 'lucide-react'
+import { useCompare } from '@/features/compare/hooks/useCompare'
+import { useRemoveCompare } from '@/features/compare/hooks/useRemoveCompare'
+import { useAddToCart } from '@/features/cart/hooks/useAddToCart'
+
+// api value helpers -------------------------------------------------------
+
+const empty = (value) => value === null || value === undefined || value === ''
+
+// specifications hold name/value/unit, e.g. { name: "Weight", value: 45, unit: "g" }
+const specOf = (item, name) => {
+  const spec = (item.specifications || []).find((entry) => entry.name?.toLowerCase() === name)
+  if (!spec || empty(spec.value)) return null
+  return spec.unit ? `${spec.value} ${spec.unit}` : `${spec.value}`
+}
+
+// customAttributes is the flexible bag, value can be a list
+const attrOf = (item, name) => {
+  const attr = (item.customAttributes || []).find((entry) => entry.name?.toLowerCase() === name)
+  if (!attr || empty(attr.value)) return null
+  return Array.isArray(attr.value) ? attr.value.join(', ') : `${attr.value}`
+}
+
+const colorOf = (item) => {
+  const attr = (item.customAttributes || []).find(
+    (entry) => entry.type === 'color' || /^colou?r$/i.test(entry.name || ''),
+  )
+  const value = attr ? (Array.isArray(attr.value) ? attr.value.join(', ') : attr.value) : null
+  return specOf(item, 'color') || (empty(value) ? null : `${value}`)
+}
+
+// a product column never squeezes narrower than this, the table scrolls instead
+const PRODUCT_COLUMN_MIN = 210
+const LABEL_COLUMN_MIN = 300
+
+// phones have room for two products, side by side and still readable
+const PHONE_LIMIT = 2
+
+const money = (value) =>
+  `$${(value ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+
+const stockOf = (item) => (item.stock > 0 ? `${item.stock} in stock` : 'Out of stock')
+
+// the rows the design asks for, in its order
+const designRows = [
+  { label: 'Price', value: (item) => money(item.price), strong: true },
+  { label: 'SKU', value: (item) => item.sku || '-' },
+  { label: 'Availability', value: stockOf, stock: true },
+  { label: 'Weight', value: (item) => specOf(item, 'weight') || '-' },
+  { label: 'Dimensions', value: (item) => specOf(item, 'dimensions') || '-' },
+  { label: 'Brands', value: (item) => item.brand || '-' },
+  { label: 'Color', value: (item) => colorOf(item) || '-' },
+]
+
+// the design has fixed rows; anything else the api carries is added so
+// comparing two random products still shows the specs they do have
+const extraRows = (items) => {
+  const taken = new Set(['weight', 'dimensions', 'color'])
+  const names = []
+  const add = (name) => {
+    const key = name?.toLowerCase()
+    if (!key || taken.has(key) || names.some((entry) => entry.toLowerCase() === key)) return
+    names.push(name)
+  }
+
+  items.forEach((item) => {
+    ;(item.specifications || []).forEach((spec) => add(spec.name))
+    ;(item.customAttributes || []).forEach((attr) => add(attr.name))
+  })
+
+  return names.map((name) => ({
+    label: name,
+    value: (item) => specOf(item, name.toLowerCase()) || attrOf(item, name.toLowerCase()) || '-',
+  }))
+}
+
+// one table, rendered twice: the two up phone view and the full list
+const SpecTable = ({ items, rows, onRemove, onAddToCart, className = '', minWidth }) => (
+  <div className={`w-full overflow-x-auto ${className}`}>
+    <table
+      className='w-full table-fixed border-collapse text-center align-middle'
+      style={minWidth ? { minWidth: `${minWidth}px` } : undefined}
+    >
+      <thead>
+        <tr>
+          {/* the label corner stays put while both axes scroll */}
+          <th className='sticky left-0 top-0 z-30 w-[96px] bg-white/90 sm:w-[300px]' />
+
+          {/* product columns carry no width, table-fixed hands them the leftover room */}
+          {items.map((item) => (
+            <th key={item._id} className='sticky top-0 z-20 bg-white/90 px-2 pt-6 align-bottom'>
+              <div className='relative flex flex-col items-center gap-3'>
+                <button
+                  type='button'
+                  aria-label={`Remove ${item.name || 'product'} from compare`}
+                  onClick={() => onRemove(item._id)}
+                  className='absolute -right-1 -top-3 cursor-pointer text-gray-400 transition-colors duration-200 hover:text-black'
+                >
+                  <X size={18} />
+                </button>
+
+                <div className='flex h-[100px] w-full items-center justify-center sm:h-[190px]'>
+                  {item.pending || !item.image ? (
+                    // added but the response is still on its way
+                    <span aria-hidden='true' className='h-full w-full animate-pulse rounded bg-gray-100' />
+                  ) : (
+                    <Link to={`/products/${item.slug || item._id}`} className='flex h-full w-full items-center justify-center'>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        loading='lazy'
+                        className='max-h-full max-w-full object-contain'
+                      />
+                    </Link>
+                  )}
+                </div>
+
+                <Link
+                  to={`/products/${item.slug || item._id}`}
+                  className='text-[13px] font-medium leading-5 text-tcolor transition-colors duration-200 hover:text-black sm:text-[15px]'
+                >
+                  {item.name}
+                </Link>
+
+                <button
+                  type='button'
+                  onClick={() => onAddToCart(item._id)}
+                  className='rounded-full bg-primary px-4 py-1.5 text-[12px] font-semibold text-tcolor transition-colors duration-200 hover:bg-black hover:text-white sm:text-[13px]'
+                >
+                  Add to cart
+                </button>
+              </div>
+            </th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.label}>
+            <td className='sticky left-0 z-10 border-b border-gray-200 bg-white/90 py-4 pr-3 text-left text-[13px] font-semibold text-tcolor sm:text-[15px]'>
+              {row.label}
+            </td>
+
+            {items.map((item) => (
+              <td
+                key={item._id}
+                className={`border-b border-gray-200 px-2 py-4 text-[13px] sm:text-[15px] ${
+                  row.stock
+                    ? item.stock > 0
+                      ? 'bg-[#eaf7e5] font-medium text-green-700'
+                      : 'bg-red-50 font-medium text-red-600'
+                    : row.strong
+                      ? 'font-semibold text-tcolor'
+                      : 'text-[#4b5563]'
+                }`}
+              >
+                {row.value(item)}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)
 
 const Compare = () => {
-    const addtocartMutation = useAddToCart()
-    const removeCompareMutation = useRemoveCompare()
-  const { data } = useCompare();
-  const compareItems = data?.data;
-  const handleRemove = (id) =>{
-           removeCompareMutation.mutate(id)
-  }
-  const handleCart =async(id)=>{
-       await addtocartMutation.mutateAsync({
-                 product: id,
-                 quantity: 1
-       })
-  }
+  const navigate = useNavigate()
+  const location = useLocation()
+  const removeCompareMutation = useRemoveCompare()
+  const addtocartMutation = useAddToCart()
+  const { data, isPending } = useCompare()
+  const items = data?.data ?? []
 
+  // the panel covers the page, so the page behind it should not scroll
+  useEffect(() => {
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [])
+
+  const close = useCallback(() => {
+    // back to the page the comparison was opened from, /products on a direct load
+    if (location.key !== 'default') navigate(-1)
+    else navigate('/products')
+  }, [navigate, location.key])
+
+  useEffect(() => {
+    const onKey = (event) => {
+      if (event.key === 'Escape') close()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [close])
+
+  const rows = [...designRows, ...extraRows(items)]
+  const remove = (id) => removeCompareMutation.mutate(id)
+  const addToCart = (id) => addtocartMutation.mutate({ product: id, quantity: 1 })
+
+  // z-1000 keeps the veiled panel above the sticky header (z-999)
   return (
-    <>
-     {!compareItems || compareItems.length === 0 ? (
-      <div className="py-10">
-        <div className="relative overflow-hidden rounded bg-primary px-8 py-6 md:px-10">
-          <span className="absolute left-0 top-0 h-full w-1.5 bg-yellow-600" />
-          <p className="text-center text-[22px] text-tcolor md:text-[26px]">
-            Your compare list is currently empty.
-          </p>
+    <div className='fixed inset-0 z-[1000] flex items-center justify-center bg-white/85 p-[9px] font-pop'>
+      <div className='flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 shadow-2xl'>
+        <div className='flex shrink-0 items-center justify-between gap-4 border-b border-gray-100 px-4 py-4 sm:px-8 sm:py-6'>
+          <h1 className='text-[20px] font-normal text-tcolor sm:text-[32px]'>Compare products</h1>
+          <button
+            type='button'
+            aria-label='Close comparison'
+            onClick={close}
+            className='cursor-pointer text-tcolor transition-colors duration-200 hover:text-black'
+          >
+            <X size={26} />
+          </button>
         </div>
 
-        <div className="mt-8 flex justify-center">
-          <Link
-            to="/"
-            className="rounded-full bg-gray-100 px-8 py-3 text-[15px] font-medium text-gray-700 transition-colors duration-200 hover:bg-black hover:text-white"
-          >
-            Return to shop
-          </Link>
+        <div className='flex flex-1 flex-col overflow-y-auto px-4 pb-8 sm:px-8'>
+          {isPending ? (
+            <p className='py-16 text-center text-[15px] text-gray-400'>Loading compare list...</p>
+          ) : items.length === 0 ? (
+            <div className='flex h-full flex-col justify-center py-10 sm:py-16'>
+              <div className='relative overflow-hidden rounded bg-primary px-8 py-6 md:px-10'>
+                <span className='absolute left-0 top-0 h-full w-1.5 bg-yellow-600' />
+                <p className='text-center text-[18px] text-tcolor md:text-[24px]'>
+                  Your compare list is currently empty.
+                </p>
+              </div>
+
+              <div className='mt-8 flex justify-center'>
+                <Link
+                  to='/'
+                  className='rounded-full bg-gray-100 px-8 py-3 text-[15px] font-medium text-gray-700 transition-colors duration-200 hover:bg-black hover:text-white'
+                >
+                  Return to shop
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* phones compare the first two, so both fit without side scrolling */}
+              <SpecTable
+                className='sm:hidden'
+                items={items.slice(0, PHONE_LIMIT)}
+                rows={rows}
+                onRemove={remove}
+                onAddToCart={addToCart}
+              />
+
+              <SpecTable
+                className='hidden sm:block'
+                items={items}
+                rows={rows}
+                onRemove={remove}
+                onAddToCart={addToCart}
+                minWidth={LABEL_COLUMN_MIN + items.length * PRODUCT_COLUMN_MIN}
+              />
+            </>
+          )}
         </div>
       </div>
-    ) : (
-    <section className="font-pop">
-      <Container>
-        <h1 className="text-[28px] sm:text-[40px] text-tcolor w-full text-center pt-6 pb-6 sm:pb-10">
-          My compare list
-        </h1>
+    </div>
+  )
+}
 
-          <>
-            {/* ---------- Mobile / tablet card view ---------- */}
-            <div className="md:hidden flex flex-col gap-6">
-              {compareItems.map((item) => (
-                <div key={item._id} className="relative flex flex-col items-center text-center px-2">
-                  <button
-                    type="button"
-                    aria-label="Remove from compare"
-                    onClick={() => handleRemove(item._id)}
-                    className="absolute left-0 top-0 text-gray-400 hover:text-black"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-
-                  <Link to={`/products/${item.slug || item._id}`} className="w-full flex justify-center">
-                    <img
-                      src={item?.image}
-                      alt={item?.name}
-                      className="w-[220px] h-[220px] object-cover rounded cursor-pointer"
-                    />
-                  </Link>
-
-                  <Link to={`/products/${item.slug || item._id}`} className="mt-4 text-[18px] font-pop text-gray-600 font-semibold cursor-pointer hover:text-black">
-                    {item.name}
-                  </Link>
-
-                  <div className="w-full flex items-center justify-between border-b border-gray-200 py-3 mt-3">
-                    <span className="text-red-500 font-semibold">Price:</span>
-                    <span className="text-tcolor text-[16px] font-semibold">
-                      ${item?.price.toFixed(2)}
-                    </span>
-                  </div>
-
-                  <div className="w-full flex items-center justify-between border-b border-gray-200 py-3">
-                    <span className="text-[#747474] font-semibold">Stock:</span>
-                    <span
-                      className={`text-[16px] font-semibold ${
-                        item.stock > 0 ? 'text-green-600' : 'text-red-500'
-                      }`}
-                    >
-                      {item.stock > 0 ? 'In Stock' : 'Out of Stock'}
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => handleCart(item._id)}
-                    className="mt-4 ml-auto block text-tcolor bg-primary font-semibold cursor-pointer hover:text-black transition-colors duration-200 border px-3 py-1 rounded-full border-gray-300"
-                  >
-                    Add to cart
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* ---------- Desktop table view ---------- */}
-            <table className="hidden md:table w-full table-fixed">
-              <thead>
-                <tr className="border-b border-gray-300 text-[#747474] font-semibold">
-                  <th className="w-[55%] py-4 text-start pl-45">Product name</th>
-                  <th className="w-[15%] py-4 text-left">Unit price</th>
-                  <th className="w-[15%] py-4 text-left">Stock status</th>
-                  <th className="w-[15%] py-4 text-left"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {compareItems?.map((item) => (
-                  <tr key={item._id} className="border-b border-b-gray-200">
-                    <td className="py-4 flex items-center gap-4">
-                      <div className="flex items-center gap-8">
-                        <X
-                          className="text-gray-400 cursor-pointer hover:text-black"
-                          onClick={() => handleRemove(item._id)}
-                        />
-                        <Link to={`/products/${item.slug || item._id}`} className='border border-gray-300 h-22 w-24 flex items-center justify-center'>
-                          <img
-                            src={item?.image}
-                            alt={item?.name}
-                            className="w-[80px] h-[80px] object-cover rounded cursor-pointer"
-                          />
-                        </Link>
-                        <Link to={`/products/${item.slug || item._id}`} className="text-[18px] pl-3 cursor-pointer hover:text-black font-pop text-gray-500 font-semibold">
-                          {item.name}
-                        </Link>
-                      </div>
-                    </td>
-                    <td className="py-4 text-left text-tcolor text-[17px] font-semibold">
-                      ${item?.price.toFixed(2)}
-                    </td>
-                    <td
-                      className={`py-4 text-left text-[17px] font-semibold ${
-                        item.stock > 0 ? 'text-green-600' : 'text-red-500'
-                      }`}
-                    >
-                      {item.stock > 0 ? 'In Stock' : 'Out of Stock'}
-                    </td>
-                    <td className="py-4 text-left">
-                      <button
-                        onClick={() => handleCart(item._id)}
-                        className="text-tcolor font-semibold cursor-pointer hover:text-black transition-colors duration-200 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:no-underline"
-                      >
-                        Add to cart
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </>
-      </Container>
-    </section>
-      )}
-   </>
-  );
-};
-
-export default Compare;
+export default Compare

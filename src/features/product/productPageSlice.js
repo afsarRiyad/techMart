@@ -14,6 +14,7 @@ const getInitialStateFromURL = () => {
   const limit = parseInt(params.get('limit')) || 10
   const minPrice = parseInt(params.get('minPrice')) || 0
   const maxPrice = parseInt(params.get('maxPrice')) || 10000
+  const search = params.get('search') || ''
 
   return {
     page,
@@ -22,6 +23,7 @@ const getInitialStateFromURL = () => {
     selectedBrands: brands,
     selectedColors: colors,
     priceRange: [minPrice, maxPrice],
+    search,
   }
 }
 
@@ -35,6 +37,7 @@ const initialState = {
   selectedBrands: urlState?.selectedBrands || [],
   selectedColors: urlState?.selectedColors || [],
   priceRange: urlState?.priceRange || [0, 10000],
+  search: urlState?.search || '',
   activeCategory: null,
   activeChildCategory: null,
 }
@@ -67,6 +70,10 @@ const productPageSlice = createSlice({
     },
     setPriceRange: (state, action) => {
       state.priceRange = action.payload
+      state.page = 1
+    },
+    setSearch: (state, action) => {
+      state.search = action.payload
       state.page = 1
     },
     setActiveCategory: (state, action) => {
@@ -102,6 +109,7 @@ export const {
   setSelectedBrands,
   setSelectedColors,
   setPriceRange,
+  setSearch,
   setActiveCategory,
   setActiveChildCategory,
   resetFilters,

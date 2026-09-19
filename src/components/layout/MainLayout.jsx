@@ -11,10 +11,15 @@ import Breadcrumbs from '@/components/common/Breadcrumbs'
 import DarkMode from '@/components/common/DarkMode'
 import SponsorLogo from '@/components/common/SponsorLogo'
 import FooterWidget from '@/components/common/FooterWidget'
+import CompareBar from '@/components/common/CompareBar'
+import MobileQuickActions from '@/components/common/MobileQuickActions'
+import { useSyncLocalCompare } from '@/hooks/useSyncLocalCompare'
 
 
 const  MainLayout= () => {
   let direction = useLocation()
+  // hands the guest compare picks to the account once someone is signed in
+  useSyncLocalCompare()
   const dontShow = ['/']
   return (
     <>
@@ -30,6 +35,8 @@ const  MainLayout= () => {
      <MobileFooter/>
      <Footer/>
      <Copyright/>
+     <CompareBar/>
+     <MobileQuickActions/>
     </>
   )
 }

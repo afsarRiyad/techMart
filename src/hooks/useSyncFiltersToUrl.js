@@ -11,6 +11,7 @@ export const useSyncFiltersToUrl = () => {
     selectedBrands,
     selectedColors,
     priceRange,
+    search,
   } = useSelector((state) => state.productPage)
 
   useEffect(() => {
@@ -37,6 +38,9 @@ export const useSyncFiltersToUrl = () => {
       params.set('maxPrice', String(priceRange[1]))
     }
 
+    // Search term
+    if (search) params.set('search', search)
+
     const queryString = params.toString()
     const currentSearch = window.location.search.slice(1)
 
@@ -45,5 +49,5 @@ export const useSyncFiltersToUrl = () => {
       const basePath = window.location.pathname
       navigate(`${basePath}${queryString ? `?${queryString}` : ''}`, { replace: true })
     }
-  }, [page, itemsPerPage, sort, selectedBrands, selectedColors, priceRange, navigate])
+  }, [page, itemsPerPage, sort, selectedBrands, selectedColors, priceRange, search, navigate])
 }

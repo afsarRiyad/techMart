@@ -15,7 +15,17 @@ const capitalize = (text = '') =>
 const Breadcrumbs = ({ items = [] }) => {
   const location = useLocation()
 
-  const segments = location.pathname.split('/').filter(Boolean)
+  const segments = location.pathname
+    .split('/')
+    .filter(Boolean)
+    .map((segment) => {
+      // category names arrive percent encoded in the path
+      try {
+        return decodeURIComponent(segment)
+      } catch {
+        return segment
+      }
+    })
 
   const isProductPage =
     segments[0] === 'products' && segments[1]
@@ -146,6 +156,26 @@ const Breadcrumbs = ({ items = [] }) => {
           },
         ]
       }
+
+      // the segment can also be a child category
+      for (const parent of categories) {
+        const child = parent.children?.find((item) => item.slug === categorySlug)
+
+        if (child) {
+          return [
+            { name: parent.name, url: `/category/${parent.slug}` },
+            { name: child.name, url: null },
+          ]
+        }
+      }
+
+      // unknown segment, show it but never link back to /category
+      return [
+        {
+          name: capitalize(categorySlug),
+          url: null,
+        },
+      ]
     }
 
     // Fallback
@@ -170,11 +200,11 @@ const Breadcrumbs = ({ items = [] }) => {
   return (
     <div className="border-b border-gray-200 text-[15px] dark:border-gray-700">
       <Container>
-        <div className="px-3 py-4 lg:px-5">
-          <ul className="flex items-center gap-3">
+        <div className="px-3 py-3 lg:px-5 lg:py-4">
+          <ul className="flex items-center gap-2 overflow-x-auto whitespace-nowrap lg:gap-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
             {/* Home */}
-            <li className="rounded hover:bg-black/10">
+            <li className="shrink-0 rounded hover:bg-black/10">
               <Link
                 to="/"
                 aria-label="Go to home page"
@@ -184,28 +214,38 @@ const Breadcrumbs = ({ items = [] }) => {
               </Link>
             </li>
 
+            {/* small screens hide the middle steps, this keeps the trail readable */}
+            {breadcrumbs.length > 2 && (
+              <li className="flex shrink-0 items-center gap-2 sm:hidden">
+                <ChevronRight size={20} className="dark:text-white" />
+                <span className="font-inter tracking-widest text-gray-400">…</span>
+              </li>
+            )}
+
             {/* Breadcrumb items */}
             {breadcrumbs.map((item, index) => {
               const isLast = index === breadcrumbs.length - 1
+              // phones show the current step only, the rest is behind the "..."
+              const showOnMobile = isLast
 
               return (
                 <li
                   key={`${item.name}-${index}`}
-                  className="flex items-center gap-2"
+                  className={`items-center gap-2 ${showOnMobile ? 'flex' : 'hidden sm:flex'} ${isLast ? 'min-w-0' : 'shrink-0'}`}
                 >
                   <ChevronRight
                     size={20}
-                    className="dark:text-white"
+                    className="shrink-0 dark:text-white"
                   />
 
                   {isLast || !item.url ? (
-                    <span className="font-inter tracking-widest text-[#29323A] dark:text-white">
+                    <span className="block truncate font-inter tracking-widest text-[#29323A] dark:text-white">
                       {item.name}
                     </span>
                   ) : (
                     <Link
                       to={item.url}
-                      className="rounded-md bg-gray-200 px-3 py-2 font-inter tracking-widest text-[#29323A] transition-all hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/10"
+                      className="inline-block truncate max-w-[40vw] rounded-md bg-gray-200 px-3 py-2 font-inter tracking-widest text-[#29323A] transition-all hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/10 sm:max-w-none"
                     >
                       {item.name}
                     </Link>

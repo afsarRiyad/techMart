@@ -10,6 +10,7 @@ import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
 import { useCompare } from '@/features/compare/hooks/useCompare';
 import Tooltip from '@/components/ui/Tooltip';
+import useTouchReveal from '@/hooks/useTouchReveal';
 
 const GridExtend = ({ products }) => {
     const addtoWishlist = useUpdateWishlist()
@@ -18,6 +19,8 @@ const GridExtend = ({ products }) => {
     const addToCart = useAddToCart()
     const { data: wishlistData } = useWishlist()
     const { data: compareData } = useCompare()
+    // touch screens get no hover, a tap opens the wishlist/compare row
+    const { openId, reveal, blockOpeningTap } = useTouchReveal()
 
     const handleWishlist = (id) => {
         addtoWishlist.mutate({ productId: id })
@@ -73,7 +76,12 @@ const getBullets = (description) => {
                     const displayPrice = pro.salePrice ?? pro.price;
 
                     return (
-                        <div key={pro._id || pro.id || index} className='font-inter group/card min-w-0 mb-5'>
+                        <div
+                            key={pro._id || pro.id || index}
+                            onTouchStart={() => reveal(pro._id)}
+                            onClickCapture={blockOpeningTap}
+                            className='font-inter group/card min-w-0 mb-5'
+                        >
                             <div className={`relative py-3 bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] mb-2 cursor-pointer ${(index + 1) % 5 == 0 ? 'border-none' : 'border-r border-r-gray-300'}`}>
                                 <div className='px-5'>
 
@@ -149,7 +157,7 @@ const getBullets = (description) => {
                                     </div>
 
                                     {/* hover wishlist and compare */}
-                                    <div className='absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 opacity-0 invisible group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]'>
+                                    <div className={`absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 ${openId === pro._id ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]`}>
                                         <div className='flex items-center gap-1 justify-center cursor-pointer hover:text-black text-gray-500'>
                                             {isInWishlist(pro._id) ?
                                                 <>

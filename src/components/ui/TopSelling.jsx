@@ -12,6 +12,7 @@ import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
 import { useCompare } from '@/features/compare/hooks/useCompare'
 import { Link } from 'react-router'
 import { useCart } from '@/features/cart/hooks/useCart';
+import useTouchReveal from '@/hooks/useTouchReveal';
 
 const ProductCard = ({ data, loading = false, errs = '', type = '', discount, timers }) => {
     const addToCart = useAddToCart()
@@ -23,6 +24,8 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
     const compareListItem = compareData?.data || []
     const addToWishlist = useUpdateWishlist()
     const addToCompare = useUpdateCompare()
+    // touch screens get no hover, a tap opens the wishlist/compare row
+    const { openId, reveal, blockOpeningTap } = useTouchReveal()
 
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
@@ -56,7 +59,11 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                         <div className='flex flex-col lg:flex-row pb-3 gap-1'>
                             <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-0 gap-x-1 lg:w-[60%]'>
                                 {data?.products && data.products.slice(0, 6).map((pro, index) => (
-                                    <div className={`relative  py-3 bg-white   group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-r border-r-gray-300 mb-2 cursor-pointer `}>
+                                    <div
+                                        onTouchStart={() => reveal(pro._id)}
+                                        onClickCapture={blockOpeningTap}
+                                        className={`relative  py-3 bg-white   group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-r border-r-gray-300 mb-2 cursor-pointer `}
+                                    >
                                         <div className=' px-5 '>
                                             <div className='flex items-center pt-1'>
                                                 {pro?.categories?.map((tag, index) => (
@@ -91,7 +98,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                                                 </div>
                                             </div>
                                             {/* Hover wishlist and compare  */}
-                                            <div className={`absolute left-0 flex gap-4 items-center justify-center right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5  before:w-47 lg:before:w-35 xl:before:w-57 before:border-t-2 before:border-gray-200 before:content-[""]`}>
+                                            <div className={`absolute left-0 flex gap-4 items-center justify-center right-0 bottom-4 translate-y-full  bg-white  p-3  ${openId === pro._id ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover/card:opacity-100  group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5  before:w-47 lg:before:w-35 xl:before:w-57 before:border-t-2 before:border-gray-200 before:content-[""]`}>
                                                 <div className='flex items-center gap-1 justify-end cursor-pointer hover:text-black text-gray-500 pb-2 pt-1'>
                                                     {isInWishlist(pro._id) ?
                                                         <>

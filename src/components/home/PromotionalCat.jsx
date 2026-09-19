@@ -20,6 +20,7 @@ import { useCart } from '@/features/cart/hooks/useCart'
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist'
 import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
 import { useCompare } from '@/features/compare/hooks/useCompare'
+import useTouchReveal from '@/hooks/useTouchReveal'
 
 const PromotionalCat = () => {
     const addToCart = useAddToCart()
@@ -31,6 +32,8 @@ const PromotionalCat = () => {
     const compareListItem = compareData?.data || []
     const addToWishlist = useUpdateWishlist()
     const addToCompare = useUpdateCompare()
+    // touch screens get no hover, a tap opens the wishlist/compare row
+    const { openId, reveal, blockOpeningTap } = useTouchReveal()
     
     const handleCart = (productId) => {
         addToCart.mutate({ product: productId, quantity: 1 });
@@ -102,7 +105,11 @@ const PromotionalCat = () => {
                         >
                             {section?.products && section.products.map((pro, index) => (
                                 <SwiperSlide key={index} >
-                                    <div className='relative flex py-3 bg-white mr-1 mb-2 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] '>
+                                    <div
+                                        onTouchStart={() => reveal(pro._id)}
+                                        onClickCapture={blockOpeningTap}
+                                        className='relative flex py-3 bg-white mr-1 mb-2 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] '
+                                    >
                                         {pro.image &&
                                             <div className='w-[35%] h-full flex items-center'>
                                                 <Link to={`/products/${pro.slug || pro._id}`}>
@@ -138,7 +145,7 @@ const PromotionalCat = () => {
                                                     </div>
                                                 </div>
                                                 {/* Hover wishlist and compare  */}
-                                                <div className='absolute left-0 right-0 bottom-4 translate-y-full  bg-white  p-3  opacity-0 invisible group-hover/card:opacity-100  group-hover/card:visible z-20 shadow-xl before:absolute before:top-0 before:right-1 before:w-48 before:border-t-2 before:border-primary before:content-[""]'>
+                                                <div className={`absolute left-0 right-0 bottom-4 translate-y-full  bg-white  p-3  ${openId === pro._id ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover/card:opacity-100  group-hover/card:visible z-20 shadow-xl before:absolute before:top-0 before:right-1 before:w-48 before:border-t-2 before:border-primary before:content-[""]`}>
                                                     <div className='flex items-center gap-1 mr-10 justify-end cursor-pointer hover:text-black text-gray-500'>
                                                         {isInWishlist(pro._id) ?
                                                             <>

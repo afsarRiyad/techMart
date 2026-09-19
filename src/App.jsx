@@ -44,13 +44,16 @@ function App() {
         <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/compare" element={<Compare/>}/>
         <Route path="/account/login" element={<Login/>}/>
-        <Route path="/order-received" element={<OrderReceived/>}/>
         <Route path="/products" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetail />} />
         <Route path="/category/:slug" element={<Products />} />
         <Route path="/category/:parent/:child" element={<Products />} />
         <Route path="/cart" element={<Cart/>}/>
-        <Route path="/checkout" element={<Checkout/>}/>
+        {/* the api refuses POST /api/orders for unverified users */}
+        <Route element={<ProtectedRoute requireVerified />}>
+          <Route path="/checkout" element={<Checkout/>}/>
+          <Route path="/order-received" element={<OrderReceived/>}/>
+        </Route>
         <Route path="/account/signup" element={<Signup/>}/>
         <Route path="/account/forgot-password" element={<Forgot/>}/>
         <Route path="/account/otp-verification" element={<OtpVerification/>}/>
@@ -60,14 +63,17 @@ function App() {
      <Route element={<ProtectedRoute/>}>
        <Route element={<Dashboard/>}>
         <Route path="/account" element={<MyAccount/>}/>
-        <Route path="/account/orders" element={<Orders/>}/>
-        <Route path="/account/downloads" element={<Downloads/>}/>
-        <Route path="/account/addresses" element={<Addresses/>}/>
-        <Route path="/account/payments-methods" element={<Payments/>}/>
-        <Route path="/account/billing" element={<Billing/>}/>
-        <Route path="/account/shipping" element={<Shipping/>}/>
-        <Route path="/account/account-details" element={<Details/>}/>
-        <Route path="/account/orders/:orderId" element={<SingleOrderDetails/>}/>
+        {/* order, billing and address data needs a verified email */}
+        <Route element={<ProtectedRoute requireVerified/>}>
+          <Route path="/account/orders" element={<Orders/>}/>
+          <Route path="/account/orders/:orderId" element={<SingleOrderDetails/>}/>
+          <Route path="/account/downloads" element={<Downloads/>}/>
+          <Route path="/account/addresses" element={<Addresses/>}/>
+          <Route path="/account/payments-methods" element={<Payments/>}/>
+          <Route path="/account/billing" element={<Billing/>}/>
+          <Route path="/account/shipping" element={<Shipping/>}/>
+          <Route path="/account/account-details" element={<Details/>}/>
+        </Route>
       </Route>
      </Route>
         <Route path="/terms-and-conditions" element={<Terms/>}/>

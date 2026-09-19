@@ -6,13 +6,15 @@ import ErrorBoundary from '@/components/common/ErrorBoundary'
 import { ProductGridSkeleton } from '@/components/product/ProductSkeletons'
 import { useSyncFiltersToUrl } from '@/hooks/useSyncFiltersToUrl'
 import { ChevronDown, ChevronsUpDown, Grid2X2, Grid3X3, List, MoveLeft, MoveRight, Rows3, SlidersHorizontal, X } from 'lucide-react'
+import { useParams } from 'react-router'
 import { useGetCatProducts } from '@/features/product/hooks/useGetCatProducts'
+import { useGetCategories } from '@/features/product/hooks/useGetCategories'
 import Gridview from '@/components/product/Gridview'
 import GridExtend from '@/components/product/GridExtend'
 import Listview from '@/components/product/ListView'
 import ListViewSmall from '@/components/product/ListViewSmall'
 import { setPage, setItemsPerPage, setSort, setView,
-  setSelectedBrands, setSelectedColors, setPriceRange,
+  setSelectedBrands, setSelectedColors, setPriceRange, setSearch,
   setActiveCategory, setActiveChildCategory, resetFilters,
 } from '@/features/product/productPageSlice'
 import useScrollBlocker from '@/hooks/useScrollBlocker'
@@ -122,14 +124,74 @@ Pagination.displayName = 'Pagination'
 
 const Products = () => {
   const dispatch = useDispatch()
-  const [active, setActive] = useState()
+  // url is the source of truth for the open category
+  const { slug, parent, child } = useParams()
+  const parentParam = slug ?? parent
+  const childParam = child
+
   const [inputPage, setInputPage] = useState('1')
-  const [activeChild, setActiveChild] = useState()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useSyncFiltersToUrl()
 
-  const { page, itemsPerPage, sort, view, selectedBrands, selectedColors, priceRange, activeCategory } = useSelector((state) => state.productPage)
+  const { page, itemsPerPage, sort, view, selectedBrands, selectedColors, priceRange, search, activeCategory, activeChildCategory } = useSelector((state) => state.productPage)
+
+  const { data: catData, isLoading: catsLoading } = useGetCategories()
+  const categories = useMemo(() => catData?.data ?? [], [catData])
+  const onCategoryRoute = Boolean(parentParam)
+  // hold the product request while the category list loads, so a category url
+  // never shows the unfiltered list first
+  const resolvingCategory = onCategoryRoute && catsLoading
+
+  // slug first, name second: home page cards and the search list only carry names
+  const findCategory = (list, value) =>
+    list?.find((item) => item.slug === value) ||
+    list?.find((item) => item.name?.toLowerCase() === value?.toLowerCase()) ||
+    list?.find((item) => item.name?.toLowerCase() === value?.replace(/-/g, ' ').toLowerCase())
+
+  const routeCategory = useMemo(
+    () => (parentParam ? findCategory(categories, parentParam) : undefined),
+    [categories, parentParam]
+  )
+
+  // a single segment url can also name a child, the api matches both
+  const childMatch = useMemo(() => {
+    if (!parentParam || childParam || routeCategory) return undefined
+    for (const cat of categories) {
+      const child = findCategory(cat.children, parentParam)
+      if (child) return { parent: cat, child }
+    }
+    return undefined
+  }, [categories, parentParam, childParam, routeCategory])
+
+  // the parent object drives the sidebar section and the filters
+  const currentParent = routeCategory ?? childMatch?.parent
+  const activeChild = childParam ? findCategory(currentParent?.children, childParam) : childMatch?.child
+  const activeChildName = activeChild?.name
+
+  // switching category resets page, sort and filters
+  useEffect(() => {
+    if (!currentParent) return
+    if (activeCategory?._id === currentParent._id) return
+    dispatch(setActiveCategory(currentParent))
+  }, [currentParent, activeCategory, dispatch])
+
+  // keep the sidebar child in step with the url
+  useEffect(() => {
+    if (childParam && !activeChildName) return
+    if (activeChildCategory === (activeChildName ?? null)) return
+    dispatch(setActiveChildCategory(activeChildName ?? null))
+  }, [activeChildName, childParam, activeChildCategory, dispatch])
+
+  // a category page always shows the whole category
+  useEffect(() => {
+    if (!currentParent || !search) return
+    dispatch(setSearch(''))
+  }, [currentParent, search, dispatch])
+
+  // sidebar clicks only dispatch, the url decides what is shown
+  const pickCategory = useCallback((cat) => dispatch(setActiveCategory(cat)), [dispatch])
+  const pickChild = useCallback((ch) => dispatch(setActiveChildCategory(ch?.name ?? null)), [dispatch])
 
   // Restore saved page and reset filters when returning from product detail
   useEffect(() => {
@@ -152,22 +214,32 @@ const Products = () => {
     }
   }, [page])
 
-  const currentActive = active || activeCategory
+  const currentActive = onCategoryRoute ? currentParent : activeCategory
+  // the heading names the deepest thing the url points at
+  const pageTitle = onCategoryRoute
+    ? (activeChildName ?? currentParent?.name ?? parentParam.replace(/-/g, ' '))
+    : (search ? `Search results for "${search}"` : currentActive?.name)
+
+  // deepest url segment decides the category sent to the api
+  const urlTarget = childParam ?? parentParam
+  const categoryForQuery = onCategoryRoute
+    ? (resolvingCategory ? undefined : (activeChildName ?? currentParent?.name ?? urlTarget.replace(/-/g, ' ')))
+    : (activeCategory?.name === 'View All Products' ? undefined : activeCategory?.name)
 
   const { data, isLoading, isError } = useGetCatProducts({
-                                    category: activeChild ? activeChild : currentActive?.name === 'View All Products' ? undefined : currentActive?.name,
+                                    category: categoryForQuery,
+                                    search,
                                     brands: selectedBrands,
                                      colors: selectedColors,
                                      priceRange, limit: itemsPerPage,
                                      page,
                                     sort,
+                                    enabled: !resolvingCategory,
                                   })
 
   const products = data?.data || []
   const meta = data?.meta || { total: 0, totalPages: 1 }
-
-  useEffect(() => { if (active) dispatch(setActiveCategory(active)) }, [active, dispatch])
-  useEffect(() => { if (activeChild) dispatch(setActiveChildCategory(activeChild)) }, [activeChild, dispatch])
+  const loading = isLoading || resolvingCategory
 
   const handleSortChange = useCallback((e) => dispatch(setSort(e.target.value)), [dispatch])
   const handleLimitChange = useCallback((e) => dispatch(setItemsPerPage(Number(e.target.value))), [dispatch])
@@ -208,7 +280,7 @@ const Products = () => {
     <Container className="py-3 font-inter">
       <div className="flex w-full gap-8">
         <aside className="hidden lg:block w-[20%] shrink-0">
-          <SidebarContent active={currentActive} setActive={setActive} activeChild={activeChild} setActiveChild={setActiveChild} onClose={closeSidebar} />
+          <SidebarContent active={currentActive} setActive={pickCategory} activeChild={activeChildName} setActiveChild={pickChild} onClose={closeSidebar} />
         </aside>
 
         <div className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 lg:hidden ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeSidebar} />
@@ -219,14 +291,14 @@ const Products = () => {
             <button onClick={closeSidebar} className="cursor-pointer rounded p-1 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"><X size={20} /></button>
           </div>
           <div className="p-4">
-            <SidebarContent active={currentActive} setActive={setActive} activeChild={activeChild} setActiveChild={setActiveChild} onClose={closeSidebar} />
+            <SidebarContent active={currentActive} setActive={pickCategory} activeChild={activeChildName} setActiveChild={pickChild} onClose={closeSidebar} />
           </div>
         </div>
 
         <main className="w-full lg:w-[79%]">
           <div className="flex items-end justify-between pb-4">
-            <h1 className="text-[26px] font-medium text-tcolor dark:text-white">{currentActive?.name}</h1>
-            {!isLoading && <span className="text-[13px] text-gray-500 dark:text-gray-400">Showing {firstResult}–{lastResult} of {meta.total} results</span>}
+            <h1 className="text-[26px] font-medium text-tcolor dark:text-white">{pageTitle}</h1>
+            {!loading && <span className="text-[13px] text-gray-500 dark:text-gray-400">Showing {firstResult}–{lastResult} of {meta.total} results</span>}
           </div>
 
           {/* Active filter chips */}
@@ -300,9 +372,9 @@ const Products = () => {
           </div>
 
           <ErrorBoundary>
-            {isLoading && <div className="py-6"><ProductGridSkeleton view={view} /></div>}
-            {isError && !isLoading && <div className="py-16 text-center"><p className="text-red-500">Unable to load products. Please try again.</p></div>}
-            {!isLoading && !isError && (
+            {loading && <div className="py-6"><ProductGridSkeleton view={view} /></div>}
+            {isError && !loading && <div className="py-16 text-center"><p className="text-red-500">Unable to load products. Please try again.</p></div>}
+            {!loading && !isError && (
               <>
                 {products.length === 0 ? (
                   <div className="py-16 text-center"><p className="text-gray-500 dark:text-gray-400">No products found.</p></div>
