@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import toast from 'react-hot-toast';
 import { useAddresses } from '@/features/user/hooks/useGetAddresses';
 import { useShippingAddress } from '@/features/user/hooks/useShippingAddress';
+import { useNavigate } from 'react-router';
 
 const COUNTRIES = ['Bangladesh'];
 
@@ -54,6 +55,7 @@ const FormSelect = ({
 );
 
 const Shipping = ({ setShow , className = '' }) => {
+  const navigate = useNavigate();
   const { data: userData } = useAuth();
 
   const updateAddress = useShippingAddress();
@@ -155,9 +157,14 @@ const Shipping = ({ setShow , className = '' }) => {
       phone: form.phone,
     };
 
-    updateAddress.mutate({
-      shippingAddress
-    });
+    updateAddress.mutate(
+      { shippingAddress },
+      {
+        onSuccess: () => {
+          navigate('/account/addresses', { state: { success: 'Shipping address updated successfully!' } })
+        }
+      }
+    );
   };
 
   if (isLoading) {
@@ -169,7 +176,7 @@ const Shipping = ({ setShow , className = '' }) => {
      {!className &&
       <>
            <button
-              onClick={()=>setShow('list')}
+              onClick={()=>setShow()}
               className="flex items-center gap-2 text-gray-700 hover:text-black pb-5"
             >
               <Undo2 size={20} />

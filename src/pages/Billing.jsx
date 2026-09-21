@@ -6,6 +6,7 @@ import { useBillingAddress } from '@/features/user/hooks/useBillingAddress';
 import { useAuth } from '@/hooks/useAuth';
 import toast from 'react-hot-toast';
 import { useAddresses } from '@/features/user/hooks/useGetAddresses';
+import { useNavigate } from 'react-router';
 
 
 
@@ -62,7 +63,8 @@ const COUNTIES = [  'Dhaka',
 
 
 
-const Billing = ({ setShow, className,title}) => {
+const Billing = ({ setShow, className, title}) => {
+  const navigate = useNavigate()
   const { data: userData } = useAuth()
   const updateAddress = useBillingAddress()
   const { data: addressData, isLoading } = useAddresses()
@@ -145,7 +147,11 @@ const Billing = ({ setShow, className,title}) => {
       zipCode: form.zipCode,
       phone: form.phone,
     };
-    updateAddress.mutate({ billingAddress });
+    updateAddress.mutate({ billingAddress }, {
+      onSuccess: () => {
+        navigate('/account/addresses', { state: { success: 'Billing address updated successfully!' } })
+      }
+    });
   };
 
   if (isLoading) {
@@ -157,7 +163,7 @@ const Billing = ({ setShow, className,title}) => {
 
       {!title && 
       <button
-       onClick={() => setShow('list')}
+       onClick={() => setShow()}
         className="flex items-center gap-2 text-gray-700 hover:text-black pb-5" >
         <Undo2 size={20} />
         Back

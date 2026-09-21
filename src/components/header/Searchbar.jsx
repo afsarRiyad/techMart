@@ -13,7 +13,10 @@ import { useDispatch } from 'react-redux'
 import useDebounced from '@/hooks/useDebounced'
 import SearchSuggestions from '@/components/header/SearchSuggestions'
 import { useSearchProducts } from '@/features/product/hooks/useSearchProducts'
-import { useCompare } from '@/features/compare/hooks/useCompare'
+import { useAuth } from '@/hooks/useAuth'
+import { logout } from '@/hooks/useFetchData'
+import { clearCustomerToken } from '@/api/apiCustomer'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { setSearch, setActiveCategory } from '@/features/product/productPageSlice'
 
 const Searchbar = () => {
@@ -21,8 +24,8 @@ const Searchbar = () => {
   const dispatch = useDispatch()
   const {data} = useCart()
   // shares the ["compare"] cache with the tray and the product cards
-  const { data: compareData } = useCompare()
-  const compareCount = compareData?.data?.length ?? 0
+  const { data: compareCache } = useQuery({ queryKey: ['compare'] })
+  const compareCount = Array.isArray(compareCache?.data) ? compareCache.data.length : 0
   const [category, setCategory] = useState('All Categories')
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([])
@@ -31,6 +34,24 @@ const Searchbar = () => {
   const [suggestOpen, setSuggestOpen] = useState(false)
   const [mobileSearch, setMobileSearch] = useState(false)
   const [sticky, setSticky] = useState(false)
+  const queryClient = useQueryClient()
+  const { data: authData } = useAuth()
+  const isLoggedIn = !!authData?.data
+  const [accountOpen, setAccountOpen] = useState(false)
+  const accountRef = useRef(null)
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      clearCustomerToken()
+      queryClient.setQueryData(['me'], null)
+      queryClient.removeQueries({ queryKey: ['me'] })
+      setAccountOpen(false)
+      navigate('/account/login', { replace: true })
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const categoryRef = useRef(null)
   const searchAreaRef = useRef(null)
   const mobileSearchRef = useRef(null)
@@ -45,6 +66,7 @@ const Searchbar = () => {
   useOutsideClick(categoryRef, () => setCatOpen(false), catOpen)
   useOutsideClick(mobileSearchRef, () => setMobileSearch(false), mobileSearch)
   useOutsideClick(searchBoxRefs, () => setSuggestOpen(false), suggestOpen)
+  useOutsideClick(accountRef, () => setAccountOpen(false), accountOpen)
   useScrollBlocker(mobileSearch)
 
   // enter or the search button runs the search on the products page
@@ -176,8 +198,7 @@ const Searchbar = () => {
                 <Link aria-label='compare products' to='/compare' className='searchbarIconhover hidden lg:block relative group' >
                 <div className='relative'>
                 <GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' />
-                {/* a number only once the list is known, a failed call is not zero */}
-                {compareData ? (
+                {compareCache ? (
                 <span className='absolute -bottom-2 -right-1 bg-primary text-black text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center'>
                   {compareCount}
                 </span>
@@ -207,16 +228,61 @@ const Searchbar = () => {
                   mobileSearch ? <X size={23} className='cursor-pointer lg:hidden ' onClick={() => setMobileSearch(false)} /> :
                     <Search size={23} className='cursor-pointer lg:hidden dark:text-tcolor' onClick={() => setMobileSearch(true)} />
                 }
-                <Link to='/account' aria-label='go to myAccount ' className='relative group'>
-                   <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
-                   {/* My Account Tooltip  */}
-                     <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
-                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
-                        My Account
+                {isLoggedIn ? (
+                  <div ref={accountRef} className='relative'>
+                    <button type='button' aria-label='account menu' onClick={() => setAccountOpen(!accountOpen)} className='cursor-pointer'>
+                      <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
+                    </button>
+                    <div className={`absolute right-0 top-full mt-3 w-52 bg-white dark:bg-[#181818] rounded-md shadow-lg border-t-4 border-primary transition-all duration-200 ${accountOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                      <div className='py-2'>
+                        {[
+                          { label: 'Dashboard', href: '/account' },
+                          { label: 'Orders', href: '/account/orders' },
+                          { label: 'Downloads', href: '/account/downloads' },
+                          { label: 'Addresses', href: '/account/addresses' },
+                          { label: 'Payment methods', href: '/account/payments-methods' },
+                          { label: 'Account details', href: '/account/account-details' },
+                        ].map((item) => (
+                          <Link
+                            key={item.href}
+                            to={item.href}
+                            onClick={() => setAccountOpen(false)}
+                            className='block px-5 py-2.5 text-[14px] font-inter text-tcolor dark:text-gray-200 hover:text-black hover:bg-gray-50 dark:hover:bg-[#252525]'
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                        <div className='border-t border-gray-200 dark:border-gray-600 mx-4'></div>
+                        <button
+                          type='button'
+                          onClick={handleLogout}
+                          className='block w-full text-left px-5 py-2.5 text-[14px] font-inter text-tcolor dark:text-gray-200 hover:text-black hover:bg-gray-50 dark:hover:bg-[#252525] cursor-pointer'
+                        >
+                          Log out
+                        </button>
                       </div>
-                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
-                     </div>
-                   </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div ref={accountRef} className='relative'>
+                    <button type='button' aria-label='account menu' onClick={() => setAccountOpen(!accountOpen)} className='cursor-pointer'>
+                      <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
+                    </button>
+                    <div className={`absolute right-0 top-full mt-3 w-56 bg-white dark:bg-[#181818] rounded-md shadow-lg border-t-4 border-primary transition-all duration-200 ${accountOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                      <div className='p-5'>
+                        <p className='text-[15px] font-inter text-tcolor dark:text-gray-200 mb-3'>Returning Customer ?</p>
+                        <Link to='/account/login' onClick={() => setAccountOpen(false)} className='block w-20 text-center mx-auto bg-primary hover:bg-yellow-400 text-black font-medium text-[15px] py-1.5 rounded-sm font-inter'>
+                          Sign in
+                        </Link>
+                        <div className='border-t border-gray-200 dark:border-gray-600 my-4'></div>
+                        <p className='text-[15px] font-inter text-tcolor dark:text-gray-200 mb-2'>Don't have an account ?</p>
+                        <Link to='/account/signup' onClick={() => setAccountOpen(false)} className='block text-center text-[15px] font-inter text-tcolor dark:text-gray-200 hover:text-black underline'>
+                          Register
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <Link aria-label='go to Cart' to='/cart' className='flex gap-2 group relative'>
                   <div className={`relative `}>
                     <Handbag size={22} className='text-tcolor lg:dark:text-gray-200' />
