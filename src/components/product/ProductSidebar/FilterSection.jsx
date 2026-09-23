@@ -29,13 +29,13 @@ const CheckBox = React.memo(({ filter, selectedItems, isBrand = true, onClose })
         htmlFor={filterId}
         className={`w-4 h-4 border-1 rounded-sm cursor-pointer flex items-center justify-center transition-all duration-200 ${
           isChecked
-            ? 'bg-yellow-400 text-white border-yellow-400'
-            : 'bg-white text-transparent border-gray-400 group-hover:text-yellow-400 group-hover:border-yellow-400'
+            ? 'bg-primary text-tcolor border-primary'
+            : 'bg-white dark:bg-[#212121] text-transparent border-gray-400 dark:border-[#444444] group-hover:text-primary group-hover:border-primary'
         }`}
       >
         ✓
       </label>
-      <label htmlFor={filterId} className="cursor-pointer select-none text-tcolor transition-colors duration-200">
+      <label htmlFor={filterId} className="cursor-pointer select-none text-tcolor dark:text-gray-100 transition-colors duration-200">
         {filterName}
       </label>
     </div>
@@ -100,14 +100,14 @@ const FilterSection = ({ brands, colors, onClose }) => {
       {/* Brands */}
       {brands.length > 0 && (
         <>
-          <div className="border-b border-b-gray-300 pb-3 pt-8 mb-5">
-            <span className="font-medium text-[18px] text-tcolor border-b-[2px] border-b-primary pb-[13px]">
+          <div className="border-b border-b-gray-300 dark:border-b-[#333333] pb-3 pt-8 mb-5">
+            <span className="font-medium text-[18px] text-tcolor dark:text-gray-100 border-b-[2px] border-b-primary pb-[13px]">
               Filters
             </span>
           </div>
 
           <div className="pb-4">
-            <h2 className="font-bold font-pop text-tcolor text-[14px] pb-2">Brands</h2>
+            <h2 className="font-bold font-pop text-tcolor dark:text-gray-100 text-[14px] pb-2">Brands</h2>
 
             {visibleBrands?.map((filter) => (
               <CheckBox
@@ -134,8 +134,8 @@ const FilterSection = ({ brands, colors, onClose }) => {
 
       {/* Colors */}
       {colors && colors.length > 0 && (
-        <div className={`border-t border-t-gray-300 pb-5 ${colors.length > 0 ? 'border-b border-b-gray-300' : ''}`}>
-          <h2 className="font-bold font-pop text-tcolor text-[14px] pb-2 pt-4">Colors</h2>
+        <div className={`border-t border-t-gray-300 pb-5 ${colors.length > 0 ?'border-b border-b-gray-300 dark:border-b-[#333333]' : ''}`}>
+          <h2 className="font-bold font-pop text-tcolor dark:text-gray-100 text-[14px] pb-2 pt-4">Colors</h2>
 
           {visibleColors?.map((color) => (
             <CheckBox

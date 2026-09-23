@@ -198,7 +198,7 @@ const Breadcrumbs = ({ items = [] }) => {
   }
 
   return (
-    <div className="border-b border-gray-200 text-[15px] dark:border-gray-700">
+    <div className="border-b border-gray-200 dark:border-[#333333] text-[15px] dark:border-gray-700">
       <Container>
         <div className="px-3 py-3 lg:px-5 lg:py-4">
           <ul className="flex items-center gap-2 overflow-x-auto whitespace-nowrap lg:gap-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -208,7 +208,7 @@ const Breadcrumbs = ({ items = [] }) => {
               <Link
                 to="/"
                 aria-label="Go to home page"
-                className="flex items-center font-inter tracking-widest dark:text-white"
+                className="flex items-center font-inter tracking-widest dark:text-gray-100"
               >
                 <House size={20} />
               </Link>
@@ -217,7 +217,7 @@ const Breadcrumbs = ({ items = [] }) => {
             {/* small screens hide the middle steps, this keeps the trail readable */}
             {breadcrumbs.length > 2 && (
               <li className="flex shrink-0 items-center gap-2 sm:hidden">
-                <ChevronRight size={20} className="dark:text-white" />
+                <ChevronRight size={20} className="dark:text-gray-100" />
                 <span className="font-inter tracking-widest text-gray-400">…</span>
               </li>
             )}
@@ -231,21 +231,21 @@ const Breadcrumbs = ({ items = [] }) => {
               return (
                 <li
                   key={`${item.name}-${index}`}
-                  className={`items-center gap-2 ${showOnMobile ? 'flex' : 'hidden sm:flex'} ${isLast ? 'min-w-0' : 'shrink-0'}`}
+                  className={`items-center gap-2 ${showOnMobile ?'flex' : 'hidden sm:flex'} ${isLast ? 'min-w-0' : 'shrink-0'}`}
                 >
                   <ChevronRight
                     size={20}
-                    className="shrink-0 dark:text-white"
+                    className="shrink-0 dark:text-gray-100"
                   />
 
                   {isLast || !item.url ? (
-                    <span className="block truncate font-inter tracking-widest text-[#29323A] dark:text-white">
+                    <span className="block truncate font-inter tracking-widest text-[#29323A] dark:text-gray-100">
                       {item.name}
                     </span>
                   ) : (
                     <Link
                       to={item.url}
-                      className="inline-block truncate max-w-[40vw] rounded-md bg-gray-200 px-3 py-2 font-inter tracking-widest text-[#29323A] transition-all hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/10 sm:max-w-none"
+                      className="inline-block truncate max-w-[40vw] rounded-md bg-gray-200 dark:bg-[#333333] px-3 py-2 font-inter tracking-widest text-[#29323A] transition-all hover:bg-black/20 dark:text-gray-100 dark:hover:bg-white/10 sm:max-w-none"
                     >
                       {item.name}
                     </Link>

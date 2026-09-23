@@ -14,15 +14,17 @@ import FooterWidget from '@/components/common/FooterWidget'
 import CompareBar from '@/components/common/CompareBar'
 import MobileQuickActions from '@/components/common/MobileQuickActions'
 import { useSyncLocalCompare } from '@/hooks/useSyncLocalCompare'
+import { ThemeProvider } from '@/features/theme/ThemeProvider'
 
 
 const  MainLayout= () => {
-  let direction = useLocation()
+  // the real router location, not window.location, so this updates on navigation
+  const location = useLocation()
   // hands the guest compare picks to the account once someone is signed in
   useSyncLocalCompare()
   const dontShow = ['/']
   return (
-    <>
+    <ThemeProvider>
     <Topbar/>
     <Searchbar/>
      <Navbar />
@@ -37,7 +39,7 @@ const  MainLayout= () => {
      <Copyright/>
      <CompareBar/>
      <MobileQuickActions/>
-    </>
+    </ThemeProvider>
   )
 }
 

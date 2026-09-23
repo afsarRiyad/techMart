@@ -31,9 +31,12 @@ import Products from "@/pages/Products"
 import ProductDetail from "@/pages/ProductDetail"
 import ScrollToTop from "@/components/common/ScrollToTop"
 import NotFound from "@/pages/NotFound"
+import useTouchHover from "@/hooks/useTouchHover"
 
 
 function App() {
+  // tap stands in for hover on touch screens, for the whole app
+  useTouchHover()
 
   return (
     <>

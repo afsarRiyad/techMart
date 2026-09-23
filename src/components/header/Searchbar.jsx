@@ -16,16 +16,17 @@ import { useSearchProducts } from '@/features/product/hooks/useSearchProducts'
 import { useAuth } from '@/hooks/useAuth'
 import { logout } from '@/hooks/useFetchData'
 import { clearCustomerToken } from '@/api/apiCustomer'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCompare } from '@/features/compare/hooks/useCompare'
 import { setSearch, setActiveCategory } from '@/features/product/productPageSlice'
 
 const Searchbar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {data} = useCart()
-  // shares the ["compare"] cache with the tray and the product cards
-  const { data: compareCache } = useQuery({ queryKey: ['compare'] })
-  const compareCount = Array.isArray(compareCache?.data) ? compareCache.data.length : 0
+  // same hook the tray and the product cards use, so the badge always matches them
+  const { items: compareItems, isPending: comparePending } = useCompare()
+  const compareCount = compareItems.length
   const [category, setCategory] = useState('All Categories')
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([])
@@ -131,9 +132,9 @@ const Searchbar = () => {
           {mobileSearch && 
            <div className='fixed left-0 top-16 w-full h-full bg-black/10 z-50' onClick={() => setMobileSearch(false)}/>
           }
-          <div ref={mobileSearchRef} className={`absolute  top-full left-0 h-25 z-50   shadow-xl w-full flex items-center font-inter text-tcolor lg:hidden  transition-all duration-200 ease-in-out ${sticky ? 'bg-white  border-t-[2px] border-t-black' : 'bg-primary  border-t-[2px] border-t-white'} ${mobileSearch ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
-            <input type="text" placeholder='Search for products..' className={` ps-6 pe-26  bg-white rounded-full w-[90%] py-4 flex ms-4 outline-none ${sticky ? 'border border-gray-300' : 'border-none'}`} value={term} onChange={handleTermChange} onKeyDown={handleKeyDown} />
-            {term !== '' && <X size={18} className=' absolute right-21 cursor-pointer' onClick={() => setTerm('')} />}
+          <div ref={mobileSearchRef} className={`absolute top-full left-0 h-25 z-50 shadow-xl w-full flex items-center font-inter text-tcolor lg:hidden transition-all duration-200 ease-in-out ${sticky ?'bg-white  border-t-[2px] border-t-black' : 'bg-primary  border-t-[2px] border-t-white'} ${mobileSearch ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+            <input type="text" placeholder='Search for products..' className={`ps-6 pe-26 bg-white rounded-full w-[90%] py-4 flex ms-4 outline-none ${sticky ?'border border-gray-300' : 'border-none'}`} value={term} onChange={handleTermChange} onKeyDown={handleKeyDown} />
+            {term !== '' && <X size={18} className='absolute right-21 cursor-pointer' onClick={() => setTerm('')} />}
             <button type='button' aria-label='Search products' onClick={runSearch} className='absolute right-11 cursor-pointer'>
               <Search size={25} />
             </button>
@@ -148,25 +149,25 @@ const Searchbar = () => {
             )}
           </div>
           {/* mobile searchbar ends here  */}
-          <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-5 items-center lg:bg-white '>
-            <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-between items-center '>
+          <div className='lg:py-7 lg:dark:bg-darkBg py-5 flex lg:gap-5 items-center lg:bg-white'>
+            <div className='lg:w-[300px] lg:flex lg:flex-row flex flex-row-reverse justify-between items-center'>
               <Link aria-label='gok to homepage' to='/'><Logo className='lg:h-10 lg:dark:hidden h-6 w-auto block ps-4 lg:ps-0' /></Link>
               <Link aria-label='gok to homepage' to='/'><LogoWhite className='lg:h-10 lg:dark:flex hidden h-6 w-auto pl-10' /></Link>
               <Hamberger  />
             </div>
             <div className='flex flex-1 items-center gap-20 min-w-0'>
              <div ref={searchAreaRef} className='relative rounded-full h-[44px] hidden lg:flex items-center flex-1 max-w-[850px]'>
-                <input type="text" placeholder='Search for Products' value={term} onChange={handleTermChange} onFocus={() => setSuggestOpen(true)} onKeyDown={handleKeyDown} className='flex-1 min-w-0 dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full text-inter text-tcolor text-[14px] py-2 px-8 outline-none bg-white border-2 dark:border-yellow-500 border-primary border-r-0 ml-[2px] placeholder:font-inter placeholder:text-gray-600 leading-6'/>
-              { catOpen && <div className='fixed inset-0 left-0 top-34  bg-black/10'/>}
+                <input type="text" placeholder='Search for Products' value={term} onChange={handleTermChange} onFocus={() => setSuggestOpen(true)} onKeyDown={handleKeyDown} className='flex-1 min-w-0 dark:bg-[#212121] dark:placeholder:text-gray-400 rounded-l-full text-inter text-tcolor dark:text-gray-100 text-[14px] py-2 px-8 outline-none bg-white dark:bg-[#262626] border-2 dark:border-primary border-primary border-r-0 ml-[2px] placeholder:font-inter placeholder:text-gray-600 leading-6'/>
+              { catOpen && <div className='fixed inset-0 left-0 top-34 bg-black/10'/>}
                {/* all categories starts here  */}
                 <div className='relative' ref={categoryRef}>
-                  <h2 className='dark:bg-[#212121]  dark:text-gray-400 bg-white outline-none select-none border border-[2px]  border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
-                  <ul className={`absolute top-full border bg-white shadow-md dark:bg-[#181818]  dark:border-gray-500 border-gray-200  transition ${catOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none '}`}>
+                  <h2 className='dark:bg-[#212121] dark:text-gray-400 bg-white dark:bg-[#262626] outline-none select-none border border-[2px] border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor dark:text-gray-100' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
+                  <ul className={`absolute top-full border bg-white shadow-md dark:bg-[#181818] dark:border-gray-500 border-gray-200 transition ${catOpen ?'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none '}`}>
                     {error && 
                          <p>{error}</p>}
                     {
                       categories?.map((item, index) => (
-                        <li key={index} className={`dark:text-gray-100 ${category === item.name && 'bg-blue-500 text-white'}`}>
+                        <li key={index} className={`dark:text-gray-100 ${category === item.name &&'bg-blue-500 text-white'}`}>
                           <Link
                             to={`/category/${item.slug ?? item.name}`}
                             onClick={() => { setCategory(item.name); setCatOpen(false) }}
@@ -178,10 +179,10 @@ const Searchbar = () => {
                       ))
                     }
                   </ul>
-                  <ChevronsUpDown size={15} className='absolute top-4  right-4 text-gray-500 pointer-events-none' />
+                  <ChevronsUpDown size={15} className='absolute top-4 right-4 text-gray-500 dark:text-gray-400 pointer-events-none' />
                 </div>
               {/* all categories ends here  */}
-                <button type='button' aria-label='Search products' onClick={runSearch} className='w-16 h-11  bg-primary dark:bg-yellow-500 flex justify-center items-center rounded-r-full cursor-pointer'>
+                <button type='button' aria-label='Search products' onClick={runSearch} className='w-16 h-11 bg-primary dark:bg-primary flex justify-center items-center rounded-r-full cursor-pointer'>
                   <Search size={23} />
                 </button>
                 {showSuggestions && (
@@ -198,7 +199,7 @@ const Searchbar = () => {
                 <Link aria-label='compare products' to='/compare' className='searchbarIconhover hidden lg:block relative group' >
                 <div className='relative'>
                 <GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' />
-                {compareCache ? (
+                {!comparePending ? (
                 <span className='absolute -bottom-2 -right-1 bg-primary text-black text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center'>
                   {compareCount}
                 </span>
@@ -208,24 +209,24 @@ const Searchbar = () => {
                 </div>
                  {/* Compare Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
-                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:bg-[#2f2f2f] dark:text-gray-100 px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Compare
                       </div>
-                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8' />
                      </div>
                 </Link>
-                  <Link to='/wishlist' aria-label='browse to wishlist' className='relative group '>
+                  <Link to='/wishlist' aria-label='browse to wishlist' className='relative group'>
                      <Heart size={22} className='text-tcolor lg:dark:text-gray-200 hidden lg:flex' />
                      {/*wishlist tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300'>
-                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:bg-[#2f2f2f] dark:text-gray-100 px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Wishlist
                       </div>
-                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8' />
                      </div>
                   </Link>
                 {
-                  mobileSearch ? <X size={23} className='cursor-pointer lg:hidden ' onClick={() => setMobileSearch(false)} /> :
+                  mobileSearch ? <X size={23} className='cursor-pointer lg:hidden dark:text-tcolor' onClick={() => setMobileSearch(false)} /> :
                     <Search size={23} className='cursor-pointer lg:hidden dark:text-tcolor' onClick={() => setMobileSearch(true)} />
                 }
                 {isLoggedIn ? (
@@ -233,7 +234,7 @@ const Searchbar = () => {
                     <button type='button' aria-label='account menu' onClick={() => setAccountOpen(!accountOpen)} className='cursor-pointer'>
                       <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
                     </button>
-                    <div className={`absolute right-0 top-full mt-3 w-52 bg-white dark:bg-[#181818] rounded-md shadow-lg border-t-4 border-primary transition-all duration-200 ${accountOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                    <div className={`absolute right-0 top-full mt-3 w-52 bg-white dark:bg-[#181818] rounded-md shadow-lg border-t-4 border-primary transition-all duration-200 ${accountOpen ?'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
                       <div className='py-2'>
                         {[
                           { label: 'Dashboard', href: '/account' },
@@ -247,16 +248,16 @@ const Searchbar = () => {
                             key={item.href}
                             to={item.href}
                             onClick={() => setAccountOpen(false)}
-                            className='block px-5 py-2.5 text-[14px] font-inter text-tcolor dark:text-gray-200 hover:text-black hover:bg-gray-50 dark:hover:bg-[#252525]'
+                            className='block px-5 py-2.5 text-[14px] font-inter text-tcolor dark:text-gray-100 dark:text-gray-200 hover:text-black hover:bg-gray-50 dark:hover:bg-[#252525]'
                           >
                             {item.label}
                           </Link>
                         ))}
-                        <div className='border-t border-gray-200 dark:border-gray-600 mx-4'></div>
+                        <div className='border-t border-gray-200 dark:border-[#333333] dark:border-gray-600 mx-4'></div>
                         <button
                           type='button'
                           onClick={handleLogout}
-                          className='block w-full text-left px-5 py-2.5 text-[14px] font-inter text-tcolor dark:text-gray-200 hover:text-black hover:bg-gray-50 dark:hover:bg-[#252525] cursor-pointer'
+                          className='block w-full text-left px-5 py-2.5 text-[14px] font-inter text-tcolor dark:text-gray-100 dark:text-gray-200 hover:text-black hover:bg-gray-50 dark:hover:bg-[#252525] cursor-pointer'
                         >
                           Log out
                         </button>
@@ -268,15 +269,15 @@ const Searchbar = () => {
                     <button type='button' aria-label='account menu' onClick={() => setAccountOpen(!accountOpen)} className='cursor-pointer'>
                       <UserRound size={22} className='text-tcolor lg:dark:text-gray-200' />
                     </button>
-                    <div className={`absolute right-0 top-full mt-3 w-56 bg-white dark:bg-[#181818] rounded-md shadow-lg border-t-4 border-primary transition-all duration-200 ${accountOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                    <div className={`absolute right-0 top-full mt-3 w-56 bg-white dark:bg-[#181818] rounded-md shadow-lg border-t-4 border-primary transition-all duration-200 ${accountOpen ?'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
                       <div className='p-5'>
-                        <p className='text-[15px] font-inter text-tcolor dark:text-gray-200 mb-3'>Returning Customer ?</p>
+                        <p className='text-[15px] font-inter text-tcolor dark:text-gray-100 dark:text-gray-200 mb-3'>Returning Customer ?</p>
                         <Link to='/account/login' onClick={() => setAccountOpen(false)} className='block w-20 text-center mx-auto bg-primary hover:bg-yellow-400 text-black font-medium text-[15px] py-1.5 rounded-sm font-inter'>
                           Sign in
                         </Link>
-                        <div className='border-t border-gray-200 dark:border-gray-600 my-4'></div>
-                        <p className='text-[15px] font-inter text-tcolor dark:text-gray-200 mb-2'>Don't have an account ?</p>
-                        <Link to='/account/signup' onClick={() => setAccountOpen(false)} className='block text-center text-[15px] font-inter text-tcolor dark:text-gray-200 hover:text-black underline'>
+                        <div className='border-t border-gray-200 dark:border-[#333333] dark:border-gray-600 my-4'></div>
+                        <p className='text-[15px] font-inter text-tcolor dark:text-gray-100 dark:text-gray-200 mb-2'>Don't have an account ?</p>
+                        <Link to='/account/signup' onClick={() => setAccountOpen(false)} className='block text-center text-[15px] font-inter text-tcolor dark:text-gray-100 dark:text-gray-200 hover:text-black dark:hover:text-white underline'>
                           Register
                         </Link>
                       </div>
@@ -284,20 +285,20 @@ const Searchbar = () => {
                   </div>
                 )}
                 <Link aria-label='go to Cart' to='/cart' className='flex gap-2 group relative'>
-                  <div className={`relative `}>
+                  <div className={`relative`}>
                     <Handbag size={22} className='text-tcolor lg:dark:text-gray-200' />
                     {/* same rule as the compare badge, wait for the cart before showing a count */}
-                    <span className={`absolute -bottom-2 -right-1 text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center ${data ? 'bg-primary text-black' : 'bg-gray-300 animate-pulse'}`}>
+                    <span className={`absolute -bottom-2 -right-1 text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center ${data ?'bg-primary text-black' : 'bg-gray-300 animate-pulse'}`}>
                       {data ? totalItem ?? 0 : ''}
                     </span>
                   </div>
                   <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>${totalAmount?.toFixed(2) || '0.00'}</span>
                    {/*Cart Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
-                      <div className='relative bg-black text-white dark:text-t dark:bg-white px-3 py-1.5 text-[14px] rounded-md font-roboto'>
+                      <div className='relative bg-black text-white dark:bg-[#2f2f2f] dark:text-gray-100 px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Cart
                       </div>
-                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8 ' />
+                      <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8' />
                      </div>
                 </Link>
               </div>

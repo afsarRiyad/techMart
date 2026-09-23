@@ -15,31 +15,18 @@ const FormSelect = ({ label, required, hint, value, onChange, options = [] }) =>
   <div className="mb-6">
 
     <label className="mb-2 block font-inter text-sm font-semibold text-tcolor darkH">
-
       {label} {required && <span className="text-tcolor darkH">*</span>}
-
     </label>
-
     <select
-
       value={value}
-
       onChange={onChange}
-
       className="inputRing w-full appearance-none rounded-full border border-gray-300 bg-white bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>')] bg-[length:16px] bg-[right_1.25rem_center] bg-no-repeat px-5 py-3 font-inter text-[15px] text-tcolor outline-none transition-all duration-200 dark:border-gray-700 dark:bg-[#222] darkH"
-
     >
-
       {options.map((opt) => (
-
         <option key={opt} value={opt}>
-
           {opt}
-
         </option>
-
       ))}
-
     </select>
 
     {hint && <p className="mt-2 font-inter text-[13px] italic text-gray-500 darktxt">{hint}</p>}
@@ -159,24 +146,24 @@ const Billing = ({ setShow, className, title}) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className=" font-inter">
+    <form onSubmit={handleSubmit} className="font-inter">
 
       {!title && 
       <button
        onClick={() => setShow()}
-        className="flex items-center gap-2 text-gray-700 hover:text-black pb-5" >
+        className="flex items-center gap-2 text-gray-700 dark:text-gray-200 hover:text-black pb-5" >
         <Undo2 size={20} />
         Back
       </button>
       }
       <div>
       {!title &&
-       <h2 className={`mb-4 font-inter text-2xl font-bold text-tcolor darkH sm:mb-6 sm:text-[28px] `}>
+       <h2 className={`mb-4 font-inter text-2xl font-bold text-tcolor darkH sm:mb-6 sm:text-[28px]`}>
         Billing address
       </h2>
       }
       <span className={`${className}`}>{title}</span>
-      <hr className="mb-6 mt-3 border-gray-200 dark:border-gray-700" />
+      <hr className="mb-6 mt-3 border-gray-200 dark:border-[#333333] dark:border-gray-700" />
       </div>
 
       <FormInput
@@ -278,7 +265,7 @@ const Billing = ({ setShow, className, title}) => {
         disabled={notChanged || updateAddress.isPending}
         className={`rounded-full px-6 py-3 font-inter text-[15px] font-semibold transition-colors duration-200 ${notChanged || updateAddress.isPending
             ? 'cursor-not-allowed bg-gray-200 text-gray-400 dark:bg-[#333]'
-            : 'cursor-pointer bg-gray-200 text-tcolor hover:bg-black hover:text-white dark:bg-[#333] dark:text-white'
+            : 'cursor-pointer bg-gray-200 text-tcolor hover:bg-black hover:text-white dark:bg-[#333] dark:text-gray-100'
           }`}
       >
         {updateAddress.isPending ? 'Saving...' : 'Save address'}

@@ -23,7 +23,7 @@ const MobileQuickActions = () => {
           key={to}
           to={to}
           aria-label={label}
-          className='relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-tcolor shadow-lg transition-colors duration-200 hover:bg-primary dark:border-gray-700 dark:bg-neutral-900 dark:text-gray-200'
+          className='relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 dark:border-[#333333] bg-white dark:bg-[#262626] text-tcolor shadow-lg transition-colors duration-200 hover:bg-primary dark:border-gray-700 dark:bg-neutral-900 dark:text-gray-200'
         >
           <Icon size={20} />
           {count > 0 && (

@@ -40,12 +40,12 @@ const MyAccount = () => {
     <>
       <div className='font-inter'>
         {!data?.data?.isVerified && (
-          <div className="flex items-center mb-6 justify-between gap-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center mb-6 justify-between gap-4 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800/60 dark:bg-amber-950/40">
             <div>
-              <h3 className="text-sm font-semibold text-amber-900">
+              <h3 className="text-sm font-semibold text-amber-900 dark:text-amber-200">
                 Email Verification Required
               </h3>
-              <p className="mt-1 text-sm text-amber-700">
+              <p className="mt-1 text-sm text-amber-700 dark:text-amber-300/90">
                 Your account is currently operating with limited access. Verify your
                 email address to unlock all features and enjoy the full experience.
               </p>
@@ -53,7 +53,7 @@ const MyAccount = () => {
 
             <button
               onClick={handleResend}
-              className="shrink-0 rounded-md bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 cursor-pointer"
+              className="shrink-0 min-h-11 rounded-md bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600 cursor-pointer"
             >
               Verify Account
             </button>

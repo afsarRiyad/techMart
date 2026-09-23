@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateCompare } from '@/features/compare/services/compareService';
 import { addLocalCompare } from '@/features/compare/localCompare';
 import { useAuth } from '@/hooks/useAuth';
+import showActionToast from '@/components/ui/showActionToast';
 import toast from 'react-hot-toast';
 
 // the card passes { productId }, a plain id is accepted too
@@ -37,7 +38,12 @@ export const useUpdateCompare = ()=>{
             return {previous, changed: true}
         },
         onSuccess:()=>{
-            toast.success("Item added to compare!", {id: 'compare'})
+            showActionToast({
+                id: 'compare',
+                title: 'Item added to compare',
+                cta: 'Compare now',
+                to: '/compare',
+            })
         },
         onError:(error, vars, context)=>{
             // already in the list is the state we were after

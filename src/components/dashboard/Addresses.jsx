@@ -9,26 +9,26 @@ const AddressCard = ({ title, address, onEdit, onAdd }) => {
   if (!address) {
     return (
       <div className='max-w-[50%] w-full'>
-        <h2 className='pb-2 pt-5 border-b border-b-gray-300 text-[28px] font-semibold text-tcolor'>
+        <h2 className='pb-2 pt-5 border-b border-b-gray-300 dark:border-b-[#333333] text-[28px] font-semibold text-tcolor dark:text-gray-100'>
           {title}
         </h2>
-        <button onClick={onAdd} className='w-full text-end text-gray-700 pt-10 pb-3 border-b border-b-gray-300'>
+        <button onClick={onAdd} className='w-full text-end text-gray-700 dark:text-gray-200 dark:text-gray-300 pt-10 pb-3 border-b border-b-gray-300 dark:border-b-[#333333]'>
           Add {title}
         </button>
-        <p className='pt-4 text-gray-500 text-[14px]'>You have not set up this type of address yet.</p>
+        <p className='pt-4 text-gray-500 dark:text-gray-400 text-[14px]'>You have not set up this type of address yet.</p>
       </div>
     )
   }
 
   return (
     <div className='max-w-[50%] w-full'>
-      <h2 className='pb-2 pt-5 border-b border-b-gray-300 text-[28px] font-semibold text-tcolor'>
+      <h2 className='pb-2 pt-5 border-b border-b-gray-300 dark:border-b-[#333333] text-[28px] font-semibold text-tcolor dark:text-gray-100'>
         {title}
       </h2>
-      <button onClick={onEdit} className='w-full text-end text-gray-700 pt-10 pb-3 border-b border-b-gray-300'>
+      <button onClick={onEdit} className='w-full text-end text-gray-700 dark:text-gray-200 dark:text-gray-300 pt-10 pb-3 border-b border-b-gray-300 dark:border-b-[#333333]'>
         Edit {title}
       </button>
-      <div className='pt-4 text-tcolor text-[15px] leading-relaxed'>
+      <div className='pt-4 text-tcolor dark:text-gray-100 text-[15px] leading-relaxed'>
         <p>{address.firstName} {address.lastName}</p>
         {address.companyName && <p>{address.companyName}</p>}
         {address.streetAddress && <p>{address.streetAddress}</p>}
@@ -69,7 +69,7 @@ const Addresses = () => {
       )}
       {!edit && (
         <>
-          <p className='font-pop text-[14px] font-semibold text-gray-500'>The following addresses will be used on the checkout page by default.</p>
+          <p className='font-pop text-[14px] font-semibold text-gray-500 dark:text-gray-400'>The following addresses will be used on the checkout page by default.</p>
           <div className='flex gap-10 font-pop'>
             <AddressCard
               title='Billing address'

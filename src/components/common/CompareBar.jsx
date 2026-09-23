@@ -41,12 +41,12 @@ const CompareBar = () => {
 
       {/* plain see through fill, no blur, so the page stays visible behind it */}
       {/* hidden on phones: the bar covers too much of a small screen */}
-      <div className='fixed inset-x-0 bottom-0 z-40 hidden bg-[#333E48]/80 text-white sm:block'>
+      <div className='fixed inset-x-0 bottom-0 z-40 hidden border-t border-transparent bg-[#333E48]/80 text-white sm:block dark:border-[#333333] dark:bg-[#212121]/95'>
         <Container>
           <div className='mx-auto flex w-full max-w-[1000px] items-center gap-4 py-3.5 sm:gap-10 sm:py-5'>
             {/* on phones the hint only shows while the button is still off */}
             <p
-              className={`${canCompare ? 'hidden sm:block' : 'block'} w-[104px] shrink-0 font-inter text-[12px] leading-4 sm:w-[176px] sm:text-[15px] sm:leading-7`}
+              className={`${canCompare ?'hidden sm:block' : 'block'} w-[104px] shrink-0 font-inter text-[12px] leading-4 sm:w-[176px] sm:text-[15px] sm:leading-7`}
             >
               {canCompare ? `${items.length} products selected` : 'Select at least 2 products to compare'}
             </p>
@@ -79,7 +79,7 @@ const CompareBar = () => {
                     type='button'
                     aria-label={`Remove ${item.name || 'product'} from compare`}
                     onClick={() => removeCompare.mutate(item._id)}
-                    className='absolute -right-2.5 -top-2.5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white text-[#333E48] shadow-md transition-colors duration-200 hover:bg-black hover:text-white'
+                    className='absolute -right-2.5 -top-2.5 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white dark:bg-[#262626] text-[#333E48] shadow-md transition-colors duration-200 hover:bg-black hover:text-white'
                   >
                     <X size={15} />
                   </button>

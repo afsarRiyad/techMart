@@ -177,7 +177,7 @@ const Shipping = ({ setShow , className = '' }) => {
       <>
            <button
               onClick={()=>setShow()}
-              className="flex items-center gap-2 text-gray-700 hover:text-black pb-5"
+              className="flex items-center gap-2 text-gray-700 dark:text-gray-200 hover:text-black pb-5"
             >
               <Undo2 size={20} />
               Back
@@ -185,7 +185,7 @@ const Shipping = ({ setShow , className = '' }) => {
       <h2 className="mb-4 font-inter text-2xl font-bold text-tcolor darkH sm:mb-6 sm:text-[28px]">
         Billing Address
       </h2>
-      <hr className="mb-6 border-gray-200 dark:border-gray-700" />
+      <hr className="mb-6 border-gray-200 dark:border-[#333333] dark:border-gray-700" />
       </>
     }
 
@@ -280,7 +280,7 @@ const Shipping = ({ setShow , className = '' }) => {
         className={`rounded-full px-6 py-3 font-inter text-[15px] font-semibold transition-colors duration-200 ${
           notChanged || updateAddress.isPending
             ? 'cursor-not-allowed bg-gray-200 text-gray-400 dark:bg-[#333]'
-            : 'cursor-pointer bg-gray-200 text-tcolor hover:bg-black hover:text-white dark:bg-[#333] dark:text-white'
+            : 'cursor-pointer bg-gray-200 text-tcolor hover:bg-black hover:text-white dark:bg-[#333] dark:text-gray-100'
         }`}
       >
         {updateAddress.isPending ? 'Saving...' : 'Save address'}

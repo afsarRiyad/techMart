@@ -19,20 +19,20 @@ const FeatureCard = ({
     return (
     
         <>
-            <div className='bg-[#F5F5F5] flex pl-3 py-3 lg:w-auto sm:gap-8 xl:gap-2 gap-2 items-center  snap-start shrink-0 rounded-lg dark:text-white dark:bg-[#212121] '>
-                <Link to='*' className='w-32 sm:w-48 lg:w-38  shrink-0 relative overflow-hidden group'>
-                    <img draggable={false} src={img} alt={alt} className='w-full h-full object-cover transform-gpu md:group-hover:scale-110 transition-transform duration-500 ease-out will-change-transform cursor-pointer md:group-hover:rotate-6 ' />
+            <div className='bg-[#F5F5F5] flex pl-3 py-3 lg:w-auto sm:gap-8 xl:gap-2 gap-2 items-center snap-start shrink-0 rounded-lg dark:text-gray-100 dark:bg-[#212121]'>
+                <Link to='*' className='w-32 sm:w-48 lg:w-38 shrink-0 relative overflow-hidden group'>
+                    <img draggable={false} src={img} alt={alt} className='w-full h-full object-cover transform-gpu md:group-hover:scale-110 transition-transform duration-500 ease-out will-change-transform cursor-pointer md:group-hover:rotate-6' />
                     <span className='absolute inset-0 bg-black/5 dark:bg-white/5 cursor-pointer group-hover:bg-transparent transition-colors duration-300 ease-in-out' />
                 </Link>
                 
-                <div className='ps-1  min-w-0'>
-                    <h3 className='sm:text-[17px] darkH text-[16px] text-tcolor uppercase leading-6  '>
+                <div className='ps-1 min-w-0'>
+                    <h3 className='sm:text-[17px] darkH text-[16px] text-tcolor uppercase leading-6'>
                         {title} 
-                 <span className='font-bold block dark:text-white'>{highlight}</span>
+                 <span className='font-bold block dark:text-gray-100'>{highlight}</span>
                      {subtitle && 
                        <span className='text-[15px] pt-1 block'>{subtitle}</span>}
                     </h3>
-                 <Link to='*' className='flex pt-1  gap-2 cursor-pointer items-center select-none active:scale-95 transition-transform duration-150 [WebkitTapHighlightColor:transparent]'>
+                 <Link to='*' className='flex pt-1 gap-2 cursor-pointer items-center select-none active:scale-95 transition-transform duration-150 [WebkitTapHighlightColor:transparent]'>
                     {variant === 'shop' &&
                         <span className='cursor-pointer font-bold text-[14px]'>Shop now </span>
                     }
@@ -40,24 +40,24 @@ const FeatureCard = ({
                <span className='cursor-pointer font-bold text-[14px]'>
                  <span className='m-0'>
                     <sup className='text-[16px] lg:font-bold font-semibold'>$</sup>
-                    <span className=' text-[26px] font-bold'>{price}</span>
-                    <sup className=' text-[16px] lg:font-bold font-semibold'>{decimal}</sup>
+                    <span className='text-[26px] font-bold'>{price}</span>
+                    <sup className='text-[16px] lg:font-bold font-semibold'>{decimal}</sup>
                  </span>
                </span>
                 }
             {variant === 'discount' && 
-               <Link to='*' className='cursor-pointer font-bold text-[14px]'>
-                 <span className='m-0 flex items-center gap-1 '>
-                    <span className='font-inter font-thin text-[15px] leading-none flex flex-col dark:text-white'>
+               <>
+                 <span className='m-0 flex items-center gap-1'>
+                    <span className='font-inter font-thin text-[15px] leading-none flex flex-col dark:text-gray-100'>
                       <span>UP</span>
                       <span>TO</span>
                     </span>
-                    <span className=' text-[26px] font-bold dark:text-white'>{discount}</span>
-                    <sup className=' text-[16px] dark:text-white'>%</sup>
+                    <span className='text-[26px] font-bold dark:text-gray-100'>{discount}</span>
+                    <sup className='text-[16px] dark:text-gray-100'>%</sup>
                  </span>
-               </Link>
+               </>
               }
-               <span className='lg:w-6 lg:h-6  bg-primary rounded-full flex justify-center items-center'>
+               <span className='lg:w-6 lg:h-6 bg-primary rounded-full flex justify-center items-center'>
                 <ChevronRight size={20} strokeWidth={3} className='text-white' />
                </span>
              </Link>

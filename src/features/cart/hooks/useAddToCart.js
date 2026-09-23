@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToCart, removeCartItem } from "@/features/cart/services/cartService";
+import showActionToast from "@/components/ui/showActionToast";
 import toast from "react-hot-toast";
 
 export function useAddToCart() {
@@ -13,7 +14,12 @@ export function useAddToCart() {
  },
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["cart"] });
-    toast.success("Item added to cart!", {id: 'add-cart'})
+    showActionToast({
+      id: 'add-cart',
+      title: 'Item added to cart',
+      cta: 'Go to cart',
+      to: '/cart',
+    })
   },
   onError:(error)=>{
              toast.error(error.response?.data?.message || error.message,

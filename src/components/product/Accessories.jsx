@@ -57,7 +57,7 @@ const Accessories = ({ data = [] }) => {
                 {index !== 0 && (
                   <div className="relative flex sm:flex-col items-center justify-center w-full sm:w-10 h-10 sm:h-auto shrink-0 my-1 sm:my-0">
                     <div className="absolute inset-x-6 top-1/2 h-px bg-gray-300 sm:inset-x-0 sm:inset-y-6 sm:w-px sm:h-auto sm:left-1/2" />
-                    <span className="relative z-10 w-8 h-8 rounded-full border border-gray-300 bg-white flex items-center justify-center text-gray-500 text-lg shrink-0">
+                    <span className="relative z-10 w-8 h-8 rounded-full border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] dark:bg-[#212121] flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg shrink-0">
                       +
                     </span>
                   </div>
@@ -73,7 +73,7 @@ const Accessories = ({ data = [] }) => {
                     {item.categories?.map((cat) => (
                       <span
                         key={cat}
-                        className="whitespace-nowrap text-[12px] font-medium text-gray-500"
+                        className="whitespace-nowrap text-[12px] font-medium text-gray-500 dark:text-gray-400"
                       >
                         {cat}
                       </span>
@@ -83,7 +83,7 @@ const Accessories = ({ data = [] }) => {
                   {/* Product name */}
                   <Link
                     to={`/products/${item.slug || id}`}
-                    className="text-[#0062BD] text-[15px] sm:text-[16px] min-h-fit sm:min-h-12 leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer text-center sm:text-left"
+                    className="text-[#0062BD] dark:text-blue-400 text-[15px] sm:text-[16px] min-h-fit sm:min-h-12 leading-tight pt-2 font-semibold line-clamp-2 cursor-pointer text-center sm:text-left"
                   >
                     {item.name}
                   </Link>
@@ -92,12 +92,12 @@ const Accessories = ({ data = [] }) => {
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] object-contain cursor-pointer"
+                    className="imageTile w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] object-contain cursor-pointer mix-blend-multiply dark:mix-blend-normal"
                   />
 
                   {/* Price */}
                   <div className="flex items-baseline gap-2 pb-3">
-                    <p className={` font-medium text-[18px] sm:text-[20px] ${index === 0 ? 'text-gray-400' : 'text-tcolor'}`}>
+                    <p className={`font-medium text-[18px] sm:text-[20px] ${index === 0 ?'text-gray-400' : 'text-tcolor dark:text-gray-100'}`}>
                       ${displayPrice.toFixed(2)}
                     </p>
                     {hasSale && (
@@ -117,11 +117,11 @@ const Accessories = ({ data = [] }) => {
           <p className="text-red-600 font-semibold text-[24px] sm:text-[28px]">
             ${total.toFixed(2)}
           </p>
-          <p className="text-gray-500 text-sm">for {itemCount} item(s)</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">for {itemCount} item(s)</p>
           <button
             onClick={handleAddAllToCart}
             disabled={isAddToCartDisabled}
-            className="mt-2 w-full sm:w-auto px-6 py-2 rounded-full bg-gray-100 cursor-pointer hover:bg-black hover:text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 transition-colors"
+            className="mt-2 w-full sm:w-auto px-6 py-2 rounded-full bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#212121] cursor-pointer hover:bg-black hover:text-white text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition-colors"
           >
             Add all to cart
           </button>
@@ -144,7 +144,7 @@ const Accessories = ({ data = [] }) => {
                   disabled
                   className="accent-gray-400 cursor-not-allowed mt-0.5 sm:mt-0 shrink-0"
                 />
-                <span className="text-gray-500 font-medium">
+                <span className="text-gray-500 dark:text-gray-400 font-medium">
                   This product: {item.name} -{' '}
                   <span className="text-red-600 font-semibold">
                     ${displayPrice.toFixed(2)}
@@ -168,7 +168,7 @@ const Accessories = ({ data = [] }) => {
               <span>
                 <Link
                   to={`/products/${item.slug || id}`}
-                  className="text-[#0062BD] font-medium underline hover:text-[#004a94]"
+                  className="text-[#0062BD] dark:text-blue-400 font-medium underline hover:text-[#004a94]"
                 >
                   {item.name}
                 </Link>{' '}

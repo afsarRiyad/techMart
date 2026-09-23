@@ -10,7 +10,6 @@ import TrendingPro from '@/components/home/TrendingPro';
 import Banner from '@/components/ui/Banner';
 import ValueProps from '@/components/home/ValueProps';
 import Container from '@/components/layout/Container';
-import Reset from '@/pages/Reset';
 
 const Home = () => {
   return (

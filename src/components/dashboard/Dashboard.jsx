@@ -36,26 +36,27 @@ const Dashboard = () => {
   return (
     <>
    <Container>
-     <h1 className='flex justify-center pt-3 text-[40px] font-inter text-tcolor'>{dashboardNav.find(item => item.href === location.pathname)?.title}</h1>
-       <div className='flex flex-col md:flex-row py-10 gap-8'>
-           <div className='  md:max-w-2/7 w-full'>
+     <h1 className='flex justify-center pt-3 text-[26px] sm:text-[40px] font-inter text-tcolor dark:text-gray-100'>{dashboardNav.find(item => item.href === location.pathname)?.title}</h1>
+       <div className='flex flex-col md:flex-row py-6 md:py-10 gap-6 md:gap-8'>
+           {/* phones get a scrollable strip of tabs, a seven item stack buries the page */}
+           <div className='md:max-w-2/7 w-full flex md:block gap-2 overflow-x-auto pb-1 md:overflow-visible md:gap-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
                 {dashboardNav.map((item, index) => {
   if (item.action === "logout") {
     return (
       <button
         key={item.id}
         onClick={handleLogout}
-        className={`w-full flex justify-between group/main cursor-pointer border-t border-t-gray-400 py-4 ${
-          index === dashboardNav.length - 1 && "border-b border-b-gray-400"
+        className={`w-auto md:w-full shrink-0 flex justify-between items-center gap-2 group/main cursor-pointer rounded-full md:rounded-none border border-gray-200 dark:border-[#333333] md:border-0 md:border-t md:border-t-gray-400 px-4 md:px-0 min-h-11 md:py-4 whitespace-nowrap ${
+          index === dashboardNav.length - 1 && "md:border-b md:border-b-gray-400"
         }`}
       >
-        <span className="group-hover/main:text-black text-base text-gray-500">
+        <span className="group-hover/main:text-black text-base text-gray-500 dark:text-gray-400">
           {item.name}
         </span>
 
         <item.icon
           size={20}
-          className="group-hover/main:text-black text-gray-500"
+          className="group-hover/main:text-black text-gray-500 dark:text-gray-400"
         />
       </button>
     );
@@ -64,15 +65,15 @@ const Dashboard = () => {
   return (
     <Link key={item.id} to={item.href}>
       <div
-        className={`flex justify-between group/main cursor-pointer border-t border-t-gray-400 py-4 ${
-          index === dashboardNav.length - 1 && "border-b border-b-gray-400"
+        className={`flex justify-between items-center gap-2 group/main cursor-pointer rounded-full md:rounded-none border border-gray-200 dark:border-[#333333] md:border-0 md:border-t md:border-t-gray-400 px-4 md:px-0 min-h-11 md:py-4 whitespace-nowrap ${
+          index === dashboardNav.length - 1 && "md:border-b md:border-b-gray-400"
         }`}
       >
         <span
-          className={`group-hover/main:text-black text-base ${
+          className={`group-hover/main:text-black dark:text-gray-100 text-base ${
             active === item.title
-              ? "text-black font-semibold"
-              : "text-gray-500"
+              ? "text-black dark:text-gray-100 font-semibold"
+              : "text-gray-500 dark:text-gray-400"
           }`}
         >
           {item.name}
@@ -80,10 +81,10 @@ const Dashboard = () => {
 
         <item.icon
           size={20}
-          className={`group-hover/main:text-black ${
+          className={`group-hover/main:text-black dark:text-gray-100 ${
             active === item.title
-              ? "text-black font-semibold"
-              : "text-gray-500"
+              ? "text-black dark:text-gray-100 font-semibold"
+              : "text-gray-500 dark:text-gray-400"
           }`}
         />
       </div>

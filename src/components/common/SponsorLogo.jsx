@@ -58,12 +58,12 @@ const SponsorLogo = () => {
         spaceBetween: 40,
       },
     }}
-    className='border-y border-y-gray-200'
+    className='border-y border-y-gray-200 dark:border-y-[#333333]'
                  >
       {logos.map((logo) => (
         <SwiperSlide key={logo.id}>
           <Link>
-            <img className='brightness-130 hover:brightness-80 cursor-pointer xl:w-44 w-38 h-auto py-5' src={logo.src} alt={logo.alt} />
+            <img className='brightness-130 hover:brightness-80 dark:brightness-90 dark:invert dark:hover:brightness-130 cursor-pointer xl:w-44 w-38 h-auto py-5' src={logo.src} alt={logo.alt} />
           </Link>
         </SwiperSlide>
       ))}

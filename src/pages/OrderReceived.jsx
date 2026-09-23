@@ -2,16 +2,16 @@ import { useLocation, useNavigate } from 'react-router';
 import Container from '@/components/layout/Container';
 
 const SectionHeading = ({ children }) => (
-  <h2 className="inline-block border-b-2 border-b-primary pb-3 text-[30px] text-tcolor">
+  <h2 className="inline-block border-b-2 border-b-primary pb-3 text-[30px] text-tcolor dark:text-gray-100">
     {children}
   </h2>
 );
 
-const SummaryRow = ({ label, value, valueNote, color = 'text-tcolor' }) => (
-  <div className="flex justify-between border-b border-b-gray-200 py-4">
+const SummaryRow = ({ label, value, valueNote, color = 'text-tcolor dark:text-gray-100' }) => (
+  <div className="flex justify-between border-b border-b-gray-200 dark:border-b-[#333333] py-4">
     <span className={`text-[15px] font-bold ${color}`}>{label}</span>
     <span className={`text-[15px] font-semibold ${color}`}>
-      {value} {valueNote && <span className="text-gray-500 font-normal">{valueNote}</span>}
+      {value} {valueNote && <span className="text-gray-500 dark:text-gray-400 font-normal">{valueNote}</span>}
     </span>
   </div>
 );
@@ -19,7 +19,7 @@ const SummaryRow = ({ label, value, valueNote, color = 'text-tcolor' }) => (
 const AddressBlock = ({ title, address, showEmail }) => (
   <div>
     <SectionHeading>{title}</SectionHeading>
-    <div className="mt-6 space-y-1 text-[15px] text-gray-600">
+    <div className="mt-6 space-y-1 text-[15px] text-gray-600 dark:text-gray-300">
       
       <p>{address.firstName}</p>
       <p>{address.lastName}</p>
@@ -53,16 +53,16 @@ const OrderReceived = () => {
   return (
     <section className="font-pop">
       <Container>
-        <h1 className="pt-10 pb-8 text-center text-[40px] text-tcolor">Order received</h1>
+        <h1 className="pt-10 pb-8 text-center text-[40px] text-tcolor dark:text-gray-100">Order received</h1>
 
-        <p className="text-[15px] text-gray-700">Thank you. Your order has been received.</p>
+        <p className="text-[15px] text-gray-700 dark:text-gray-200 dark:text-gray-300">Thank you. Your order has been received.</p>
 
-        <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] text-gray-700">
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] text-gray-700 dark:text-gray-200 dark:text-gray-300">
           <li>
-            Order number: <span className="font-bold text-tcolor">{orderId}</span>
+            Order number: <span className="font-bold text-tcolor dark:text-gray-100">{orderId}</span>
           </li>
           <li>
-            Date: <span className="font-bold text-tcolor">
+            Date: <span className="font-bold text-tcolor dark:text-gray-100">
                 {new Date(date).toLocaleDateString("en-US", {
                             month: "long",
                             day: "numeric",
@@ -71,36 +71,36 @@ const OrderReceived = () => {
             </span>
           </li>
           <li>
-            Email: <span className="font-bold text-tcolor">{email}</span>
+            Email: <span className="font-bold text-tcolor dark:text-gray-100">{email}</span>
           </li>
           <li>
-            Total: <span className="font-bold text-tcolor">${total.toFixed(2)}</span>
+            Total: <span className="font-bold text-tcolor dark:text-gray-100">${total.toFixed(2)}</span>
           </li>
           <li>
-            Payment method: <span className="font-bold text-tcolor">{paymentMethod}</span>
+            Payment method: <span className="font-bold text-tcolor dark:text-gray-100">{paymentMethod}</span>
           </li>
           <li>
-            Payment Status: <span className="font-bold text-tcolor">{paymentStatus}</span>
+            Payment Status: <span className="font-bold text-tcolor dark:text-gray-100">{paymentStatus}</span>
           </li>
         </ul>
 
         <div className="mt-14">
           <SectionHeading>Order details</SectionHeading>
         </div>
-        <div className="mt-6 border-t border-gray-200" />
+        <div className="mt-6 border-t border-gray-200 dark:border-[#333333]" />
 
         {/* items table */}
-        <div className="flex justify-between border-b border-gray-300 py-4 text-[15px] font-semibold text-tcolor">
+        <div className="flex justify-between border-b border-gray-300 dark:border-[#333333] py-4 text-[15px] font-semibold text-tcolor dark:text-gray-100">
           <span>Product</span>
           <span>Total</span>
         </div>
 
         {orderDetils?.data?.items?.map((item) => (
-          <div key={item.id} className="flex justify-between border-b border-b-gray-200 py-4">
-            <p className="text-[15px] text-tcolor">
+          <div key={item.id} className="flex justify-between border-b border-b-gray-200 dark:border-b-[#333333] py-4">
+            <p className="text-[15px] text-tcolor dark:text-gray-100">
               {item.productName} <span className="font-bold">&times; {item.quantity}</span>
             </p>
-            <span className="text-[15px] text-tcolor">${item.totalPrice.toFixed(2)}</span>
+            <span className="text-[15px] text-tcolor dark:text-gray-100">${item.totalPrice.toFixed(2)}</span>
           </div>
         ))}
 

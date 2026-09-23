@@ -4,7 +4,6 @@ import { createSlice } from '@reduxjs/toolkit'
 const getInitialStateFromURL = () => {
   if (typeof window === 'undefined') return null
   const params = new URLSearchParams(window.location.search)
-  console.log(params);
   
 
   const brands = params.getAll('brand')

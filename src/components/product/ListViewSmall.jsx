@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaOpencart } from "react-icons/fa6";
-import { ArrowBigRight, Heart, GitCompareArrows, Star } from 'lucide-react';
+import { ArrowBigRight, Star } from 'lucide-react';
+import CardActions from '@/components/ui/CardActions';
 import { useAddToCart } from '@/features/cart/hooks/useAddToCart'
 import { useCart } from '@/features/cart/hooks/useCart';
 import { Link } from 'react-router';
@@ -59,7 +60,7 @@ const ListViewSmall = ({ products }) => {
                 return (
                     <div
                         key={pro._id || pro.id || index}
-                        className={`flex items-start gap-6 py-6 ${index !== products.length - 1 ? 'border-b border-gray-200' : ''}`}
+                        className={`flex items-start gap-6 py-6 ${index !== products.length - 1 ?'border-b border-gray-200' : ''}`}
                     >
                         {/* image */}
                         <div className='w-40 shrink-0 flex items-center justify-center'>
@@ -75,7 +76,7 @@ const ListViewSmall = ({ products }) => {
                             {/* categories */}
                             <div className='flex items-center flex-wrap pt-1'>
                                 {pro?.categories?.map((tag, i) => (
-                                    <p key={i} className='truncate text-[12px] text-gray-500 font-inter cursor-pointer hover:text-gray-900'>
+                                    <p key={i} className='truncate text-[12px] text-gray-500 dark:text-gray-400 font-inter cursor-pointer hover:text-gray-900'>
                                         {tag}{i < pro.categories.length - 1 && ','}&nbsp;
                                     </p>
                                 ))}
@@ -83,7 +84,7 @@ const ListViewSmall = ({ products }) => {
 
                             {/* name */}
                             {pro.name &&
-                                <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] text-[17px] pt-1 font-semibold leading-tight block '>
+                                <Link to={`/products/${pro.slug || pro._id}`} className='text-[#0062BD] dark:text-blue-400 text-[17px] pt-1 font-semibold leading-tight block'>
                                     {pro.name}
                                 </Link>
                             }
@@ -100,14 +101,14 @@ const ListViewSmall = ({ products }) => {
                                         />
                                     ))}
                                 </div>
-                                <span className='text-[12px] text-gray-500 font-inter'>({pro.reviews ?? 0})</span>
+                                <span className='text-[12px] text-gray-500 dark:text-gray-400 font-inter'>({pro.reviews ?? 0})</span>
                             </div>
 
                             {/* description bullets */}
                             {bullets.length > 0 &&
                                 <ul className='pt-3'>
                                     {bullets.map((b, i) => (
-                                        <li key={i} className='flex items-start gap-1.5 text-[13px] text-gray-500 font-inter leading-relaxed'>
+                                        <li key={i} className='flex items-start gap-1.5 text-[13px] text-gray-500 dark:text-gray-400 font-inter leading-relaxed'>
                                             <span className='mt-[7px] w-1 h-1 rounded-full bg-gray-400 shrink-0' />
                                             <span>{b}</span>
                                         </li>
@@ -124,9 +125,9 @@ const ListViewSmall = ({ products }) => {
                         {/* price + actions */}
                         <div className='w-48 shrink-0 flex flex-col gap-3 pt-1'>
                             <div className='flex items-center justify-between border-b border-b-gray-300 pb-4'>
-                               <div className='flex '>
+                               <div className='flex'>
                                  {displayPrice != null &&
-                                    <p className='text-tcolor text-[20px] font-medium'>${Number(displayPrice).toFixed(2)}</p>
+                                    <p className='text-tcolor dark:text-gray-100 text-[20px] font-medium'>${Number(displayPrice).toFixed(2)}</p>
                                 }
                                 {hasSale &&
                                 <p className='text-[13px] text-red-400 font-medium line-through -mt-2'>${pro.regularPrice}</p>
@@ -134,7 +135,7 @@ const ListViewSmall = ({ products }) => {
                                </div>
                                 <div className='relative group'>
                                     {isInCart(pro._id) ?
-                                        <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer hover:bg-primary'>
+                                        <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 dark:bg-[#333333] flex items-center justify-center cursor-pointer hover:bg-primary'>
                                             <ArrowBigRight size={22} className='text-white' />
                                         </Link>
                                         :
@@ -152,34 +153,15 @@ const ListViewSmall = ({ products }) => {
 
                             
 
-                            <div className='flex items-center justify-center gap-4'>
-                                <div className='flex items-center gap-1 cursor-pointer hover:text-black text-gray-500'>
-                                    {isInWishlist(pro._id) ?
-                                        <>
-                                            <Heart size={16} className='text-black' fill="currentColor" />
-                                            <Link to='/wishlist' className='text-sm'>Wishlist</Link>
-                                        </>
-                                        :
-                                        <button onClick={() => handleWishlist(pro._id)} className='flex items-center gap-1'>
-                                            <Heart size={16} />
-                                            <span className='text-sm'>Wishlist</span>
-                                        </button>
-                                    }
-                                </div>
-                                <div className='flex items-center gap-1 cursor-pointer hover:text-black text-gray-500'>
-                                    {isInCompare(pro._id) ?
-                                        <>
-                                            <GitCompareArrows size={16} className='text-black' />
-                                            <Link to='/compare' className='text-sm'>Compare</Link>
-                                        </>
-                                        :
-                                        <button onClick={() => handleCompare(pro._id)} className='flex items-center gap-1'>
-                                            <GitCompareArrows size={16} />
-                                            <span className='text-sm'>Compare</span>
-                                        </button>
-                                    }
-                                </div>
-                            </div>
+                            <CardActions
+                                productId={pro._id}
+                                inWishlist={isInWishlist(pro._id)}
+                                inCompare={isInCompare(pro._id)}
+                                onWishlist={handleWishlist}
+                                onCompare={handleCompare}
+                                layout='inline'
+                                className='gap-4'
+                            />
                         </div>
                     </div>
                 )

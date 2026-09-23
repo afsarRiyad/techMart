@@ -9,10 +9,10 @@ const SearchSuggestions = ({ term, products = [], loading, onPick, onSeeAll, cla
     <div
       className={`absolute left-0 right-0 top-full z-50 mt-2 max-h-[75vh] overflow-y-auto rounded-lg border border-gray-200 bg-white text-left shadow-xl dark:border-gray-700 dark:bg-[#181818] sm:max-h-[540px] ${className}`}
     >
-      {loading && <p className='px-5 py-4 text-[15px] text-gray-500'>Searching...</p>}
+      {loading && <p className='px-5 py-4 text-[15px] text-gray-500 dark:text-gray-400'>Searching...</p>}
 
       {!loading && products.length === 0 && (
-        <p className='px-5 py-4 text-[15px] text-gray-500'>No products found.</p>
+        <p className='px-5 py-4 text-[15px] text-gray-500 dark:text-gray-400'>No products found.</p>
       )}
 
       {!loading && products.map((product) => (
@@ -41,7 +41,7 @@ const SearchSuggestions = ({ term, products = [], loading, onPick, onSeeAll, cla
         <button
           type='button'
           onClick={onSeeAll}
-          className='flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-[15px] font-semibold text-tcolor hover:bg-gray-50 dark:text-white dark:hover:bg-white/5'
+          className='flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-[15px] font-semibold text-tcolor dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-white/5'
         >
           See all results for "{term}"
           <ArrowRight size={18} />

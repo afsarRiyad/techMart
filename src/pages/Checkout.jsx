@@ -27,12 +27,11 @@ const cancleCoupon = () =>{
     setDiscount(null)
     toast.success('Coupon removed!')
 }
-console.log(data?.data?.items?.length);
 
       if(data?.data?.items?.length <= 0) return navigate('/cart', {replace:true})
   return (
     <Container>
-       <h2 className='font-pop text-[40px] pt-5 text-tcolor text-center pb-7'>Checkout</h2>
+       <h2 className='font-pop text-[40px] pt-5 text-tcolor dark:text-gray-100 text-center pb-7'>Checkout</h2>
        <Dropdown 
           subtitle={'Have a coupon?'}
           subCls={'pl-1 font-semibold cursor-pointer'}
@@ -54,7 +53,7 @@ console.log(data?.data?.items?.length);
        <div className="flex gap-5 pt-10">
          <div className='w-[55%]'>
            <Billing title={'Billing Details'} className={'border-b-[3px] text-[30px] pb-4 border-b-primary'}/>
-           <div className=" pt-12 font-inter text-2xl font-bold text-tcolor border-b border-b-gray-300 pb-3 darkH  sm:text-[28px] mb-6">
+           <div className="pt-12 font-inter text-2xl font-bold text-tcolor dark:text-gray-100 border-b border-b-gray-300 dark:border-b-[#333333] pb-3 darkH sm:text-[28px] mb-6">
            <span className='text-[28px] pb-3 font-normal border-b-[3px] mb-6 border-b-primary'>Shipping Details</span>
            </div>
             <input type="checkbox" id='shipping' onClick={()=>setShipToDifferent(!shipToDifferent)} />
@@ -65,15 +64,15 @@ console.log(data?.data?.items?.length);
               <Shipping className={'pt-10'}/>
             }
             <div className="mb-6 pt-10">
-                <label className="mb-2 block font-inter text-sm font-semibold text-tcolor">
-                    Order notes <span className="font-normal text-gray-500">(optional)</span>
+                <label className="mb-2 block font-inter text-sm font-semibold text-tcolor dark:text-gray-100">
+                    Order notes <span className="font-normal text-gray-500 dark:text-gray-400">(optional)</span>
                 </label>
 
                 <textarea
                     onChange={(e)=>setNotes(e.target.value)}
                     rows={5}
                     placeholder="Notes about your order, e.g. special delivery instructions."
-                    className="inputRing w-full resize-none rounded-2xl border border-gray-300 bg-white px-5 py-3 font-inter text-[15px] text-tcolor outline-none transition-all duration-200 dark:border-gray-700 dark:bg-[#222]"
+                    className="inputRing w-full resize-none rounded-2xl border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] px-5 py-3 font-inter text-[15px] text-tcolor dark:text-gray-100 outline-none transition-all duration-200 dark:border-gray-700 dark:bg-[#222]"
                 />
                 </div>
          </div>

@@ -38,13 +38,13 @@ let lastInd = valueProps.length - 1
 const ValueProps = () => {
   return (
     <Container className='xl:pt-12 pt-8'>
-      <div className='border border-gray-300 rounded flex snap-center snap-x py-1 snap-mandatory touch-auto overflow-x-auto'> 
+      <div className='border border-gray-300 dark:border-[#333333] rounded flex snap-center snap-x py-1 snap-mandatory touch-auto overflow-x-auto'> 
          {valueProps.map((item, id)=>{
          return(
-           <div key={id} className={`flex justify-center items-center gap-4 lg:py-3 py-2 px-7 lg:px-1 border-r whitespace-nowrap border-r-gray-200 ${id === lastInd && 'border-none'} flex-1`} >
+           <div key={id} className={`flex shrink-0 md:flex-1 justify-center items-center gap-4 lg:py-3 py-2 px-7 lg:px-1 border-r whitespace-nowrap border-r-gray-200 dark:border-r-[#333333] ${id === lastInd &&'border-none'} snap-start`} >
             <item.icons className='text-primary' size={30} />
             <div className='text-center'>
-             <h3 className='font-inter font-bold text-[14px] dark:text-white'>{item.title}</h3>
+             <h3 className='font-inter font-bold text-[14px] dark:text-gray-100'>{item.title}</h3>
              <p className='font-inter text-[14px] text-gray-400'>{item.subTitle}</p>
             </div>
           </div>

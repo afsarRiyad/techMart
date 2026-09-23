@@ -46,7 +46,6 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
   const [agreed, setAgreed] = useState(false);
   const [isPlacing, setIsPlacing] = useState(false);
 
-  console.log(selectedPayment);
   const handlePlaceOrder = async () => {
     if (!agreed) return;
     const items = products.map((item)=> ({
@@ -65,20 +64,20 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
   };
 
   return (
-    <div className="font-pop rounded-lg bg-gray-100 dark:bg-[#1f1f1f] p-8">
-      <h2 className="text-[25px] text-tcolor border-b-[2px] border-b-primary w-40 pb-3">
+    <div className="font-pop rounded-lg bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#1f1f1f] p-8">
+      <h2 className="text-[25px] text-tcolor dark:text-gray-100 border-b-[2px] border-b-primary w-40 pb-3">
         Your order
       </h2>
 
       {/* items table */}
-      <div className="mt-6 border-b border-gray-300 pb-3 flex justify-between text-tcolor font-bold text-[15px]">
+      <div className="mt-6 border-b border-gray-300 dark:border-[#333333] pb-3 flex justify-between text-tcolor dark:text-gray-100 font-bold text-[15px]">
         <span>Product</span>
         <span>Subtotal</span>
       </div>
 
       {products?.map((item) => (
-        <div key={item?.product?._id} className="border-b border-gray-200 py-4">
-          <div className="flex justify-between text-[15px] text-tcolor">
+        <div key={item?.product?._id} className="border-b border-gray-200 dark:border-[#333333] py-4">
+          <div className="flex justify-between text-[15px] text-tcolor dark:text-gray-100">
             <span>
               {item.product.name} <span className="font-bold">&times; {item.quantity}</span>
             </span>
@@ -89,28 +88,28 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         </div>
       ))}
 
-      <div className="flex justify-between border-b border-gray-300 py-4">
-        <span className="font-bold text-[15px] text-tcolor">Subtotal</span>
-        <span className="text-tcolor">${(totalAmount ?? 0).toFixed(2)}</span>
+      <div className="flex justify-between border-b border-gray-300 dark:border-[#333333] py-4">
+        <span className="font-bold text-[15px] text-tcolor dark:text-gray-100">Subtotal</span>
+        <span className="text-tcolor dark:text-gray-100">${(totalAmount ?? 0).toFixed(2)}</span>
       </div>
 
       {discountAmount > 0 && (
-        <div className="flex justify-between border-b border-b-gray-300 pt-3 pb-2">
+        <div className="flex justify-between border-b border-b-gray-300 dark:border-b-[#333333] pt-3 pb-2">
           <span className="font-bold text-[15px] text-green-600">Coupon Discount</span>
           <span className="font-semibold text-green-600">- ${discountAmount.toFixed(2)}</span>
         </div>
       )}
 
-      <div className="border-b border-gray-300 py-4">
+      <div className="border-b border-gray-300 dark:border-[#333333] py-4">
         <div className="flex justify-between text-[15px]">
-          <span className="text-gray-600 font-semibold">Flat rate:</span>
-          <span className="text-tcolor">${shippingFee.toFixed(2)}</span>
+          <span className="text-gray-600 dark:text-gray-300 font-semibold">Flat rate:</span>
+          <span className="text-tcolor dark:text-gray-100">${shippingFee.toFixed(2)}</span>
         </div>
       </div>
 
-      <div className="flex justify-between border-b border-gray-300 py-4">
-        <span className="font-bold text-[15px] text-tcolor">Total</span>
-        <span className="font-bold text-tcolor">${(total).toFixed(2)}</span>
+      <div className="flex justify-between border-b border-gray-300 dark:border-[#333333] py-4">
+        <span className="font-bold text-[15px] text-tcolor dark:text-gray-100">Total</span>
+        <span className="font-bold text-tcolor dark:text-gray-100">${(total).toFixed(2)}</span>
       </div>
 
       {/* payment methods */}
@@ -118,7 +117,7 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         {paymentMethods.map(({ id, label, icon: Icon, description, img }) => {
           const isSelected = selectedPayment === id;
           return (
-            <div key={id} className="border-b border-gray-200 last:border-b-0">
+            <div key={id} className="border-b border-gray-200 dark:border-[#333333] last:border-b-0">
               <label className="flex items-center justify-between py-4 cursor-pointer select-none">
                 <span className="flex items-center gap-3">
                   <span
@@ -136,7 +135,7 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
                     onChange={() => setSelectedPayment(id)}
                     className="sr-only"
                   />
-                  <span className="font-bold text-[15px] text-tcolor">{label}</span>
+                  <span className="font-bold text-[15px] text-tcolor dark:text-gray-100">{label}</span>
                 </span>
 
                 {Icon && (
@@ -158,7 +157,7 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         })}
       </div>
 
-      <p className="pt-6 text-[14px] text-gray-600 leading-relaxed">
+      <p className="pt-6 text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">
         Your personal data will be used to process your order, support your experience throughout
         this website, and for other purposes described in our privacy policy.
       </p>
@@ -170,7 +169,7 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
           onChange={(e) => setAgreed(e.target.checked)}
           className="mt-1 h-4 w-4 accent-tcolor cursor-pointer"
         />
-        <span className="text-[14px] text-tcolor">
+        <span className="text-[14px] text-tcolor dark:text-gray-100">
           I have read and agree to the website{' '}
           <Link to="/terms-and-conditions" className="text-blue-600 hover:underline">
             terms and conditions
@@ -185,8 +184,8 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         disabled={!agreed || isPlacing}
         className={`mt-6 w-full rounded-full py-4 font-bold transition-colors duration-200 ${
           agreed && !isPlacing
-            ? 'bg-primary text-tcolor hover:bg-black hover:text-white cursor-pointer'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            ? 'bg-primary text-tcolor dark:text-gray-100 hover:bg-black hover:text-white cursor-pointer'
+            : 'bg-gray-200 dark:bg-[#333333] text-gray-400 dark:text-gray-500 cursor-not-allowed'
         }`}
       >
         {isPlacing ? 'Placing order...' : 'Place order'}

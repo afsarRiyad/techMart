@@ -89,17 +89,15 @@ const getPoints = (data) => {
 };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="text-gray-500">Loading product...</div>
+    return (        <div className="flex justify-center items-center py-20">
+        <div className="text-gray-500 dark:text-gray-400">Loading product...</div>
       </div>
     )
   }
 
   if (isError || !product) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="text-red-500">Product not found</div>
+    return (        <div className="flex justify-center items-center py-20">
+        <div className="text-red-500 dark:text-red-400">Product not found</div>
       </div>
     )
   }
@@ -122,13 +120,10 @@ const getPoints = (data) => {
       case 'randomCombo':
         return product?.randomCombo && product?.randomCombo.length > 0;
         case 'description':
-          return Boolean(product?.description.trim());
-          case 'specifications':
-          return product?.specifications && product?.specifications.length > 0;
-          case 'reviews':
-          return true;
-          case 'moreProducts':
-          return true;
+          return Boolean(product?.description.trim());          case 'specifications':
+            return product?.specifications && product?.specifications.length > 0;          case 'reviews':
+            return true;          case 'moreProducts':
+            return true;
       default:
         true;
      }}
@@ -142,7 +137,7 @@ const getPoints = (data) => {
           <button
             type="button"
             onClick={onOpenSidebar}
-            className="flex items-center gap-2 cursor-pointer rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 cursor-pointer rounded-lg border border-gray-300 dark:border-[#333333] px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors"
           >
             <SlidersHorizontal size={18} />
             <span>Browse Categories</span>
@@ -151,8 +146,7 @@ const getPoints = (data) => {
 
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 font-inter w-full">
           {/* Product Images */}
-          <div className="w-full flex flex-col items-center lg:items-start lg:block lg:w-[320px] xl:w-[395px] lg:shrink-0">
-      <div className='w-full relative max-w-[395px]'>
+          <div className="w-full flex flex-col items-center lg:items-start lg:block lg:w-[320px] xl:w-[395px] lg:shrink-0">        <div className='w-full relative max-w-[395px]'>
          <Swiper
         style={{
           '--swiper-navigation-color': '#fff',
@@ -160,8 +154,7 @@ const getPoints = (data) => {
         }}
         spaceBetween={10}
         thumbs={{ swiper: thumbsSwiper }}
-        modules={[FreeMode, Navigation, Thumbs]}
-        freeMode={{
+        modules={[FreeMode, Navigation, Thumbs]}                freeMode={{
             enabled: true,
             momentum: true,
             momentumRatio: 0.8,
@@ -171,7 +164,7 @@ const getPoints = (data) => {
             {productImages.map((img, index) => (
                   <SwiperSlide
                     key={index}
-                    className=" overflow-hidden cursor-pointer "
+                    className="overflow-hidden cursor-pointer"
                   >
                     <img onMouseEnter={()=> canHover && setZoom(true)} onMouseLeave={()=> canHover && setZoom(false)}
                     onMouseMove={handleMouseMove}
@@ -179,14 +172,14 @@ const getPoints = (data) => {
                       style={{  transform: zoom ? "scale(2)" : "scale(1)",
                           transformOrigin: `${position.x}% ${position.y}%`,  }}
                       alt={`${product?.name || 'Product'} ${index + 1}`}
-                      className={`w-full mb-5 object-cover `}
+                      className={`imageTile w-full mb-5 object-contain mix-blend-multiply dark:mix-blend-normal`}
                     />
                   </SwiperSlide>
                 ))}
          </Swiper>
-                <Search size={18} className='absolute pointer-events-none z-20 right-1 top-1 text-gray-400'/>
+                <Search size={18} className='absolute pointer-events-none z-20 right-1 top-1 text-gray-400 dark:text-gray-500'/>
                {product?.salePrice && 
-                  <span className={`bg-[#DC3545] px-3 py-1 text-white rounded-sm absolute top-3 left-3 font-semibold z-20 pointer-events-none`}>-{Math.floor(discountPercent)}%</span>
+                  <span className={`bg-[#DC3545] dark:bg-[#FF6B6B] px-3 py-1 text-white rounded-sm absolute top-3 left-3 font-semibold z-20 pointer-events-none`}>-{Math.floor(discountPercent)}%</span>
                }
       </div>
             {/* Thumbnail images for slider */}
@@ -203,14 +196,14 @@ const getPoints = (data) => {
   className="mySwiper w-full mt-2"
 >
   {productImages.map((img, index) => (
-    <SwiperSlide
-      key={index}
+  <SwiperSlide
+    key={index}
       className="cursor-pointer overflow-hidden"
     >
       <img
         src={img}
         alt={`${product?.name || 'Product'} ${index + 1}`}
-        className="w-full h-[108px]   pb-2 object-contain"
+        className="imageTile w-full h-[108px] pb-2 object-contain mix-blend-multiply dark:mix-blend-normal"
       />
     </SwiperSlide>
   ))}
@@ -219,28 +212,28 @@ const getPoints = (data) => {
 
           {/* Product Info */}
           <div className="w-full min-w-0">
-              <h1 className="text-[22px] sm:text-[25px] font-medium  text-tcolor mb-2 border-b border-b-gray-300 pb-3">{product?.name || 'Product Name'}</h1>
-               <div className='text-[15px] text-gray-600'> Availability: <span className='font-semibold text-[16px] text-green-700'>{product.stock} in stocks.</span> </div>
+              <h1 className="text-[22px] sm:text-[25px] font-medium text-tcolor dark:text-gray-100 mb-2 border-b border-b-gray-300 dark:border-b-[#333333] pb-3">{product?.name || 'Product Name'}</h1>
+               <div className='text-[15px] text-gray-600 dark:text-gray-300'> Availability: <span className='font-semibold text-[16px] text-green-700 dark:text-green-400'>{product.stock} in stocks.</span> </div>
               {/* wishlist and compare  */}
                 <div className='flex gap-4 mb-4 pt-5'>
                   {isInWishlist(product?._id || product?.id) ? (
-                    <Link to='/wishlist' className='flex items-center gap-2 text-sm text-gray-500 hover:text-black cursor-pointer'>
-                      <Heart size={18} className='text-black' fill="currentColor" />
+                    <Link to='/wishlist' className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-100 cursor-pointer'>
+                      <Heart size={18} className='text-black dark:text-gray-100' fill="currentColor" />
                       <span>Added to Wishlist</span>
                     </Link>
                   ) : (
-                    <button onClick={handleAddToWishlist} className='flex items-center gap-2 text-sm text-gray-500 hover:text-black cursor-pointer'>
+                    <button onClick={handleAddToWishlist} className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-100 cursor-pointer'>
                       <Heart size={18} />
                       <span>Wishlist</span>
                     </button>
                   )}
                   {isInCompare(product?._id || product?.id) ? (
-                    <Link to='/compare' className='flex items-center gap-2 text-sm text-gray-500 hover:text-black cursor-pointer'>
-                      <GitCompareArrows size={18} className='text-black' />
+                    <Link to='/compare' className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-100 cursor-pointer'>
+                      <GitCompareArrows size={18} className='text-black dark:text-gray-100' />
                       <span>Added to Compare</span>
                     </Link>
                   ) : (
-                    <button onClick={handleAddToCompare} className='flex items-center gap-2 text-sm text-gray-500 hover:text-black cursor-pointer'>
+                    <button onClick={handleAddToCompare} className='flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-100 cursor-pointer'>
                       <GitCompareArrows size={18} />
                       <span>Compare</span>
                     </button>
@@ -250,29 +243,28 @@ const getPoints = (data) => {
             </div>
 
             {product.description && 
-             <ul className='flex flex-col gap-[1px] list-disc pl-7 pt-1 font-inter'>
+             <ul className='flex flex-col gap-[1px] list-disc pl-7 pt-1 font-inter marker:text-tcolor dark:marker:text-gray-400'>
               {getPoints(product.description).map((point, index) => (
-                 <li key={index} className='text-[14px] font-medium text-gray-500 font-inter'>{point}</li>
+                 <li key={index} className='text-[14px] font-medium text-gray-500 dark:text-gray-400 font-inter'>{point}</li>
                   ))}
              </ul>
             }
              {/* price and discount  */}
             <div className='pt-6 sm:pt-9'>
-               <span className={`${product?.salePrice ? 'text-[#DC3545]' : 'text-gray-600'} font-medium text-[28px] sm:text-[35px]`}>${price.toFixed(2)}</span>
-               {/* discount regular price  */}
-              {product?.salePrice &&
-                <span className='text-[18px] sm:text-[21px] text-gray-400 line-through pl-1'>${product?.regularPrice.toFixed(2)}</span>
+               <span className={`${product?.salePrice ?'text-[#DC3545] dark:text-[#FF6B6B]' : 'text-gray-600 dark:text-gray-300'} font-medium text-[28px] sm:text-[35px]`}>${price.toFixed(2)}</span>
+               {/* discount regular price  */}               {product?.salePrice &&
+                <span className='text-[18px] sm:text-[21px] text-gray-400 dark:text-gray-500 line-through pl-1'>${product?.regularPrice.toFixed(2)}</span>
               }
             </div>
                 {/* quantity input field  */}
                 <div className='pt-6 flex flex-wrap gap-3'>
-                  <input type="number" className='border border-gray-300 rounded-full w-32 py-3  outline-none focus:ring-2 ring-blue-400/20 px-6'
+                  <input type="number" className='border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] dark:bg-[#2a2a2a] text-tcolor dark:text-gray-100 rounded-full w-32 py-3 outline-none focus:ring-2 ring-blue-400/20 px-6'
                       value={proQuantity}
                       onChange={(e)=>setProQuantity(e.target.value)}
                       min={1}
                       max={product?.stock}
                           />
-                  <button onClick={()=>handleQuantityChange(product?._id)} className='flex flex-1 whitespace-nowrap gap-2 items-center justify-center px-6 sm:px-10 py-3 bg-primary text-black rounded-full text-[16px] font-bold hover:bg-black cursor-pointer transition-all duration-150 hover:text-white'><FaOpencart size={20}/> Add to cart</button>
+                  <button onClick={()=>handleQuantityChange(product?._id)} className='flex flex-1 whitespace-nowrap gap-2 items-center justify-center px-6 sm:px-10 py-3 bg-primary text-black rounded-full text-[16px] font-bold hover:bg-black hover:text-white dark:hover:bg-gray-200 dark:hover:text-black cursor-pointer transition-all duration-150'><FaOpencart size={20}/> Add to cart</button>
                 </div>
                 <div className="flex flex-wrap gap-4 font-inter">
               {/* Apple Pay button */}
@@ -280,10 +272,10 @@ const getPoints = (data) => {
               <button
                 type="button"
                 aria-label="Pay with Apple Pay"
-                className="flex items-center justify-center py-2 lg:py-0 gap-1.5 h-12 px-8 flex-1 rounded-sm bg-black text-white cursor-pointer transition-transform duration-150 hover:opacity-90"
+                className="flex items-center justify-center py-2 lg:py-0 gap-1.5 h-12 px-8 flex-1 rounded-sm bg-black dark:bg-gray-100 dark:text-black text-white cursor-pointer transition-transform duration-150 hover:opacity-90"
               >
                 <FaApple size={22} />
-                <span className="text-[21px]  tracking-tight "> Pay</span>
+                <span className="text-[21px] tracking-tight"> Pay</span>
               </button>
 
               {/* Link button */}
@@ -297,7 +289,7 @@ const getPoints = (data) => {
                   <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-black shrink-0">
                     <ArrowRight size={11} color="#00D66F" strokeWidth={3} />
                   </span>
-                  <span className="text-[17px] font-semibold ">link</span>
+                  <span className="text-[17px] font-semibold">link</span>
                 </span>
               </button>
             </div>
@@ -305,7 +297,7 @@ const getPoints = (data) => {
           </div>
         </div>
         {/* below descreption about products  */}
-            <div className='pt-12 sm:pt-16 lg:pt-32 flex flex-wrap gap-x-6 gap-y-3 justify-center  text-tcolor text-[16px] sm:text-[18px]'>
+            <div className='pt-12 sm:pt-16 lg:pt-32 flex flex-wrap gap-x-6 gap-y-3 justify-center text-tcolor dark:text-gray-100 text-[16px] sm:text-[18px]'>
               {activeButtons.map(item =>(
                <button
             key={item.id}
@@ -318,7 +310,7 @@ const getPoints = (data) => {
           </button>
               ))}  
             </div>
-            <div className='border rounded-lg border-gray-300 py-6 md:py-10 px-4 sm:px-6 md:px-10 min-h-[300px] w-full '>
+            <div className='border rounded-lg border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] py-6 md:py-10 px-4 sm:px-6 md:px-10 min-h-[300px] w-full'>
               {show === 'randomCombo' &&
                  <Accessories data={product?.randomCombo}/> 
                 }
@@ -332,16 +324,16 @@ const getPoints = (data) => {
                  <MoreProducts data={product?.moreProducts}/> 
                 }
                {show === 'description' &&
-                 <p className='break-words'>{product.description}</p>
+                 <p className='break-words text-tcolor dark:text-gray-100'>{product.description}</p>
                 }
             </div>
             <div className='pt-10'>
-             <div className="border-b border-b-gray-300 pb-3 mb-8 ">
-                            <span className=" text-[20px] sm:text-[26px] text-tcolor border-b-[2px] border-b-primary pb-[13px]">
+             <div className="border-b border-b-gray-300 dark:border-b-[#333333] pb-3 mb-8">
+                            <span className="text-[20px] sm:text-[26px] text-tcolor dark:text-gray-100 border-b-[2px] border-b-primary pb-[13px]">
                                 Related Products
                             </span>
                         </div>
-              <Gridview products={product?.relatedProducts} grid={'4'}/>
+              <Gridview products={product?.                          relatedProducts} grid={'4'}/>
             </div>
       </>
     )

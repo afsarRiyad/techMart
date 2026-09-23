@@ -19,19 +19,19 @@ const SidebarContent = ({ active, setActive, activeChild, setActiveChild, onClos
     return (
       <div className={`${classname} space-y-4`}>
         {/* Skeleton for categories */}
-        <div className="border-[2px] pt-3 border-gray-300 rounded animate-pulse">
-          <div className="h-10 bg-gray-200 mx-5 mb-4 rounded" />
+        <div className="border-[2px] pt-3 border-gray-300 dark:border-[#333333] rounded animate-pulse">
+          <div className="h-10 bg-gray-200 dark:bg-[#333333] mx-5 mb-4 rounded" />
           <div className="space-y-2 px-5 pb-4">
             {Array.from({ length: 6 }, (_, i) => (
-              <div key={i} className="h-8 bg-gray-100 rounded" />
+              <div key={i} className="h-8 bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#212121] rounded" />
             ))}
           </div>
         </div>
         {/* Skeleton for filters */}
         <div className="pt-6 space-y-3">
-          <div className="h-6 bg-gray-200 rounded w-1/3" />
+          <div className="h-6 bg-gray-200 dark:bg-[#333333] rounded w-1/3" />
           {Array.from({ length: 4 }, (_, i) => (
-            <div key={i} className="h-5 bg-gray-100 rounded w-2/3" />
+            <div key={i} className="h-5 bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#212121] rounded w-2/3" />
           ))}
         </div>
       </div>

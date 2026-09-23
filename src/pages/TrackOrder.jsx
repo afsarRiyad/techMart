@@ -34,7 +34,7 @@ const TrackOrder = () => {
       toast.success('Order found successfully')
       setOrderData({email:'', orderId:''})
     } catch (error) {
-      console.log('Track error:', error)
+      console.error('Track order lookup failed:', error)
       toast.error(error.message || 'Order not found')
       setTrackedOrder(null)
     } finally {
@@ -57,28 +57,28 @@ const TrackOrder = () => {
     <Container>
       <main className='text-inter py-2 pb-12 px-3 lg:px-5'> 
         <h1 className='text-[38px] text-tcolor flex justify-center pb-7 font-medium darkH'>Track your Order</h1>
-        <span className='text-[15px] text-gray-500 leading-6 block pb-5 font-roboto content-center dark:text-gray-300 w-full mx-auto text-center'>
+        <span className='text-[15px] text-gray-500 dark:text-gray-400 leading-6 block pb-5 font-roboto content-center dark:text-gray-300 w-full mx-auto text-center'>
           To track your order please enter your Order ID in the box below and press the "Track" button. This was given to you on your receipt and in the confirmation email you should have received.
         </span>
         
         <div className='flex flex-col lg:flex-row lg:gap-x-8 gap-y-4 w-full lg:gap-y-0'>
           <div className='lg:max-w-[50%] w-full w-[300px]'>
-            <label htmlFor='orderId' className='block text-tcolor font-inter font-semibold pb-2 dark:text-gray-300 select-none'>Order ID</label>
+            <label htmlFor='orderId' className='block text-tcolor dark:text-gray-100 font-inter font-semibold pb-2 dark:text-gray-300 select-none'>Order ID</label>
             <input 
               onChange={(e) => setOrderData((prev) => ({ ...prev, orderId: e.target.value }))} 
               id='orderId' 
               type="text" 
-              className='w-full border rounded-full border-gray-200 outline-none px-7 py-2 text-gray-700 inputRing dark:placeholder:text-gray-200' 
+              className='w-full border rounded-full border-gray-200 dark:border-[#333333] outline-none px-7 py-2 text-gray-700 dark:text-gray-200 inputRing dark:placeholder:text-gray-200' 
               placeholder='Found in your order confirmation email.'
             />
           </div>
           <div className='lg:max-w-[50%] w-full'>
-            <label htmlFor='billingEmail' className='block text-tcolor font-inter font-semibold pb-2 dark:text-gray-300 select-none'>Billing email</label>
+            <label htmlFor='billingEmail' className='block text-tcolor dark:text-gray-100 font-inter font-semibold pb-2 dark:text-gray-300 select-none'>Billing email</label>
             <input 
               id='billingEmail' 
               onChange={(e) => setOrderData((prev) => ({ ...prev, email: e.target.value }))} 
               type="email" 
-              className='w-full border rounded-full border-gray-200 outline-none px-7 py-2 text-gray-700 inputRing dark:placeholder:text-gray-200' 
+              className='w-full border rounded-full border-gray-200 dark:border-[#333333] outline-none px-7 py-2 text-gray-700 dark:text-gray-200 inputRing dark:placeholder:text-gray-200' 
               placeholder='Email you used during checkout.' 
               autoComplete="email"
             />
@@ -87,7 +87,7 @@ const TrackOrder = () => {
         <button 
           onClick={handleTrack} 
           disabled={loading}
-          className='bg-gray-200 w-34 h-12 hover:bg-black dark:hover:border dark:hover:border-gray-200 hover:text-white text-black font-bold py-2 px-4 rounded-full mt-4 cursor-pointer transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed'
+          className='bg-gray-200 dark:bg-[#333333] w-34 h-12 hover:bg-black dark:hover:border dark:hover:border-gray-200 hover:text-white text-black font-bold py-2 px-4 rounded-full mt-4 cursor-pointer transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed'
         >
           {loading ? 'Tracking...' : 'Track Order'}
         </button>
@@ -95,10 +95,10 @@ const TrackOrder = () => {
         {trackedOrder && (
           <div className='mt-12 max-w-4xl mx-auto'>
             {/* Order Summary */}
-            <div className='bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8'>
+            <div className='bg-gray-50 dark:bg-[#1c1c1c] dark:bg-gray-800 rounded-lg p-6 mb-8'>
               <div className='flex justify-between items-start mb-4'>
                 <div>
-                  <h2 className='text-2xl font-bold text-tcolor dark:text-white mb-2'>
+                  <h2 className='text-2xl font-bold text-tcolor dark:text-gray-100 mb-2'>
                     Order {trackedOrder.orderNumber}
                   </h2>
                   <p className='text-gray-600 dark:text-gray-300'>
@@ -121,11 +121,11 @@ const TrackOrder = () => {
               <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mt-6'>
                 <div>
                   <p className='text-gray-500 dark:text-gray-400 text-sm'>Total Amount</p>
-                  <p className='text-xl font-bold text-tcolor dark:text-white'>${trackedOrder.totalAmount?.toFixed(2)}</p>
+                  <p className='text-xl font-bold text-tcolor dark:text-gray-100'>${trackedOrder.totalAmount?.toFixed(2)}</p>
                 </div>
                 <div>
                   <p className='text-gray-500 dark:text-gray-400 text-sm'>Payment Method</p>
-                  <p className='text-xl font-bold text-tcolor dark:text-white capitalize'>{trackedOrder.paymentMethod?.replace('_', ' ')}</p>
+                  <p className='text-xl font-bold text-tcolor dark:text-gray-100 capitalize'>{trackedOrder.paymentMethod?.replace('_', ' ')}</p>
                 </div>
                 <div>
                   <p className='text-gray-500 dark:text-gray-400 text-sm'>Payment Status</p>
@@ -135,18 +135,18 @@ const TrackOrder = () => {
                 </div>
                 <div>
                   <p className='text-gray-500 dark:text-gray-400 text-sm'>Items</p>
-                  <p className='text-xl font-bold text-tcolor dark:text-white'>{trackedOrder.items?.length}</p>
+                  <p className='text-xl font-bold text-tcolor dark:text-gray-100'>{trackedOrder.items?.length}</p>
                 </div>
               </div>
             </div>
 
             {/* Order Timeline */}
-            <div className='bg-white dark:bg-gray-900 rounded-lg p-8 shadow-md'>
-              <h3 className='text-xl font-bold text-tcolor dark:text-white mb-8'>Order Status</h3>
+            <div className='bg-white dark:bg-[#262626] dark:bg-gray-900 rounded-lg p-8 shadow-md'>
+              <h3 className='text-xl font-bold text-tcolor dark:text-gray-100 mb-8'>Order Status</h3>
               
               <div className='relative'>
                 {/* Green Progress Line */}
-                <div className='absolute top-5 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700'>
+                <div className='absolute top-5 left-0 right-0 h-1 bg-gray-200 dark:bg-[#333333] dark:bg-gray-700'>
                   <div 
                     className='h-full bg-green-500 transition-all duration-500'
                     style={{ width: `${(getStatusIndex(trackedOrder.status) / (orderSteps.length - 1)) * 100}%` }}
@@ -168,7 +168,7 @@ const TrackOrder = () => {
                           {isCompleted ? (
                             <CheckCircle className='w-6 h-6 text-white' />
                           ) : (
-                            <Icon className={`w-6 h-6 ${isCurrent ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400'}`} />
+                            <Icon className={`w-6 h-6 ${isCurrent ?'text-gray-600 dark:text-gray-300' : 'text-gray-400'}`} />
                           )}
                         </div>
                         <span className={`mt-3 text-sm font-medium ${
@@ -195,16 +195,16 @@ const TrackOrder = () => {
             </div>
 
             {/* Order Items */}
-            <div className='mt-8 bg-white dark:bg-gray-900 rounded-lg p-6 shadow-md'>
-              <h3 className='text-xl font-bold text-tcolor dark:text-white mb-4'>Order Items</h3>
+            <div className='mt-8 bg-white dark:bg-[#262626] dark:bg-gray-900 rounded-lg p-6 shadow-md'>
+              <h3 className='text-xl font-bold text-tcolor dark:text-gray-100 mb-4'>Order Items</h3>
               <div className='space-y-4'>
                 {trackedOrder.items?.map((item, index) => (
-                  <div key={index} className='flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-800 last:border-0'>
+                  <div key={index} className='flex justify-between items-center py-3 border-b border-gray-100 dark:border-[#333333] dark:border-gray-800 last:border-0'>
                     <div>
-                      <p className='font-medium text-tcolor dark:text-white'>{item.productName}</p>
+                      <p className='font-medium text-tcolor dark:text-gray-100'>{item.productName}</p>
                       <p className='text-sm text-gray-500 dark:text-gray-400'>Qty: {item.quantity} × ${item.unitPrice?.toFixed(2)}</p>
                     </div>
-                    <p className='font-bold text-tcolor dark:text-white'>${item.totalPrice?.toFixed(2)}</p>
+                    <p className='font-bold text-tcolor dark:text-gray-100'>${item.totalPrice?.toFixed(2)}</p>
                   </div>
                 ))}
               </div>

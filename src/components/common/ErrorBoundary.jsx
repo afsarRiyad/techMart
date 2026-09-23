@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <AlertTriangle size={48} className="text-red-400 mb-4" />
-          <h3 className="text-lg font-semibold text-tcolor dark:text-white mb-2">
+          <h3 className="text-lg font-semibold text-tcolor dark:text-gray-100 mb-2">
             Something went wrong
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-md">

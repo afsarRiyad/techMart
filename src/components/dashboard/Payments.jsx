@@ -62,18 +62,18 @@ const PaymentMethods = () => {
     setSaveInfo(false)
   }
 
-  const inputClass = 'w-full rounded-lg border border-gray-300 bg-white px-4 py-3 font-inter text-[15px] text-tcolor outline-none transition-all duration-200 dark:border-gray-700 dark:bg-[#222] dark:text-white placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary'
+  const inputClass = 'w-full rounded-lg border border-gray-300 bg-white px-4 py-3 font-inter text-[15px] text-tcolor outline-none transition-all duration-200 dark:border-gray-700 dark:bg-[#222] dark:text-gray-100 placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary'
 
   return (
     <div className='font-inter'>
       {!showForm ? (
         <>
           <div className='bg-primary/90 border-l-4 border-yellow-500 px-4 py-3 mb-6'>
-            <p className='text-[15px] text-tcolor'>No saved methods found.</p>
+            <p className='text-[15px] text-tcolor dark:text-gray-100'>No saved methods found.</p>
           </div>
           <button
             onClick={() => navigate('/account/payments-methods?action=add')}
-            className='px-6 py-3 bg-gray-200 hover:bg-gray-300 text-tcolor font-semibold rounded-full transition-colors duration-200 cursor-pointer'
+            className='px-6 py-3 bg-gray-200 dark:bg-[#333333] hover:bg-gray-300 text-tcolor dark:text-gray-100 font-semibold rounded-full transition-colors duration-200 cursor-pointer'
           >
             Add payment method
           </button>
@@ -91,20 +91,20 @@ const PaymentMethods = () => {
                   onChange={() => setSelectedMethod('card')}
                   className='w-4 h-4 text-primary accent-primary'
                 />
-                <span className='font-semibold text-tcolor'>Credit / Debit Card</span>
-                <CreditCard size={20} className='ml-auto text-gray-500' />
+                <span className='font-semibold text-tcolor dark:text-gray-100'>Credit / Debit Card</span>
+                <CreditCard size={20} className='ml-auto text-gray-500 dark:text-gray-400' />
               </label>
             </div>
 
             {selectedMethod === 'card' && (
-              <div className='bg-gray-50 dark:bg-[#1a1a1a] rounded-xl p-6 mb-6'>
-                <p className='text-[13px] text-gray-600 dark:text-gray-400 mb-5'>
+              <div className='bg-gray-50 dark:bg-[#1c1c1c] dark:bg-[#1a1a1a] rounded-xl p-6 mb-6'>
+                <p className='text-[13px] text-gray-600 dark:text-gray-300 dark:text-gray-400 mb-5'>
                   <strong>Test mode:</strong> use card 4242 4242 4242 4242 with any expiry and CVC. More test cards.
                 </p>
 
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
                   <div className='md:col-span-1'>
-                    <label className='mb-2 block text-sm font-semibold text-tcolor'>Card number</label>
+                    <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Card number</label>
                     <div className='relative'>
                       <input
                         type='text'
@@ -120,7 +120,7 @@ const PaymentMethods = () => {
                     </div>
                   </div>
                   <div>
-                    <label className='mb-2 block text-sm font-semibold text-tcolor'>Expiration date</label>
+                    <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Expiration date</label>
                     <input
                       type='text'
                       value={cardForm.expiry}
@@ -131,7 +131,7 @@ const PaymentMethods = () => {
                     />
                   </div>
                   <div>
-                    <label className='mb-2 block text-sm font-semibold text-tcolor'>Security code</label>
+                    <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Security code</label>
                     <div className='relative'>
                       <input
                         type='text'
@@ -141,13 +141,13 @@ const PaymentMethods = () => {
                         className={inputClass}
                         required
                       />
-                      <CreditCard size={16} className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400' />
+                      <CreditCard size={16} className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500' />
                     </div>
                   </div>
                 </div>
 
                 <div className='mb-5'>
-                  <label className='mb-2 block text-sm font-semibold text-tcolor'>Country</label>
+                  <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Country</label>
                   <select
                     value={cardForm.country}
                     onChange={handleCardChange('country')}
@@ -162,15 +162,15 @@ const PaymentMethods = () => {
                     type='checkbox'
                     checked={saveInfo}
                     onChange={(e) => setSaveInfo(e.target.checked)}
-                    className='w-5 h-5 rounded border-gray-300 accent-primary'
+                    className='w-5 h-5 rounded border-gray-300 dark:border-[#333333] accent-primary'
                   />
-                  <span className='text-[15px] text-tcolor'>Save my information for faster checkout</span>
+                  <span className='text-[15px] text-tcolor dark:text-gray-100'>Save my information for faster checkout</span>
                 </label>
 
                 {saveInfo && (
-                  <div className='mt-4 pt-4 border-t border-gray-200 dark:border-gray-600'>
+                  <div className='mt-4 pt-4 border-t border-gray-200 dark:border-[#333333] dark:border-gray-600'>
                     <div className='mb-4'>
-                      <label className='mb-2 block text-sm font-semibold text-tcolor'>Email</label>
+                      <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Email</label>
                       <input
                         type='email'
                         value={savedForm.email}
@@ -180,10 +180,10 @@ const PaymentMethods = () => {
                       />
                     </div>
                     <div className='mb-4'>
-                      <label className='mb-2 block text-sm font-semibold text-tcolor'>Mobile number</label>
+                      <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Mobile number</label>
                       <div className='flex gap-2'>
                         <div className='w-24'>
-                          <select className="w-full rounded-lg border border-gray-300 bg-white px-2 py-3 font-inter text-[14px] text-tcolor outline-none appearance-none">
+                          <select className="w-full rounded-lg border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] dark:bg-[#212121] px-2 py-3 font-inter text-[14px] text-tcolor dark:text-gray-100 outline-none appearance-none">
                             <option>🇧🇩 +880</option>
                           </select>
                         </div>
@@ -198,7 +198,7 @@ const PaymentMethods = () => {
                       </div>
                     </div>
                     <div className='mb-4'>
-                      <label className='mb-2 block text-sm font-semibold text-tcolor'>Full name</label>
+                      <label className='mb-2 block text-sm font-semibold text-tcolor dark:text-gray-100'>Full name</label>
                       <input
                         type='text'
                         value={savedForm.fullName}
@@ -207,7 +207,7 @@ const PaymentMethods = () => {
                         required
                       />
                     </div>
-                    <p className='text-[12px] text-gray-500 mt-4'>
+                    <p className='text-[12px] text-gray-500 dark:text-gray-400 mt-4'>
                       By selecting to save your info, you agree to create an account subject to Link's <a href='#' className='underline'>Terms</a> and <a href='#' className='underline'>Privacy Policy</a>.
                     </p>
                   </div>
@@ -217,7 +217,7 @@ const PaymentMethods = () => {
 
             <button
               type='submit'
-              className='px-6 py-3 bg-gray-200 hover:bg-gray-300 text-tcolor font-semibold rounded-full transition-colors duration-200 cursor-pointer'
+              className='px-6 py-3 bg-gray-200 dark:bg-[#333333] hover:bg-gray-300 text-tcolor dark:text-gray-100 font-semibold rounded-full transition-colors duration-200 cursor-pointer'
             >
               Add payment method
             </button>

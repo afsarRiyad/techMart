@@ -11,9 +11,18 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <>
-  <Toaster  />
   <QueryClientProvider client={queryClient}>
   <BrowserRouter>
+  {/* one Toaster for the whole app, pages must not render their own.
+      It lives inside the router so a toast can hold a <Link> */}
+  <Toaster
+    position='top-right'
+    toastOptions={{
+      className: 'appToast',
+      duration: 4000,
+      error: { duration: 5000 },
+    }}
+  />
   <Provider store={store}>
   <StrictMode>
     <App />

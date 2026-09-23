@@ -1,15 +1,17 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-@custom-variant touch (&:where(.touch, .touch *));
 
 @layer base {
   body {
-    @apply bg-white dark:bg-[#181818]  ;
+    /* inheritable default: without this every element that has no explicit
+       text color renders pure black on the dark background */
+    @apply bg-white text-tcolor dark:bg-[#181818] dark:text-gray-100;
   }
-body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
-    transition-property: background-color, border-color, color, fill, stroke;
-    transition-duration: 300ms;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Only the page itself fades. Putting this transition on every div, p and
+     span made the theme switch repaint the whole tree at once, which is what
+     made the toggle feel slow. */
+  body {
+    transition: background-color 200ms ease, color 200ms ease;
   }
 }
 
@@ -19,6 +21,13 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     --color-darkBg : #181818;
     --font-inter: "inter", sans-serif;
     --font-roboto: "roboto", sans-serif;
+}
+
+/* The brand yellow is loud next to a near black page, so dark mode swaps the
+   whole primary ramp for a muted gold. Every bg-primary / text-primary /
+   border-primary picks it up, no per-element variants needed. */
+.dark {
+    --color-primary: #C9A227;
 }
 
 .topbarList{
@@ -66,8 +75,10 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     --webkit-tap-highlight-color : transparent;
 }
 @media (hover: hover){
+    /* the drawer's category rows: hover went to black in dark mode as well and
+       the label disappeared into the dark panel */
     .accordionHeading:hover{
-        @apply  text-black;
+        @apply  text-black dark:text-gray-100;
     }
 }
 
@@ -80,7 +91,7 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 
 @media (hover: hover) {
     .mobileMenuLink:hover {
-        @apply text-black;
+        @apply text-black dark:text-gray-100;
     }
     .mobileMenuLink:hover::after {
         @apply w-[40px];
@@ -88,7 +99,7 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 }
 
 .mobileMenuLink:active {
-    @apply text-black scale-95; 
+    @apply text-black dark:text-gray-100 scale-95; 
 }
 
 .mobileMenuLink:active::after {
@@ -96,16 +107,18 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 }
 
 .sidebarLiHover{
-    @apply  text-gray-900 hover:text-black hover:bg-gray-200 transition-all duration-300 select-none;
+    /* the light hover band and black text used to apply in dark mode too, which
+       blacked the label out on the dark drawer */
+    @apply  text-gray-900 hover:text-black hover:bg-gray-200 transition-all duration-300 select-none dark:text-gray-300 dark:hover:bg-[#2a2a2a] dark:hover:text-gray-100;
     --webkit-tap-highlight-color : transparent;
 }
 @media (hover: hover) {
     .sidebarLiHover:hover {
-        @apply bg-gray-200 text-black;
+        @apply bg-gray-200 text-black dark:bg-[#2a2a2a] dark:text-gray-100;
     }
 }
 .sidebarLiHover:active{
-    @apply bg-gray-300 scale-[0.98] origin-center text-black
+    @apply bg-gray-300 scale-[0.98] origin-center text-black dark:bg-[#333333] dark:text-gray-100
 }
 .btnHover{
     @apply absolute  inset-0 bg-black/10 opacity-0 rounded-br-full scale-x-0  origin-top-left z-10  transition-all duration-300 ease-in-out ;
@@ -245,14 +258,15 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     font-family: "roboto";
     font-weight: 400;
     font-style: normal;
-    src: url(./fonts/Roboto/static/Roboto-Regular.ttf) format("truetype");
+    /* absolute: this sheet is served from /assets in a build and the fonts sit at the site root */
+    src: url(/fonts/Roboto/static/Roboto-Regular.ttf) format("truetype");
     font-display: swap;
 }
 @font-face {
     font-family: "inter";
     font-weight: 400;
     font-style: normal;
-    src: url(./fonts/Inter/static/Inter_18pt-Regular.ttf) format("truetype");
+    src: url(/fonts/Inter/static/Inter_18pt-Regular.ttf) format("truetype");
     font-display: swap;
 }
 
@@ -286,7 +300,8 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
     content: '';
     width: 52px;
     height: 100px;
-    background: #FED700;
+    /* follows the theme, so the switch is muted gold in dark mode too */
+    background: var(--color-primary);
     border-radius: 50px;
     bottom: 0;
     left: 0;
@@ -306,6 +321,85 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 }
 .myInput:checked + .myLabel::before{
     background: rgba(216, 212, 212, 0.849);
+}
+/* ------------------------------------------------------------------
+   Shared surfaces. Light and dark live together here so a page only has
+   to opt in once instead of repeating dark: on every element.
+   ------------------------------------------------------------------ */
+.cardSurface{
+    @apply bg-white dark:bg-[#212121]
+}
+/* In light mode the photos sit on a white card anyway, so the white fill is
+   invisible. In dark mode it drew a white rectangle around every product, so the
+   tile drops out and the card behind the photo shows through instead. */
+.imageTile{
+    @apply bg-white dark:bg-transparent
+}
+.sectionSurface{
+    @apply bg-white dark:bg-[#181818]
+}
+.cardTitle{
+    @apply text-tcolor dark:text-gray-100
+}
+.mutedText{
+    @apply text-gray-500 dark:text-gray-400
+}
+.sectionHeading{
+    @apply font-inter text-[22px] text-tcolor dark:text-gray-100
+}
+.fieldInput{
+    @apply w-full rounded-full border border-gray-300 bg-white px-5 py-3 font-inter text-[15px] text-tcolor placeholder:text-gray-400 outline-none transition-all duration-200 focus:ring-4 focus:ring-blue-400/10 focus:border-blue-500 dark:border-[#444444] dark:bg-[#242424] dark:text-gray-100 dark:placeholder:text-gray-500
+}
+/* the wishlist / compare row on a product card */
+.cardActions{
+    @apply flex items-center justify-center gap-1 bg-white text-gray-500 dark:bg-[#212121] dark:text-gray-400
+}
+/* ------------------------------------------------------------------
+   Touch screens: a tap stands in for the mouse hover.
+   Tailwind wraps every hover: / group-hover: rule in @media (hover:hover),
+   so on a phone nothing that the desktop reveals on hover is ever shown and
+   nothing can be clicked. useTouchHover puts .touch-open on the card you
+   touched (and takes it off the previous one), these rules reveal the same
+   things hover does: the compare / wishlist row, the cart tooltip, the gold
+   cart button and the photo zoom.
+   ------------------------------------------------------------------ */
+@media (hover: none){
+    [data-touch-hover]{
+        -webkit-tap-highlight-color: transparent;
+    }
+    [data-touch-hover].touch-open{
+        position: relative;
+        z-index: 50;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+    /* The row hangs below its card, which in a carousel grid means into the next
+       cell — and the next slide paints after this one, so it covered the row.
+       Desktop sidesteps this with hover:z-50 on the slide; a finger has no hover,
+       so the slide that holds the open card comes up instead. */
+    .swiper-slide:has([data-touch-hover].touch-open){
+        z-index: 50;
+    }
+    /* the row keeps the desktop position, hanging under the card rather than
+       over it, so the price and the add-to-cart button stay tappable */
+    [data-touch-hover].touch-open .cardActions{
+        visibility: visible;
+        opacity: 1;
+        /* `transition-all` would hold the visibility flip until the fade ends,
+           so a tap looked like it needed a pause before the row showed up.
+           Only the fade animates now; the row is there on the first frame. */
+        transition-property: opacity, box-shadow;
+    }
+    [data-touch-hover].touch-open .touchPrimary{
+        background-color: var(--color-primary);
+    }
+    [data-touch-hover].touch-open .touchScale{
+        transform: scale(1.05);
+    }
+}
+/* every tappable thing on a phone should be at least this big */
+.tapTarget{
+    @apply inline-flex min-h-11 min-w-11 items-center justify-center;
+    -webkit-tap-highlight-color: transparent;
 }
 .darkH{
     @apply dark:text-gray-300 
@@ -333,14 +427,14 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 
 
 .swiper-pagination-bullet-active {
-  background-color: #FED700 !important;
+  background-color: var(--color-primary) !important;
   width: 30px !important;
   border-radius: 5px !important;
 }
 
 
 .swiper-thumbs .swiper-slide-thumb-active {
-  border-bottom: 3px solid #FED700;
+  border-bottom: 3px solid var(--color-primary);
 }
 
 @keyframes chipIn {
@@ -355,4 +449,54 @@ body, div, header, section, footer, p, span, h1, h2, h3, h4, h5, h6 {
 }
 .animate-chip-in {
   animation: chipIn 0.25s ease-out forwards;
+}
+
+/* react-hot-toast writes its colours inline, so a class has to override them
+   with !important. Kept free of transitions on purpose: the pop-in already
+   animates, and an extra transition makes dismissal feel sticky. */
+.appToast {
+  color: #333e48 !important;
+  background: #fff !important;
+}
+
+.dark .appToast {
+  color: #e5e7eb !important;
+  background: #2f2f2f !important;
+}
+/* The wishlist / compare / add-to-cart popup. react-hot-toast renders a custom
+   toast without its own surface, so this card draws all of it: background,
+   corners, edge and shadow. `.actionToastWrap` covers the same ground in case
+   the wrapper picks the class up, which it does for plain toasts. */
+.actionToastWrap{
+  padding: 0 !important;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.actionToast{
+  @apply w-[330px] max-w-[86vw] overflow-hidden rounded-[10px] border border-gray-200 bg-white font-inter text-[15px] text-tcolor shadow-lg dark:border-[#3a3a3a] dark:bg-[#2f2f2f] dark:text-gray-100;
+}
+.actionToastGo{
+  @apply mx-4 mb-4 flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 text-[15px] font-semibold text-tcolor transition-transform duration-150;
+}
+.actionToastGo:active{
+  @apply scale-95;
+}
+/* the arrow keeps pointing at the list, so the button reads as the next step */
+.actionToastArrow{
+  animation: toastArrow 1.6s ease-in-out infinite;
+}
+@keyframes toastArrow{
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+/* keep this in step with the duration in showActionToast.jsx */
+.actionToastBar{
+  display: block;
+  height: 3px;
+  background: var(--color-primary);
+  animation: toastDrain 5s linear forwards;
+}
+@keyframes toastDrain{
+  from { width: 100%; }
+  to { width: 0; }
 }

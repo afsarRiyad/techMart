@@ -6,7 +6,7 @@ const TechnicalSpecifications = ({ data = [] }) => {
   
   return (
     <div className="w-full font-pop">
-      <h2 className="text-[22px] font-semibold text-gray-800 mb-4">
+      <h2 className="text-[22px] font-semibold text-gray-800 dark:text-gray-100 mb-4">
         Technical Specifications
       </h2>
 
@@ -15,13 +15,13 @@ const TechnicalSpecifications = ({ data = [] }) => {
           <div
             key={spec._id || index}
             className={`flex flex-col sm:flex-row sm:items-center py-4 ${
-              index !== data.length - 1 ? 'border-b border-gray-200' : ''
+              index !== data.length - 1 ? 'border-b border-gray-200 dark:border-[#333333]' : ''
             }`}
           >
-            <p className="w-full sm:w-[220px] shrink-0 text-gray-500 text-[15px] mb-1 sm:mb-0">
+            <p className="w-full sm:w-[220px] shrink-0 text-gray-500 dark:text-gray-400 text-[15px] mb-1 sm:mb-0">
               {spec.name}
             </p>
-            <p className="text-gray-800 text-[15px]">
+            <p className="text-gray-800 dark:text-gray-100 text-[15px]">
               {spec.value}
               {spec.unit ? ` ${spec.unit}` : ''}
             </p>

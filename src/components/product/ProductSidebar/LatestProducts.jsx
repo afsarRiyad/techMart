@@ -35,18 +35,18 @@ const LatestProducts = () => {
   if (isLoading) {
     return (
       <div className="pt-10 font-pop">
-        <div className="border-b border-b-gray-300 pb-3 mb-8">
-          <span className="font-medium text-[18px] text-tcolor border-b-[2px] border-b-primary pb-[13px]">
+        <div className="border-b border-b-gray-300 dark:border-b-[#333333] pb-3 mb-8">
+          <span className="font-medium text-[18px] text-tcolor dark:text-gray-100 border-b-[2px] border-b-primary pb-[13px]">
             Latest Products
           </span>
         </div>
         {Array.from({ length: 5 }, (_, i) => (
           <div key={i} className="flex gap-4 pb-5 animate-pulse">
-            <div className="w-20 h-20 bg-gray-200 rounded" />
+            <div className="w-20 h-20 bg-gray-200 dark:bg-[#333333] rounded" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4" />
-              <div className="h-3 bg-gray-200 rounded w-1/3" />
-              <div className="h-4 bg-gray-200 rounded w-1/4" />
+              <div className="h-4 bg-gray-200 dark:bg-[#333333] rounded w-3/4" />
+              <div className="h-3 bg-gray-200 dark:bg-[#333333] rounded w-1/3" />
+              <div className="h-4 bg-gray-200 dark:bg-[#333333] rounded w-1/4" />
             </div>
           </div>
         ))}
@@ -56,20 +56,20 @@ const LatestProducts = () => {
 
   return (
     <div className="pt-10 font-pop">
-      <div className="border-b border-b-gray-300 pb-3 mb-8">
-        <span className="font-medium text-[18px] text-tcolor border-b-[2px] border-b-primary pb-[13px]">
+      <div className="border-b border-b-gray-300 dark:border-b-[#333333] pb-3 mb-8">
+        <span className="font-medium text-[18px] text-tcolor dark:text-gray-100 border-b-[2px] border-b-primary pb-[13px]">
           Latest Products
         </span>
       </div>
       {latest?.data?.map((item) => (
         <div key={item._id} className="flex gap-4 leading-none pb-5">
-          <Link to={`/products/${item.slug || item._id}`}>
-            <img src={item.image} alt={item.name} loading="lazy" className="w-20 h-auto cursor-pointer" />
+          <Link to={`/products/${item.slug || item._id}`} className="imageTile h-20 w-20 shrink-0 flex items-center justify-center">
+            <img src={item.image} alt={item.name} loading="lazy" className="max-h-full max-w-full cursor-pointer object-contain mix-blend-multiply dark:mix-blend-normal" />
           </Link>
           <div>
             <Link
               to={`/products/${item.slug || item._id}`}
-              className="text-[14px] line-clamp-2 text-gray-500 font-medium cursor-pointer hover:text-black"
+              className="text-[14px] line-clamp-2 text-gray-500 dark:text-gray-400 font-medium cursor-pointer hover:text-black dark:hover:text-gray-100"
             >
               {item.name}
             </Link>

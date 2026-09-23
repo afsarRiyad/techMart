@@ -18,18 +18,18 @@ import Googleplay from '@/assets/icons/store/googleplay.svg?react';
 const MobileFooter = () => {
     const [activeIndex, setActiveIndex] = useState(null)
     return (
-        <div className='bg-gray-100'>
+        <div className='bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#212121]'>
             <Container>
-                <div className=' p-4 sm:hidden '>
-                    <div className='bg-gray-100 text-black rounded-lg pt-3'>
-                        <ul className=' flex flex-col gap-3'>
+                <div className='p-4 sm:hidden'>
+                    <div className='bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#212121] rounded-lg pt-3'>
+                        <ul className='flex flex-col gap-3'>
                             {
                                 mobileFooterData.map((item, index) => {
                                     return (
-                                        <li className='bg-white  rounded-lg p-3' key={index}>
+                                        <li className='bg-white dark:bg-[#262626] dark:bg-[#212121] rounded-lg p-3' key={index}>
                                             <button aria-label='toggle' className='flex accordionHeading cursor-pointer justify-between w-full text-inter text-[18px] font-semibold' onClick={() => setActiveIndex(index === activeIndex ? null : index)}>{item.name} <ChevronDown className={`${activeIndex === index ? 'rotate-180' : ''} transition-all duration-300`} /></button>
                                             {item.children &&
-                                                <div className={`grid transition-all duration-300 ease-in-out ${activeIndex === index ? 'grid grid-rows-[1fr] opacity-100 overflow-auto ' : 'grid grid-rows-[0fr] opacity-0'}`}>
+                                                <div className={`grid transition-all duration-300 ease-in-out ${activeIndex === index ?'grid grid-rows-[1fr] opacity-100 overflow-auto ' : 'grid grid-rows-[0fr] opacity-0'}`}>
                                                     <div className={`overflow-hidden mt-3 flex flex-col`}>
                                                             {item.children.map((child, i) => (
                                                                 <Link to={child.url} key={i} className='text-blue-400 cursor-pointer pb-2 text-[14px] mobileMenuLink' to={child.url}>
@@ -48,7 +48,7 @@ const MobileFooter = () => {
                     <div className='flex flex-col gap-6'>
                         <div className='flex gap-4 items-center justify-center mt-6'>
                             <Facebook className='cursor-pointer text-blue-500 w-6 h-auto footerSocial' fill='currentColor' />
-                            <Twitter className='cursor-pointer text-black w-6 h-auto footerSocial' fill='currentColor' />
+                            <Twitter className='cursor-pointer text-black dark:text-gray-100 w-6 h-auto footerSocial' fill='currentColor' />
                             <Instagram className='cursor-pointer text-pink-500 w-6 h-auto footerSocial' fill='currentColor' />
                             <Pinterest className='cursor-pointer text-red-600 w-6 h-auto footerSocial' fill='currentColor' />
                             <Whatsap className='cursor-pointer text-green-500 w-9 h-auto footerSocial' fill='currentColor' />
@@ -64,23 +64,25 @@ const MobileFooter = () => {
             <div className='mb-3 bg-[#333E48] sm:hidden flex flex-col items-center justify-center py-4'>
                 <LogoWhite className='w-40 h-auto' />
                 <div className='flex flex-col py-3 text-[14px] leading-7 font-inter items-center gap-4'>
-                    <span className='text-white '>Experience App on your mobile:
+                    <span className='text-white'>Experience App on your mobile:
                     </span>
                     <div className='flex gap-2'>
+                        {/* the store badges sit on their own dark block and hover to a light
+                            fill, so they read the same in both themes */}
                         <div className='flex gap-2 items-center py-1 px-2 group rounded active:bg-gray-50
-                                                                          hover:bg-gray-50  border border-primary '>
-                            <Googleplay fill='currentColor' className=' w-7 h-7  text-gray-50 group-hover:text-black  cursor-pointer transition-colors' />
+                                                                          hover:bg-gray-50 border border-primary '>
+                            <Googleplay fill='currentColor' className='w-7 h-7 text-gray-50 group-hover:text-black cursor-pointer transition-colors' />
                             <div className='text-white font-pop flex flex-col gap-1 leading-none'>
-                                <span className='text-gray-50 text-[12px] group-hover:text-black '>Download on the</span>
-                                <span className='font-semibold text-[14px] group-hover:text-black   text-gray-50 cursor-pointer'>Google Play</span>
+                                <span className='text-gray-50 text-[12px] group-hover:text-black'>Download on the</span>
+                                <span className='font-semibold text-[14px] group-hover:text-black text-gray-50 cursor-pointer'>Google Play</span>
                             </div>
                         </div>
                         <div className='flex gap-2 items-center py-3 px-3 group rounded active:bg-gray-50
-                                                                          hover:bg-gray-50  border border-primary '>
-                            <Appstore fill='currentColor' className=' w-7 h-7  text-gray-50 group-hover:text-black  cursor-pointer transition-colors' />
+                                                                          hover:bg-gray-50 border border-primary '>
+                            <Appstore fill='currentColor' className='w-7 h-7 text-gray-50 group-hover:text-black cursor-pointer transition-colors' />
                             <div className='text-white font-pop flex flex-col gap-1 leading-none'>
-                                <span className='text-gray-50 text-[12px] group-hover:text-black '>Download on the</span>
-                                <span className='font-semibold text-[14px] group-hover:text-black   text-gray-50 cursor-pointer'>Apple Store</span>
+                                <span className='text-gray-50 text-[12px] group-hover:text-black'>Download on the</span>
+                                <span className='font-semibold text-[14px] group-hover:text-black text-gray-50 cursor-pointer'>Apple Store</span>
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
 import { useCompare } from '@/features/compare/hooks/useCompare';
 import Tooltip from '@/components/ui/Tooltip';
-import useTouchReveal from '@/hooks/useTouchReveal';
+import CardActions from '@/components/ui/CardActions';
 
 const GridExtend = ({ products }) => {
     const addtoWishlist = useUpdateWishlist()
@@ -20,7 +20,6 @@ const GridExtend = ({ products }) => {
     const { data: wishlistData } = useWishlist()
     const { data: compareData } = useCompare()
     // touch screens get no hover, a tap opens the wishlist/compare row
-    const { openId, reveal, blockOpeningTap } = useTouchReveal()
 
     const handleWishlist = (id) => {
         addtoWishlist.mutate({ productId: id })
@@ -78,33 +77,31 @@ const getBullets = (description) => {
                     return (
                         <div
                             key={pro._id || pro.id || index}
-                            onTouchStart={() => reveal(pro._id)}
-                            onClickCapture={blockOpeningTap}
                             className='font-inter group/card min-w-0 mb-5'
                         >
-                            <div className={`relative py-3 bg-white hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] mb-2 cursor-pointer ${(index + 1) % 5 == 0 ? 'border-none' : 'border-r border-r-gray-300'}`}>
+                            <div data-touch-hover className={`relative cardSurface py-3 hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] mb-2 cursor-pointer ${(index + 1) % 5 == 0 ?'border-none' : 'border-r border-r-gray-300 dark:border-r-[#333333]'}`}>
                                 <div className='px-5'>
 
 
 
                                     {/* image */}
                                     {pro.image &&
-                                        <Link to={`/products/${pro.slug}`}>
-                                          <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105' />
+                                        <Link to={`/products/${pro.slug}`} className='flex justify-center'>
+                                          <img loading="lazy" src={pro.image} alt={pro.name || 'img'} className='imageTile md:w-full w-30 md:h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform group-hover/card:scale-105 touchScale' />
                                         </Link>
                                     }
 
                                     {/* categories */}
-                                    <div className='flex items-center pt-3 pb-2 '>
+                                    <div className='flex items-center pt-3 pb-2'>
                                         {pro?.categories?.map((tag, i) => (
-                                            <p key={i} className='truncate text-[12px] block text-gray-500 font-inter cursor-pointer hover:text-gray-900'>
+                                            <p key={i} className='truncate text-[12px] block text-gray-500 dark:text-gray-400 font-inter cursor-pointer hover:text-gray-900 dark:hover:text-gray-100'>
                                                 {tag}{i < pro.categories.length - 1 && ','}
                                             </p>
                                         ))}
                                     </div>
                                         {/* name */}
                                   {pro.name &&
-                                    <Link to={`/products/${pro.slug}`} className="block w-full h-10 overflow-hidden text-[#0062BD] text-[16px] leading-5 font-semibold line-clamp-2 ">
+                                    <Link to={`/products/${pro.slug}`} className="block w-full h-10 overflow-hidden text-[#0062BD] dark:text-blue-400 text-[16px] leading-5 font-semibold line-clamp-2">
                                     {pro.name}
                                     </Link>
                                         }
@@ -113,14 +110,14 @@ const getBullets = (description) => {
                                         <div className='flex items-center'>
                                            {rating(pro.rating || 0)}
                                         </div>
-                                        <span className='text-[12px] text-gray-500 font-inter'>({pro.reviews ?? 0})</span>
+                                        <span className='text-[12px] text-gray-500 dark:text-gray-400 font-inter'>({pro.reviews ?? 0})</span>
                                     </div>
                                     {/* description bullets */}
                                     {bullets.length > 0 &&
                                         <ul className='py-6 h-35'>
                                             {bullets.map((b, i) => (
-                                                <li key={i} className='flex items-start gap-2  text-[13px] text-gray-500 font-inter'>
-                                                    <span className='mt-[7px] w-1 h-1 rounded-full bg-gray-400 shrink-0 ' />
+                                                <li key={i} className='flex items-start gap-2 text-[13px] text-gray-500 dark:text-gray-400 font-inter'>
+                                                    <span className='mt-[7px] w-1 h-1 rounded-full bg-gray-400 shrink-0' />
                                                     <span className='line-clamp-2 leading-6'>{b}</span>
                                                 </li>
                                             ))}
@@ -129,14 +126,14 @@ const getBullets = (description) => {
 
                                     {/* sku */}
                                     {pro.sku &&
-                                        <p className='min-w-0 truncate  w-full overflow-hidden pb-3 font-inter text-[12px] text-gray-400'>SKU: {pro.sku}</p>
+                                        <p className='min-w-0 truncate w-full overflow-hidden pb-3 font-inter text-[12px] text-gray-400'>SKU: {pro.sku}</p>
                                     }
 
                                     {/* price + cart */}
                                     <div className='flex items-center justify-between pb-3'>
-                                        <div className='flex items-baseline '>
+                                        <div className='flex items-baseline'>
                                             {displayPrice != null &&
-                                                <p className='text-tcolor font-medium text-[20px]'>${displayPrice}</p>
+                                                <p className='text-tcolor dark:text-gray-100 font-medium text-[20px]'>${displayPrice}</p>
                                             }
                                             {hasSale &&
                                                 <p className='text-red-400 font-medium text-[13px] line-through'>${pro.regularPrice}</p>
@@ -144,11 +141,11 @@ const getBullets = (description) => {
                                         </div>
                                         <div className='group relative'>
                                             {isInCart(pro._id) ?
-                                                <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
+                                                <Link to='/cart' className='w-10 h-10 rounded-full bg-gray-200 dark:bg-[#333333] flex items-center justify-center cursor-pointer group-hover/card:bg-primary touchPrimary'>
                                                     <ArrowBigRight size={25} className='text-white' />
                                                 </Link>
                                                 :
-                                                <button onClick={() => handleCart(pro._id)} disabled={addToCart.isPending} className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer group-hover/card:bg-primary'>
+                                                <button onClick={() => handleCart(pro._id)} disabled={addToCart.isPending} className='w-10 h-10 rounded-full bg-gray-200 dark:bg-[#333333] flex items-center justify-center cursor-pointer group-hover/card:bg-primary touchPrimary'>
                                                     <FaOpencart size={25} className='text-white' />
                                                 </button>
                                             }
@@ -156,35 +153,15 @@ const getBullets = (description) => {
                                         </div>
                                     </div>
 
-                                    {/* hover wishlist and compare */}
-                                    <div className={`absolute left-0 justify-center right-0 bottom-4 translate-y-full bg-white p-3 ${openId === pro._id ? 'opacity-100 visible' : 'opacity-0 invisible'} group-hover/card:opacity-100 group-hover/card:visible z-50 shadow-xl before:absolute before:top-0 before:right-5 before:w-43 before:border-t-2 before:border-gray-200 before:content-[""]`}>
-                                        <div className='flex items-center gap-1 justify-center cursor-pointer hover:text-black text-gray-500'>
-                                            {isInWishlist(pro._id) ?
-                                                <>
-                                                    <Heart className='text-black ' size={18} fill="currentColor" />
-                                                    <Link to='/wishlist' className='text-[14px]'>Added to Wishlist</Link>
-                                                </>
-                                                :
-                                                <button onClick={() => handleWishlist(pro._id)} className='flex items-center gap-2'>
-                                                    <Heart size={18} />
-                                                    <span className='text-sm'>Wishlist</span>
-                                                </button>
-                                            }
-                                        </div>
-                                        <div className='flex items-center gap-1 mt-2 justify-center cursor-pointer hover:text-black text-gray-500 pb-1'>
-                                            {isInCompare(pro._id) ?
-                                                <>
-                                                    <GitCompareArrows size={18} className='text-black' />
-                                                    <Link to='/compare' className='text-[14px]'>Added to Compare</Link>
-                                                </>
-                                                :
-                                                <button onClick={() => handleCompare(pro._id)} className='flex items-center gap-2'>
-                                                    <GitCompareArrows size={18} />
-                                                    <span className='text-sm'>Compare</span>
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
+                                    <CardActions
+                                        productId={pro._id}
+                                        inWishlist={isInWishlist(pro._id)}
+                                        inCompare={isInCompare(pro._id)}
+                                        onWishlist={handleWishlist}
+                                        onCompare={handleCompare}
+                                        className='border-t border-gray-200 py-1 dark:border-[#333333]'
+                                        accent='before:right-5 before:w-43 before:border-gray-200'
+                                    />
                                 </div>
                             </div>
                         </div>

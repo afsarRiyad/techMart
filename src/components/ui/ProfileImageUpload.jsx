@@ -64,7 +64,7 @@ const ProfileImageUpload = ({ currentImage, username }) => {
     <div className="flex flex-col items-center gap-4">
       <div className="relative group">
         {/* Image Container */}
-        <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-gray-200 bg-gray-100">
+        <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-gray-200 dark:border-[#333333] bg-gray-100 dark:bg-[#1c1c1c] dark:bg-[#212121]">
           {preview ? (
             <img
               src={preview}
@@ -72,8 +72,8 @@ const ProfileImageUpload = ({ currentImage, username }) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200">
-              <span className="text-3xl font-bold text-gray-400">
+            <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-[#333333]">
+              <span className="text-3xl font-bold text-gray-400 dark:text-gray-500">
                 {username?.charAt(0)?.toUpperCase() || '?'}
               </span>
             </div>
@@ -116,7 +116,7 @@ const ProfileImageUpload = ({ currentImage, username }) => {
           </button>
           <button
             onClick={handleCancel}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+            className="px-4 py-2 bg-gray-200 dark:bg-[#333333] text-gray-700 dark:text-gray-200 dark:text-gray-300 rounded-lg hover:bg-gray-300 transition-colors"
           >
             Cancel
           </button>
@@ -125,7 +125,7 @@ const ProfileImageUpload = ({ currentImage, username }) => {
 
       {/* File Info */}
       {file && (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {file.name} ({(file.size / 1024).toFixed(1)} KB)
         </p>
       )}

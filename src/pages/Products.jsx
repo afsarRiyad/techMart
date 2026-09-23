@@ -96,25 +96,25 @@ const Pagination = React.memo(({ page, totalPages, inputPage, setInputPage, disp
   if (totalPages <= 1) return null
 
   return (
-    <div className="mt-8 flex items-center justify-center gap-2">
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
       <button type="button" onClick={() => dispatch(setPage(page - 1))} disabled={page === 1}
-        className="rounded border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:hover:bg-white/5">
+        className="min-h-11 rounded border border-gray-300 px-3 sm:px-4 py-2 text-sm transition hover:bg-gray-100 dark:border-[#333333] dark:hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-white/5">
         Previous
       </button>
       <span className="mx-1 text-sm text-gray-500 dark:text-gray-400">Page {page} of {totalPages}</span>
       <div className="flex items-center gap-2">
         {getPages.map((item, index) => {
-          if (item === '...') return <span key={`e-${index}`} className="flex h-10 w-6 items-center justify-center text-gray-500">...</span>
+          if (item === '...') return <span key={`e-${index}`} className="flex h-10 w-6 items-center justify-center text-gray-500 dark:text-gray-400">...</span>
           return (
             <button key={`p-${item}`} type="button" onClick={() => dispatch(setPage(item))}
-              className={`h-10 w-10 rounded-full border border-gray-300 text-sm transition cursor-pointer ${page === item ? 'bg-yellow-400 text-black' : 'hover:bg-gray-200 dark:hover:bg-white/10'}`}>
+              className={`h-11 w-11 rounded-full border border-gray-300 dark:border-[#333333] text-sm transition cursor-pointer ${page === item ?'bg-primary text-black' : 'hover:bg-gray-200 dark:hover:bg-white/10'}`}>
               {item}
             </button>
           )
         })}
       </div>
       <button type="button" onClick={() => dispatch(setPage(page + 1))} disabled={page >= totalPages}
-        className="rounded border border-gray-300 px-4 py-2 text-sm transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/10 dark:hover:bg-white/5">
+        className="min-h-11 rounded border border-gray-300 px-3 sm:px-4 py-2 text-sm transition hover:bg-gray-100 dark:border-[#333333] dark:hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-white/5">
         Next
       </button>
     </div>
@@ -260,10 +260,10 @@ const Products = () => {
 
   const InlinePagination = useMemo(() => (
     <div className="flex items-center">
-      {page !== 1 && <button onClick={() => dispatch(setPage(Math.max(1, page - 1)))} className="cursor-pointer text-gray-600"><MoveLeft /></button>}
+      {page !== 1 && <button onClick={() => dispatch(setPage(Math.max(1, page - 1)))} className="cursor-pointer text-gray-600 dark:text-gray-300"><MoveLeft /></button>}
       <input value={inputPage} onChange={(e) => setInputPage(e.target.value)} onKeyDown={handleMobileGoToPage} min="1" max={meta.totalPages} type="number"
-        className="border border-gray-400 rounded-full text-center w-12 py-1 mx-3 outline-none focus:ring-2 focus:ring-blue-400/20" />
-      {page !== meta.totalPages && <button onClick={() => dispatch(setPage(Math.min(meta.totalPages, page + 1)))} className="cursor-pointer text-gray-600"><MoveRight /></button>}
+        className="border border-gray-400 dark:border-[#444444] rounded-full text-center w-12 py-1 mx-3 outline-none focus:ring-2 focus:ring-blue-400/20" />
+      {page !== meta.totalPages && <button onClick={() => dispatch(setPage(Math.min(meta.totalPages, page + 1)))} className="cursor-pointer text-gray-600 dark:text-gray-300"><MoveRight /></button>}
     </div>
   ), [page, inputPage, meta.totalPages, dispatch, handleMobileGoToPage])
 
@@ -283,12 +283,12 @@ const Products = () => {
           <SidebarContent active={currentActive} setActive={pickCategory} activeChild={activeChildName} setActiveChild={pickChild} onClose={closeSidebar} />
         </aside>
 
-        <div className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 lg:hidden ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeSidebar} />
+        <div className={`fixed inset-0 z-[60] bg-black/50 transition-opacity duration-300 lg:hidden ${sidebarOpen ?'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeSidebar} />
 
-        <div className={`fixed inset-y-0 left-0 z-[70] w-[300px] overflow-y-auto bg-white shadow-xl transition-transform duration-300 ease-in-out lg:hidden dark:bg-gray-900 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-            <span className="font-medium text-tcolor dark:text-white">Filters</span>
-            <button onClick={closeSidebar} className="cursor-pointer rounded p-1 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"><X size={20} /></button>
+        <div className={`fixed inset-y-0 left-0 z-[70] w-[300px] overflow-y-auto bg-white shadow-xl transition-transform duration-300 ease-in-out lg:hidden dark:bg-gray-900 ${sidebarOpen ?'translate-x-0' : '-translate-x-full'}`}>
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-[#333333] px-4 py-3">
+            <span className="font-medium text-tcolor dark:text-gray-100">Filters</span>
+            <button onClick={closeSidebar} className="cursor-pointer rounded p-1 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-gray-100"><X size={20} /></button>
           </div>
           <div className="p-4">
             <SidebarContent active={currentActive} setActive={pickCategory} activeChild={activeChildName} setActiveChild={pickChild} onClose={closeSidebar} />
@@ -297,7 +297,7 @@ const Products = () => {
 
         <main className="w-full lg:w-[79%]">
           <div className="flex items-end justify-between pb-4">
-            <h1 className="text-[26px] font-medium text-tcolor dark:text-white">{pageTitle}</h1>
+            <h1 className="text-[26px] font-medium text-tcolor dark:text-gray-100">{pageTitle}</h1>
             {!loading && <span className="text-[13px] text-gray-500 dark:text-gray-400">Showing {firstResult}–{lastResult} of {meta.total} results</span>}
           </div>
 
@@ -307,10 +307,10 @@ const Products = () => {
           </div>
 
           {/* Mobile controls */}
-          <div className="flex flex-col gap-2 rounded bg-gray-100 px-4 py-2.5 lg:hidden dark:bg-white/5">
+          <div className="flex flex-col gap-2 rounded bg-gray-100 dark:bg-[#1c1c1c] px-4 py-2.5 lg:hidden">
             <div className="flex items-center justify-between">
               <button type="button" onClick={() => setSidebarOpen(true)}
-                className="flex items-center gap-2 cursor-pointer rounded p-1 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white">
+                className="flex items-center gap-2 cursor-pointer rounded p-1 text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-gray-100">
                 <SlidersHorizontal size={18} />
                 <span className="text-sm font-medium">Filters</span>
                 {activeFilterCount > 0 && <span className="bg-primary text-black text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center">{activeFilterCount}</span>}
@@ -320,7 +320,7 @@ const Products = () => {
             <div className="flex items-center justify-between">
               <div className="relative">
                 <select id="product-limit-m" value={itemsPerPage} onChange={handleLimitChange}
-                  className="cursor-pointer border font-pop appearance-none border-gray-300 bg-white pl-4 pr-7 py-2 text-sm text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white rounded-full">
+                  className="cursor-pointer border font-pop appearance-none border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] pl-4 pr-7 py-2 text-sm text-tcolor dark:text-gray-100 focus:border-primary focus:outline-none rounded-full">
                   {limitOptions.map((n) => <option key={n} value={n}>{n === 100 ? 'Show All' : `Show ${n}`}</option>)}
                 </select>
                 <ChevronsUpDown size={16} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -328,7 +328,7 @@ const Products = () => {
               <div className="relative">
                 <label htmlFor="product-sort-m" className="sr-only">Sort products</label>
                 <select id="product-sort-m" value={sort} onChange={handleSortChange}
-                  className="cursor-pointer appearance-none rounded-full border border-gray-300 bg-white py-2 pl-4 pr-9 text-[14px] text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white">
+                  className="cursor-pointer appearance-none rounded-full border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] py-2 pl-4 pr-9 text-[14px] text-tcolor dark:text-gray-100 focus:border-primary focus:outline-none">
                   {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
                 <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -337,11 +337,11 @@ const Products = () => {
           </div>
 
           {/* Desktop controls — three groups justify-between */}
-          <div className="hidden lg:flex items-center justify-between rounded bg-gray-100 px-4 py-2.5 dark:bg-white/5">
+          <div className="hidden lg:flex items-center justify-between rounded bg-gray-100 dark:bg-[#1c1c1c] px-4 py-2.5">
             <div className="flex items-center gap-2">
               {viewButtons.map(({ type, Icon, label }) => (
                 <button key={type} type="button" aria-label={label} aria-pressed={view === type} onClick={() => handleViewChange(type)}
-                  className={`rounded p-1 transition-all cursor-pointer duration-300 active:scale-90 ${view === type ? 'text-tcolor dark:text-white' : 'text-gray-400 hover:text-black dark:text-gray-500 dark:hover:text-white'}`}>
+                  className={`rounded p-1 transition-all cursor-pointer duration-300 active:scale-90 ${view === type ?'text-tcolor dark:text-gray-100' : 'text-gray-400 hover:text-black dark:text-gray-500 dark:hover:text-white'}`}>
                   <Icon size={18} />
                 </button>
               ))}
@@ -349,7 +349,7 @@ const Products = () => {
             <div className="flex items-center gap-2">
               <div className="relative">
                 <select id="product-limit" value={itemsPerPage} onChange={handleLimitChange}
-                  className="cursor-pointer border font-pop appearance-none border-gray-300 bg-white pl-4 pr-7 py-2 text-sm text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white rounded-full">
+                  className="cursor-pointer border font-pop appearance-none border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] pl-4 pr-7 py-2 text-sm text-tcolor dark:text-gray-100 focus:border-primary focus:outline-none rounded-full">
                   {limitOptions.map((n) => <option key={n} value={n}>{n === 100 ? 'Show All' : `Show ${n}`}</option>)}
                 </select>
                 <ChevronsUpDown size={16} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -357,17 +357,17 @@ const Products = () => {
               <div className="relative">
                 <label htmlFor="product-sort" className="sr-only">Sort products</label>
                 <select id="product-sort" value={sort} onChange={handleSortChange}
-                  className="w-56 cursor-pointer appearance-none rounded-full border border-gray-300 bg-white py-2 pl-4 pr-9 text-[14px] text-tcolor focus:border-primary focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-white">
+                  className="w-56 cursor-pointer appearance-none rounded-full border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] py-2 pl-4 pr-9 text-[14px] text-tcolor dark:text-gray-100 focus:border-primary focus:outline-none">
                   {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
                 <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
             </div>
             <div className="flex items-center">
-              {page !== 1 && <button onClick={() => dispatch(setPage(Math.max(1, page - 1)))} className="cursor-pointer text-gray-600 dark:text-gray-400"><MoveLeft /></button>}
+              {page !== 1 && <button onClick={() => dispatch(setPage(Math.max(1, page - 1)))} className="cursor-pointer text-gray-600 dark:text-gray-300 dark:text-gray-400"><MoveLeft /></button>}
               <input value={inputPage} onChange={(e) => setInputPage(e.target.value)} onKeyDown={handleMobileGoToPage} min="1" max={meta.totalPages} type="number"
-                className="border border-gray-400 rounded-full text-center w-12 py-1 mx-3 outline-none focus:ring-2 focus:ring-blue-400/20" />
-              {page !== meta.totalPages && <button onClick={() => dispatch(setPage(Math.min(meta.totalPages, page + 1)))} className="cursor-pointer text-gray-600 dark:text-gray-400"><MoveRight /></button>}
+                className="border border-gray-400 dark:border-[#444444] rounded-full text-center w-12 py-1 mx-3 outline-none focus:ring-2 focus:ring-blue-400/20" />
+              {page !== meta.totalPages && <button onClick={() => dispatch(setPage(Math.min(meta.totalPages, page + 1)))} className="cursor-pointer text-gray-600 dark:text-gray-300 dark:text-gray-400"><MoveRight /></button>}
             </div>
           </div>
 
