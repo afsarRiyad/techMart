@@ -85,7 +85,7 @@ const Featured = () => {
                                spaceBetween: 0,
                              },
                            }}
-                           className="!pb-8 pointer-coarse:!pb-20"
+                           className="!pb-12 pointer-coarse:!pb-20"
                  >
                 {currentSection?.products && currentSection.products.slice(0,6).map((pro, index) =>(
                  <SwiperSlide key={pro.id} className='pb-6'>

@@ -27,7 +27,7 @@ import SingleOrderDetails from '@/components/ui/SingleOrderDetails';
 import Wishlist from '@/pages/Wishlist';
 import Compare from '@/pages/Compare';
 import OrderReceived from "@/pages/OrderReceived"
-import Products from "@/pages/Products"
+import Products from "@/pages/Category"
 import ProductDetail from "@/pages/ProductDetail"
 import ScrollToTop from "@/components/common/ScrollToTop"
 import NotFound from "@/pages/NotFound"

@@ -5,9 +5,48 @@ import useOutsideClick from '@/hooks/useOutsideClick';
 import Logo from '@/assets/images/logo.svg?react'
 import LogoWhite from '@/assets/images/LogoWhite.svg?react'
 import useScrollBlocker from '@/hooks/useScrollBlocker';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 import { useTheme } from '@/features/theme/ThemeProvider';
+import { useGetCategories } from '@/features/product/hooks/useGetCategories';
+import { setSearch, setActiveCategory, setActiveChildCategory, resetFilters } from '@/features/product/productPageSlice';
 
+// The drawer is a static tree of 180+ marketing names while the api knows only
+// nine categories, so links are resolved in three steps: a small alias table for
+// the groups that clearly mean one category, then the api's own names, then a
+// loose word match. Anything still unmatched opens the shop with that name as
+// the search term, which is far more useful than a link to the whole catalogue.
+const ALIASES = {
+  'computers and accessories': 'laptops-computers',
+  'components': 'computer-components',
+  'laptops desktops and monitors': 'laptops',
+  'desktop monitors': 'laptops',
+  'mobile and tablets': 'smart-phones-tablets',
+  'camera': 'cameras',
+  'gadget': 'gadgets',
+  'watches and eyewear': 'smartwatches',
+  'video games': 'video-games-consoles',
+  'game console': 'game-consoles',
+  'audio speakers': 'audio-speakers',
+  'home theater systems': 'home-theater-systems',
+}
+
+// words that carry no meaning for matching, and the plural shortening that turns
+// "Cameras" into "Camera" so a label and a category name can still meet
+const NOISE = new Set(['and', 'the', 'all', 'of', 'for', 'misc', 'other', 'shop', 'products'])
+const singular = (word) => word.replace(/ies$/, 'y').replace(/s$/, '')
+const normalize = (value) =>
+  (value || '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+const wordsOf = (value) =>
+  normalize(value)
+    .split(' ')
+    .filter(Boolean)
+    .map(singular)
+    .filter((word) => !NOISE.has(word))
 const Hamberger = ({ className = '' }) => {
   const menuRef = useRef(null)
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false)
@@ -17,9 +56,78 @@ const Hamberger = ({ className = '' }) => {
   useScrollBlocker(sideDrawerOpen)
   const [activeIndex, setActiveIndex] = useState(null)
   const [activeItem, setActiveItem] = useState('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { data: catData } = useGetCategories()
+  const categories = catData?.data ?? []
 
   const handleclick = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
+  }
+
+  // every api category and child, flattened, with the parent slug kept so a child
+  // can be linked as /category/<parent>/<child>
+  const entries = categories.flatMap((cat) => [
+    { name: cat.name, slug: cat.slug, parentSlug: null },
+    ...(cat.children ?? []).map((child) => ({
+      name: child.name,
+      slug: child.slug,
+      parentSlug: cat.slug,
+    })),
+  ])
+
+  const byExactName = (name) => {
+    const wanted = normalize(name)
+    return entries.find((entry) => normalize(entry.name) === wanted)
+  }
+
+  // "Casing" and "Computer Cases" are one word apart, so a match needs most of the
+  // category's words to be present before we trust it
+  const byWords = (name) => {
+    const wanted = wordsOf(name)
+    if (!wanted.length) return null
+    let best = null
+    let bestScore = 0
+    for (const entry of entries) {
+      const target = wordsOf(entry.name)
+      if (!target.length) return null
+      const shared = target.filter((word) => wanted.includes(word)).length
+      const score = shared / target.length
+      if (shared > 0 && score > bestScore) {
+        best = entry
+        bestScore = score
+      }
+    }
+    return bestScore >= 0.6 ? best : null
+  }
+
+  const findTarget = (item) => {
+    if (item.url) return { link: item.url }
+    const alias = ALIASES[normalize(item.name)]
+    if (alias) return { entry: entries.find((entry) => entry.slug === alias) }
+    return { entry: byExactName(item.name) ?? byWords(item.name) }
+  }
+
+  // the store, not the url, decides what the products page shows, so the search
+  // term and the category are pressed in here and then we navigate
+  const openItem = (item) => {
+    const { link, entry } = findTarget(item)
+    dispatch(resetFilters())
+    dispatch(setActiveCategory(null))
+    dispatch(setActiveChildCategory(null))
+    if (link) {
+      navigate(link)
+    } else if (entry?.parentSlug) {
+      dispatch(setSearch(''))
+      navigate(`/category/${entry.parentSlug}/${entry.slug}`)
+    } else if (entry?.slug) {
+      dispatch(setSearch(''))
+      navigate(`/category/${entry.slug}`)
+    } else {
+      dispatch(setSearch(item.name))
+      navigate('/products')
+    }
+    setSideDrawerOpen(false)
   }
   return (
     < >
@@ -58,19 +166,34 @@ const Hamberger = ({ className = '' }) => {
             {
               menu.map((item, index) => (
                 <li key={index} className={`sm:px-3 dark:text-gray-100 px-1 select-none text-[14px] sm:text-[#333E48] text-gray-900 font-inter border-b border-b-gray-200 dark:border-b-[#333333] py-1 ${item.hasChild === false &&'hover:bg-gray-100 hover:text-black dark:hover:bg-[#2a2a2a] dark:hover:text-gray-100 transition-all'} ${activeItem == item && 'bg-primary text-black'}`}>
-                  <button aria-label={`Toggle ${item.name}`} className={`flex accordionHeading items-center justify-between cursor-pointer w-full h-[38px] pr-2 transition-all hover:text-black dark:hover:text-gray-100`}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
-                    {item.name}
-                    <span>{item.hasChild === false ? '' : <ChevronDown className={`${activeIndex === index ?'rotate-180' : 'rotate-0'} transform transition-transform duration-300 `} />}</span>
-                  </button>
+                  {item.hasChild === false ? (
+                    // a leaf category is a link, not an accordion with nothing in it
+                    <button
+                      type='button'
+                      className='flex accordionHeading items-center justify-between w-full h-[38px] pr-2 cursor-pointer text-left transition-all hover:text-black dark:hover:text-gray-100'
+                      onClick={() => openItem(item)}
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <button aria-label={`Toggle ${item.name}`} className={`flex accordionHeading items-center justify-between cursor-pointer w-full h-[38px] pr-2 transition-all hover:text-black dark:hover:text-gray-100`}  onClick={(e) => { handleclick(index); e.stopPropagation(); setActiveItem(item) }}>
+                      {item.name}
+                      <span><ChevronDown className={`${activeIndex === index ?'rotate-180' : 'rotate-0'} transform transition-transform duration-300 `} /></span>
+                    </button>
+                  )}
                   {item.children &&
                     <div className={`grid grid-rows-[0fr] opacity-0 transform transition-all ease-in-out duration-300 ${activeIndex === index &&'grid-rows-[1fr] opacity-100 pointer-events-auto'}`}>
                       <div className='overflow-hidden'>
                         <ul className='bg-gray-100 dark:bg-[#1c1c1c] rounded-2xl'>
                           {item.children.map((child, i) => (
-                            <li onClick={()=>setSideDrawerOpen(false)} key={i} className={`relative z-10 py-[9px] px-4 border-b border-b-gray-300 last:border-0 cursor-pointer font-inter sm:text-gray-600 sidebarLiHover ${child.isBold &&'font-bold'} border-b border-b-gray-300  cursor-pointer`}>
-                              <Link to={'*'}  >
-                              {child.name}
-                              </Link>
+                            <li key={i} className={`relative z-10 border-b border-b-gray-300 last:border-0 font-inter sm:text-gray-600 sidebarLiHover ${child.isBold &&'font-bold'}`}>
+                              <button
+                                type='button'
+                                onClick={() => openItem(child)}
+                                className='block w-full cursor-pointer py-[9px] px-4 text-left'
+                              >
+                                {child.name}
+                              </button>
                             </li>
                           ))}
                         </ul>

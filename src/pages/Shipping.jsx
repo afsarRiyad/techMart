@@ -274,13 +274,15 @@ const Shipping = ({ setShow , className = '' }) => {
         />
       </div>
 
+      {/* black once the address differs from the saved one, so an unsaved edit is
+          visible without reading every field */}
       <button
         type="submit"
         disabled={notChanged || updateAddress.isPending}
         className={`rounded-full px-6 py-3 font-inter text-[15px] font-semibold transition-colors duration-200 ${
           notChanged || updateAddress.isPending
             ? 'cursor-not-allowed bg-gray-200 text-gray-400 dark:bg-[#333]'
-            : 'cursor-pointer bg-gray-200 text-tcolor hover:bg-black hover:text-white dark:bg-[#333] dark:text-gray-100'
+            : 'cursor-pointer bg-black text-white hover:bg-gray-800'
         }`}
       >
         {updateAddress.isPending ? 'Saving...' : 'Save address'}

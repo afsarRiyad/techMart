@@ -22,6 +22,7 @@ import Reviews from '@/components/product/Reviews'
 import TechnicalSpecifications from '@/components/product/TechnicalSpecifications'
 import MoreProducts from '@/components/product/MoreProducts'
 import Gridview from '@/components/product/Gridview'
+import QuantityStepper from '@/components/ui/QuantityStepper'
 
 const buttons = [
              {id:1, title:'Accessories', name:'randomCombo'},
@@ -44,7 +45,7 @@ const ProductDetail = () => {
   const { data: wishlistData } = useWishlist()
   const addToCompare = useUpdateCompare()
   const { data: compareData } = useCompare()
-  const [proQuantity, setProQuantity] = useState('1')
+  const [proQuantity, setProQuantity] = useState(1)
   const price = product?.salePrice ?? product?.price
   const discountPercent = (product?.regularPrice - price) / product?.regularPrice * 100
   const productImages = product?.images && product.images.length > 0 ? product.images
@@ -258,12 +259,12 @@ const getPoints = (data) => {
             </div>
                 {/* quantity input field  */}
                 <div className='pt-6 flex flex-wrap gap-3'>
-                  <input type="number" className='border border-gray-300 dark:border-[#333333] bg-white dark:bg-[#262626] dark:bg-[#2a2a2a] text-tcolor dark:text-gray-100 rounded-full w-32 py-3 outline-none focus:ring-2 ring-blue-400/20 px-6'
-                      value={proQuantity}
-                      onChange={(e)=>setProQuantity(e.target.value)}
-                      min={1}
-                      max={product?.stock}
-                          />
+                  <QuantityStepper
+                    value={proQuantity}
+                    onChange={setProQuantity}
+                    max={product?.stock}
+                    label={`Quantity of ${product?.name}`}
+                  />
                   <button onClick={()=>handleQuantityChange(product?._id)} className='flex flex-1 whitespace-nowrap gap-2 items-center justify-center px-6 sm:px-10 py-3 bg-primary text-black rounded-full text-[16px] font-bold hover:bg-black hover:text-white dark:hover:bg-gray-200 dark:hover:text-black cursor-pointer transition-all duration-150'><FaOpencart size={20}/> Add to cart</button>
                 </div>
                 <div className="flex flex-wrap gap-4 font-inter">

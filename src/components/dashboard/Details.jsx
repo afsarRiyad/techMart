@@ -188,12 +188,14 @@ const passwordFieldsComplete =
         )}
       </div>
 
+            {/* black while there is something to save, grey while there is not - the
+                colour is the only cue that the form is holding unsaved edits */}
             <button
           type="submit"
           disabled={!canSave}
           className={`rounded-full px-8 py-3 font-inter text-sm font-semibold transition-all duration-300 ${
             canSave
-              ? "bg-primary text-tcolor dark:text-gray-100 hover:brightness-95 cursor-pointer"
+              ? "bg-black text-white hover:bg-gray-800 cursor-pointer"
               : "cursor-not-allowed bg-gray-200 dark:bg-[#333333] text-gray-400 dark:text-gray-500"
           }`}
         >

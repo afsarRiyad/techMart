@@ -7,9 +7,7 @@
        text color renders pure black on the dark background */
     @apply bg-white text-tcolor dark:bg-[#181818] dark:text-gray-100;
   }
-  /* Only the page itself fades. Putting this transition on every div, p and
-     span made the theme switch repaint the whole tree at once, which is what
-     made the toggle feel slow. */
+  
   body {
     transition: background-color 200ms ease, color 200ms ease;
   }
@@ -27,7 +25,7 @@
    whole primary ramp for a muted gold. Every bg-primary / text-primary /
    border-primary picks it up, no per-element variants needed. */
 .dark {
-    --color-primary: #C9A227;
+    --color-primary: #fed800fa;
 }
 
 .topbarList{

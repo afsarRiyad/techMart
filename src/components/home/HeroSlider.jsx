@@ -10,6 +10,13 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import { Autoplay, Pagination, Navigation} from 'swiper/modules';
+import { Link } from 'react-router';
+
+// each slide sells one shelf, so its button opens that shelf instead of the
+// whole catalogue: sound devices, smartwatches, then phones and tablets
+const soundDevices = '/category/tv-audio';
+const smartwatches = '/category/gadgets/smartwatches';
+const phonesAndTablets = '/category/smart-phones-tablets';
 
 
 const HeroSlider = () => {
@@ -44,10 +51,10 @@ const HeroSlider = () => {
                  </span>
                  <span className='uppercase lg:w-120 sm:text-[28px] sm:pr-3 sm:leading-10 lg:text-[46px] text-[18px] lg:font-thin text-[#333E48] anim-text lg:leading-14 leading-8'>timepieces that make a statement up to <span className='font-inter font-bold'>40% off</span></span>
                  <div className='lg:pt-9 pt-2 anim-btn'>
-                     <button className='relative group bg-primary sm:text-[16px] sm:py-2.5 sm:px-8 lg:py-3 lg:px-14 px-4 py-1.5 lg:rounded-xl rounded-md tracking-wider font-semibold lg:text-[16px] text-sm lg:font-thin cursor-pointer overflow-hidden select-none'>
+                     <Link to={soundDevices} className='relative group bg-primary sm:text-[16px] sm:py-2.5 sm:px-8 lg:py-3 lg:px-14 px-4 py-1.5 lg:rounded-xl rounded-md tracking-wider font-semibold lg:text-[16px] text-sm lg:font-thin cursor-pointer overflow-hidden select-none'>
                         Start Buying
                     <span className='btnHover'/>
-                     </button>
+                     </Link>
                  </div>
               </div >
               <div className='flex-1 flex justify-center anim-image'>
@@ -72,10 +79,10 @@ const HeroSlider = () => {
                     <span className='align-top lg:text-[40px] text-[16px] lg:font-bold font-semibold'>99</span>
                  </div>
                  <div className='lg:pt-9 sm:pt-5 pt-2 anim-btn'>
-                     <button className='relative group bg-primary sm:text-[16px] sm:py-2.5 sm:px-8 lg:py-3 font-semibold lg:px-14 px-4 py-1.5 lg:rounded-xl rounded-md tracking-wider lg:text-[16px] text-sm lg:font-thin cursor-pointer overflow-hidden select-none'>
+                     <Link to={smartwatches} className='relative group bg-primary sm:text-[16px] sm:py-2.5 sm:px-8 lg:py-3 font-semibold lg:px-14 px-4 py-1.5 lg:rounded-xl rounded-md tracking-wider lg:text-[16px] text-sm lg:font-thin cursor-pointer overflow-hidden select-none'>
                         Start Buying
                     <span className='btnHover'/>
-                     </button>
+                     </Link>
                  </div>
               </div >
               <div className='flex-1 flex justify-center lg:pl-40'>
@@ -94,10 +101,10 @@ const HeroSlider = () => {
                  </span>
                  <span className='uppercase sm:text-[28px] sm:pr-3 sm:leading-10 lg:w-120 lg:text-[46px] text-[18px] lg:font-thin text-[#333E48] anim-text lg:leading-14 leading-8'>timepieces that make a statement up to <span className='font-inter font-bold'>40% off</span></span>
                  <div className='lg:pt-9 sm:pt-5 pt-2 anim-btn'>
-                     <button className='relative group bg-primary sm:text-[16px] sm:py-2.5 sm:px-8 lg:py-3 lg:px-14 px-4 py-1.5 lg:rounded-xl rounded-md tracking-wider lg:text-[16px] text-sm lg:font-thin font-semibold cursor-pointer overflow-hidden select-none'>
+                     <Link to={phonesAndTablets} className='relative group bg-primary sm:text-[16px] sm:py-2.5 sm:px-8 lg:py-3 lg:px-14 px-4 py-1.5 lg:rounded-xl rounded-md tracking-wider lg:text-[16px] text-sm lg:font-thin font-semibold cursor-pointer overflow-hidden select-none'>
                         Start Buying
                     <span className='btnHover'/>
-                     </button>
+                     </Link>
                  </div>
               </div >
               <div className='flex-1 flex justify-center pt-13'>

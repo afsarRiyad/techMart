@@ -8,6 +8,7 @@ import { useUpdateCart } from "@/features/cart/hooks/useUpdateCart";
 import { Link, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import CouponInput from '@/components/ui/CouponInput';
+import QuantityStepper from '@/components/ui/QuantityStepper';
 import { useApplyCoupon } from '@/features/cart/hooks/useApplyCoupon';
 import { useShippingAddress } from '@/features/user/hooks/useShippingAddress';
 import { useAuth } from '@/hooks/useAuth';
@@ -26,20 +27,32 @@ const Cart = () => {
   const [cartData, setCartData] = useState({});
   const {data: userData} = useAuth()
   const { data, isLoading, error } = useCart();
+ const cartItems = data?.data?.items
  const subTotal = data?.data?.totalAmount
  const flatCharge = deliveryArea === 'inside' ? 0 : 50;
- const tax = subTotal * 0.15
- const totalAmount = subTotal + flatCharge + tax
- const cartItems = data?.data?.items
 const dis = discount?.discountAmount ?? 0
-const discountedSubTotal = subTotal - dis 
 const removeMutation = useRemoveFromCart()
 const updateMutation = useUpdateCart()
-const handleRemove = (itemId)=>{
-        removeMutation.mutateAsync(itemId)
-}
+
+// a row keeps the quantity the server sent until it is touched; from then on the
+// number in the box is what the row and the totals are built from, so editing a
+// quantity updates the price straight away instead of waiting for Update Cart
+const quantityOf = (item) => cartData[item._id] ?? item.quantity
 const handleChange = (itemId, newQuantity) =>{
   setCartData(prev =>({...prev, [itemId]: newQuantity}))
+}
+const hasPendingChanges = Object.keys(cartData).length > 0
+const itemsSubTotal = (cartItems ?? []).reduce(
+  (sum, item) => sum + item.product.price * quantityOf(item),
+  0
+)
+// the server total is right until a box is edited, then the rows are the truth
+const basketSubTotal = hasPendingChanges ? itemsSubTotal : (subTotal ?? itemsSubTotal)
+const tax = basketSubTotal * 0.15
+const totalAmount = basketSubTotal + flatCharge + tax
+const discountedSubTotal = basketSubTotal - dis
+const handleRemove = (itemId)=>{
+        removeMutation.mutateAsync(itemId)
 }
 const handleUpdate = async () => {
   const updateEntries = Object.entries(cartData);
@@ -50,6 +63,9 @@ const handleUpdate = async () => {
       updateMutation.mutateAsync({ itemId, quantity })
     )
   );
+
+  // the server is the source again once it has answered
+  setCartData({})
 
   if (dis > 0) {
     const freshTotal = results[results.length - 1]?.data?.totalAmount;
@@ -162,18 +178,15 @@ return(
                   ${(item.product.price).toFixed(2)}
                 </p>
                 <div className="flex items-center justify-between gap-2 pt-2">
-                  <input
-                    onChange={(e) => handleChange(item._id, parseInt(e.target.value))}
-                    disabled={updateMutation.isPending}
-                    type="number"
-                    min="1"
+                  <QuantityStepper
+                    value={quantityOf(item)}
+                    onChange={(next) => handleChange(item._id, next)}
                     max={item.product.stock}
-                    defaultValue={item.quantity}
-                    aria-label={`Quantity for ${item.product.name}`}
-                    className="h-11 w-20 rounded-xl border border-gray-400 dark:border-[#444444] dark:bg-[#242424] px-3 text-[15px] outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:text-gray-100"
+                    disabled={updateMutation.isPending}
+                    label={`Quantity for ${item.product.name}`}
                   />
                   <span className="text-[16px] font-semibold text-tcolor dark:text-gray-100">
-                    ${(item.product.price * item.quantity).toFixed(2)}
+                    ${(item.product.price * quantityOf(item)).toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -212,19 +225,16 @@ return(
                    </td>
                    <td className="py-4 text-left text-tcolor dark:text-gray-100 text-[17px] font-semibold">${(item.product.price).toFixed(2)}</td>
                    <td>
-                    <input
-                     onChange={(e)=>handleChange(item._id, parseInt(e.target.value))}
-                     disabled={updateMutation.isPending}
-                      type="number"
-                      min="1"
+                    <QuantityStepper
+                      value={quantityOf(item)}
+                      onChange={(next) => handleChange(item._id, next)}
                       max={item.product.stock}
-                      defaultValue={item.quantity}
-                      aria-label={`Quantity for ${item.product.name}`}
-                      className='w-20 px-4 py-2 rounded-[12px] outline-none border border-gray-400 dark:border-[#444444] dark:bg-[#242424] dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+                      disabled={updateMutation.isPending}
+                      label={`Quantity for ${item.product.name}`}
                     />
                    </td>
                      <td className="py-4 text-left text-tcolor dark:text-gray-100 text-[17px] font-semibold">
-                       ${(item.product.price * item.quantity).toFixed(2)}
+                       ${(item.product.price * quantityOf(item)).toFixed(2)}
                      </td>
                 </tr>
               ))}
@@ -235,11 +245,26 @@ return(
           {discount?.description && 
             <span className="pl-5 text-red-400 text-[22px] font-semibold">{discount?.description}</span>
           }
+          {/* the totals follow the boxes, not the last server answer */}
+          {hasPendingChanges && (
+            <p className='pt-4 font-inter text-[14px] text-gray-500 dark:text-gray-400'>
+              Quantity changed - press Update Cart to save it.
+            </p>
+          )}
            {/* button section  */}
            <div className='pb-10 pt-10 sm:pt-20 flex flex-col sm:flex-row sm:justify-between gap-6'>
               <CouponInput setDiscount={setDiscount} subTotal={subTotal}/>
               <div className='flex flex-col gap-3 sm:gap-0 sm:ml-5'>
-                <button onClick={handleUpdate} className='min-h-11 bg-gray-200 dark:bg-[#333333] dark:bg-[#212121] text-gray-500 dark:text-gray-300 font-semibold py-3 sm:w-34 rounded-full cursor-pointer hover:bg-black hover:text-white transition-colors duration-200'>Update Cart</button>
+                <button
+                  onClick={handleUpdate}
+                  disabled={updateMutation.isPending}
+                  className={`min-h-11 sm:w-34 rounded-full font-semibold py-3 transition-colors duration-200 disabled:cursor-not-allowed ${hasPendingChanges
+                    ? 'bg-black text-white cursor-pointer hover:bg-gray-800'
+                    : 'bg-gray-200 dark:bg-[#212121] text-gray-500 dark:text-gray-300 cursor-pointer hover:bg-black hover:text-white'
+                  }`}
+                >
+                  {updateMutation.isPending ? 'Updating...' : hasPendingChanges ? 'Update Cart' : 'Cart up to date'}
+                </button>
                 <button
                   onClick={handleCheckoutClick}
                   className='bg-primary hover:text-white  text-tcolor font-semibold py-3 px-6 rounded-full cursor-pointer hover:bg-black transition-colors duration-200'
@@ -258,7 +283,7 @@ return(
              </div>
              <div className='flex justify-between border-b border-b-gray-300 dark:border-b-[#333333] pt-4 pb-2'>
                <span className='font-bold text-[15px] dark:text-gray-200'>Subtotal</span>
-               <span className='text-gray-900 dark:text-gray-100 dark:text-gray-200'>${subTotal?.toFixed(2)}</span>
+               <span className='text-gray-900 dark:text-gray-100 dark:text-gray-200'>${basketSubTotal.toFixed(2)}</span>
              </div>
              {dis > 0 && (
                <div className='flex justify-between border-b border-b-gray-300 dark:border-b-[#333333] pt-3 pb-2'>
