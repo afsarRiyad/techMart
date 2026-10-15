@@ -29,10 +29,12 @@ const Login = () => {
         setCustomerToken(data.data?.data?.accessToken)
         // tell the app who is signed in, the layout moves local picks over
         queryClient.invalidateQueries({queryKey: ['me']})
-        // unverified accounts only get partial access, so send them to the code
-        const isVerified = data.data?.data?.isVerified
-        const nextPage = isVerified ? (location.state?.from || "/account") : "/account/otp-verification"
-        toast.success(data.data?.message || 'Login successful!');
+        const nextPage = location.state?.from || "/account"
+        toast.success(
+          data.data?.data?.isVerified
+            ? (data.data?.message || 'Login successful!')
+            : 'Signed in with limited access — verify your email to unlock checkout and orders.'
+        );
                     setTimeout(() => {
   navigate(nextPage);
 }, 1500);

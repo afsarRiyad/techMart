@@ -20,6 +20,7 @@ import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
 import { useCompare } from '@/features/compare/hooks/useCompare'
 import { Link } from 'react-router'
 import { useCart } from '@/features/cart/hooks/useCart';
+import { ShowcaseSkeleton } from '@/components/home/HomeSkeletons'
 
 const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
     const addToCart = useAddToCart()
@@ -50,7 +51,9 @@ const ProductShowcase = ({data, loading, errs, trending=false, type}) => {
     const isInCompare = (proId) => {
         return compareListItem.some((item) => item?._id === proId)
     }
-        if (loading) return <p className='text-center p-10 text-gray-500 dark:text-gray-400 font-inter'>Loading items...</p>
+        // the skeleton wears the same heading and column counts as the loaded
+        // section, so nothing shifts when the products land
+        if (loading) return <ShowcaseSkeleton trending={trending} />
         if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
   return (
        <Container>

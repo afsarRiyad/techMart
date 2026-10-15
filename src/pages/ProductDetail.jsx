@@ -23,6 +23,7 @@ import TechnicalSpecifications from '@/components/product/TechnicalSpecification
 import MoreProducts from '@/components/product/MoreProducts'
 import Gridview from '@/components/product/Gridview'
 import QuantityStepper from '@/components/ui/QuantityStepper'
+import { ProductDetailSkeleton } from '@/components/product/ProductSkeletons'
 
 const buttons = [
              {id:1, title:'Accessories', name:'randomCombo'},
@@ -89,10 +90,14 @@ const getPoints = (data) => {
   return points;
 };
 
+  // The skeleton goes inside the layout, not in place of it: the sidebar and the
+  // page frame are already there (the sidebar has its own skeleton), so only the
+  // product column is greyed out and the page does not jump twice.
   if (isLoading) {
-    return (        <div className="flex justify-center items-center py-20">
-        <div className="text-gray-500 dark:text-gray-400">Loading product...</div>
-      </div>
+    return (
+      <SidebarLayout>
+        {() => <ProductDetailSkeleton />}
+      </SidebarLayout>
     )
   }
 

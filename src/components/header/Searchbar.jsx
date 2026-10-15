@@ -68,7 +68,9 @@ const Searchbar = () => {
   useOutsideClick(mobileSearchRef, () => setMobileSearch(false), mobileSearch)
   useOutsideClick(searchBoxRefs, () => setSuggestOpen(false), suggestOpen)
   useOutsideClick(accountRef, () => setAccountOpen(false), accountOpen)
-  useScrollBlocker(mobileSearch)
+  // Anything that opens over the page holds the page still: the phone's search
+
+  useScrollBlocker(mobileSearch || catOpen || showSuggestions)
 
   // enter or the search button runs the search on the products page
   const runSearch = () => {
@@ -124,7 +126,7 @@ const Searchbar = () => {
 
   return (
     <>
-      <div className={`z-80 lg:dark:bg-darkBg transition-all duration-300 lg: ${sticky
+      <div className={`z-40 lg:dark:bg-darkBg transition-all duration-300 lg: ${sticky
           ? 'fixed  w-full top-0 left-0 shadow-md  bg-white animate-sticky lg:animate-none z-[999]'
           : 'relative bg-primary lg:bg-white'}`}>
         <Container>
@@ -161,7 +163,7 @@ const Searchbar = () => {
               { catOpen && <div className='fixed inset-0 left-0 top-34 bg-black/10'/>}
                {/* all categories starts here  */}
                 <div className='relative' ref={categoryRef}>
-                  <h2 className='dark:bg-[#212121] dark:text-gray-400 bg-white dark:bg-[#262626] outline-none select-none border border-[2px] border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor dark:text-gray-100' onClick={() => setCatOpen(!catOpen)}>{category}</h2>
+                  <h2 className='dark:bg-[#212121] dark:text-gray-400 bg-white dark:bg-[#262626] outline-none select-none border border-[2px] border-primary border-x-0 pt-[9px] pb-[10px] cursor-pointer text-[14px] w-54 font-inter text-tcolor dark:text-gray-100' onClick={() => {setCatOpen(!catOpen,); setSuggestOpen(false)}}>{category}</h2>
                   <ul className={`absolute top-full border bg-white shadow-md dark:bg-[#181818] dark:border-gray-500 border-gray-200 transition ${catOpen ?'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-2 pointer-events-none '}`}>
                     {error && 
                          <p>{error}</p>}

@@ -2,6 +2,7 @@ import React from 'react'
 import { useFetchData } from '@/hooks/useFetchData'
 import Container from '@/components/layout/Container'
 import { Link } from 'react-router'
+import { TopCategoriesSkeleton } from '@/components/home/HomeSkeletons'
 
 const TopCategories = () => {
     const { data: cat, loading, errs } = useFetchData('/api/categories')
@@ -9,7 +10,11 @@ const TopCategories = () => {
         title: 'Top Categories this Week',
         products: cat
     }
-    
+    // an empty tile grid would collapse the band under the hero, so it holds its
+    // shape until the categories land
+    if (loading) return <TopCategoriesSkeleton />
+    if (errs) return <p className='p-10 text-center font-inter text-red-500'>{errs}</p>
+
     return (
         <div className='bg-[#F4F4F4] dark:bg-[#141414]'>
             <Container>

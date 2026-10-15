@@ -22,6 +22,7 @@ import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare'
 import { useCompare } from '@/features/compare/hooks/useCompare'
 import CardActions from '@/components/ui/CardActions'
 import { useTheme } from '@/features/theme/ThemeProvider'
+import { PromoShowcaseSkeleton } from '@/components/home/HomeSkeletons'
 
 const PromotionalCat = () => {
     const { isDark } = useTheme()
@@ -55,7 +56,9 @@ const PromotionalCat = () => {
     }
     const { data: sec, loading, errs } = useFetchData('/api/home-v3')
     const section = sec?.data?.sections?.find(cat => cat.id === 'television-and-entertainment')
-    if (loading) return <p className='text-center p-10 text-gray-500 dark:text-gray-400 font-inter'>Loading items...</p>
+    // the promo band sits mid-page, so it reserves its own height while loading
+    // instead of collapsing and shoving the sections below it upwards
+    if (loading) return <PromoShowcaseSkeleton />
     if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
     // the texture photo only makes sense on a light page; dark mode gets a flat
     // surface instead of a photo the dark theme would have to fight with

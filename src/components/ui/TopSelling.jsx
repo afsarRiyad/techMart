@@ -12,6 +12,7 @@ import { useCompare } from '@/features/compare/hooks/useCompare'
 import { Link } from 'react-router'
 import { useCart } from '@/features/cart/hooks/useCart';
 import CardActions from '@/components/ui/CardActions';
+import { BestSellersSkeleton } from '@/components/home/HomeSkeletons';
 
 const ProductCard = ({ data, loading = false, errs = '', type = '', discount, timers }) => {
     const addToCart = useAddToCart()
@@ -42,7 +43,7 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
     const isInCompare = (proId) => {
         return compareListItem.some((item) => item?._id === proId)
     }
-    if (loading) return <p className='text-center p-10 text-gray-500 dark:text-gray-400 font-inter'>Loading items...</p>
+    if (loading) return <BestSellersSkeleton />
     if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
     const { days, hours, minutes, seconds } = timers
     return (

@@ -17,6 +17,7 @@ import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
 import { useCompare } from '@/features/compare/hooks/useCompare';
 import CardActions from '@/components/ui/CardActions'
+import { FeaturedSkeleton } from '@/components/home/HomeSkeletons'
 
 const Featured = () => {
   const addToCart = useAddToCart()
@@ -58,7 +59,7 @@ const Featured = () => {
       ['featured-products', 'on-sale', 'top-selling'].includes(item.id)
     )) || [];
     const currentSection = datas?.find(sec => show === sec.id)
-    if (loading) return <p className="text-center p-10 text-gray-500 dark:text-gray-400 font-inter">Loading items...</p>
+    if (loading) return <FeaturedSkeleton />
     if (errors) return <p className="text-center p-10 text-red-500 font-inter">{errors}</p>
   return (
     <Container  className='font-inter dark:text-gray-100'>

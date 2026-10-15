@@ -20,6 +20,7 @@ import { useUpdateWishlist } from '@/features/wishlist/hooks/useUpdateWishlist';
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 import { useUpdateCompare } from '@/features/compare/hooks/useUpdateCompare';
 import { useCompare } from '@/features/compare/hooks/useCompare';
+import { RecommendationSkeleton } from '@/components/home/HomeSkeletons'
 
 const ProductShowcaseTwo = ({data, loading=false, errs='', type=''}) => {
     const addtoWishlist = useUpdateWishlist()
@@ -51,7 +52,7 @@ const ProductShowcaseTwo = ({data, loading=false, errs='', type=''}) => {
     const isInCompare = (proId) => {
   return compareListItem.some((item) => item._id === proId);
     }
-     if (loading) return <p className='text-center p-10 text-gray-500 dark:text-gray-400 font-inter'>Loading items...</p>
+     if (loading) return <RecommendationSkeleton />
         if (errs) return <p className='text-center p-10 text-red-500 font-inter'>{errs}</p>
   return (
        <Container>

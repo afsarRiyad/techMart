@@ -18,6 +18,7 @@ import Payments from "@/components/dashboard/Payments"
 import Details from "@/components/dashboard/Details"
 import Dashboard from "@/components/dashboard/Dashboard"
 import ProtectedRoute from "@/routes/ProtectedRoute"
+import GuestRoute from "@/routes/GuestRoute"
 import Billing from "@/pages/Billing"
 import Shipping from "@/pages/Shipping"
 import Deals from "@/components/home/Deals"
@@ -46,7 +47,12 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="/wishlist" element={<Wishlist/>}/>
         <Route path="/compare" element={<Compare/>}/>
-        <Route path="/account/login" element={<Login/>}/>
+        {/* signing in or up again is only for visitors without a session: both pages
+            send an already signed-in visitor on to the dashboard */}
+        <Route element={<GuestRoute/>}>
+          <Route path="/account/login" element={<Login/>}/>
+          <Route path="/account/signup" element={<Signup/>}/>
+        </Route>
         <Route path="/products" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetail />} />
         <Route path="/category/:slug" element={<Products />} />
@@ -57,7 +63,6 @@ function App() {
           <Route path="/checkout" element={<Checkout/>}/>
           <Route path="/order-received" element={<OrderReceived/>}/>
         </Route>
-        <Route path="/account/signup" element={<Signup/>}/>
         <Route path="/account/forgot-password" element={<Forgot/>}/>
         <Route path="/account/otp-verification" element={<OtpVerification/>}/>
         <Route path="/account/reset-password" element={<Reset/>}/>
