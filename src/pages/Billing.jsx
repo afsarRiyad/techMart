@@ -50,7 +50,9 @@ const COUNTIES = [  'Dhaka',
 
 
 
-const Billing = ({ setShow, className, title}) => {
+// `stayOnPage` is for checkout, where the same form saves the address the order is
+// then placed with: leaving for /account/addresses would abandon the checkout
+const Billing = ({ setShow, className, title, stayOnPage = false }) => {
   const navigate = useNavigate()
   const { data: userData } = useAuth()
   const updateAddress = useBillingAddress()
@@ -136,6 +138,7 @@ const Billing = ({ setShow, className, title}) => {
     };
     updateAddress.mutate({ billingAddress }, {
       onSuccess: () => {
+        if (stayOnPage) return
         navigate('/account/addresses', { state: { success: 'Billing address updated successfully!' } })
       }
     });

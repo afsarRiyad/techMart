@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Container from '@/components/layout/Container'
 import Dropdown from '@/components/ui/Dropdown'
 import CouponInput from '@/components/ui/CouponInput'
@@ -6,12 +6,10 @@ import Billing from '@/pages/Billing'
 import Shipping from '@/pages/Shipping'
 import OrderSummary from '@/components/ui/OrderSummary'
 import { useCart } from '@/features/cart/hooks/useCart'
-import { Undo2 } from 'lucide-react'
-import { useNavigate } from 'react-router'
+import { Navigate } from 'react-router'
 import toast from 'react-hot-toast'
 
 const Checkout = () => {
-    const navigate = useNavigate()
     const {data} = useCart()
     const [notes, setNotes] = useState()
     const subTotal = data?.data?.totalAmount
@@ -28,7 +26,8 @@ const cancleCoupon = () =>{
     toast.success('Coupon removed!')
 }
 
-      if(data?.data?.items?.length <= 0) return navigate('/cart', {replace:true})
+
+      if(data?.data?.items && data.data.items.length === 0) return <Navigate to='/cart' replace />
   return (
     <Container>
        <h2 className='font-pop text-[40px] pt-5 text-tcolor dark:text-gray-100 text-center pb-7'>Checkout</h2>
@@ -52,7 +51,7 @@ const cancleCoupon = () =>{
        </Dropdown>
        <div className="flex gap-5 pt-10">
          <div className='w-[55%]'>
-           <Billing title={'Billing Details'} className={'border-b-[3px] text-[30px] pb-4 border-b-primary'}/>
+           <Billing title={'Billing Details'} stayOnPage className={'border-b-[3px] text-[30px] pb-4 border-b-primary'}/>
            <div className="pt-12 font-inter text-2xl font-bold text-tcolor dark:text-gray-100 border-b border-b-gray-300 dark:border-b-[#333333] pb-3 darkH sm:text-[28px] mb-6">
            <span className='text-[28px] pb-3 font-normal border-b-[3px] mb-6 border-b-primary'>Shipping Details</span>
            </div>
@@ -61,7 +60,7 @@ const cancleCoupon = () =>{
              Ship to a different address?
            </label>
             {shipToDifferent &&
-              <Shipping className={'pt-10'}/>
+              <Shipping stayOnPage className={'pt-10'}/>
             }
             <div className="mb-6 pt-10">
                 <label className="mb-2 block font-inter text-sm font-semibold text-tcolor dark:text-gray-100">

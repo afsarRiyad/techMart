@@ -3,6 +3,7 @@ import { LayoutDashboard, Package, Download, MapPin, CreditCard, UserRound, LogO
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import Container from '@/components/layout/Container';
 import { logout } from '@/hooks/useFetchData';
+import { clearLocalCompare } from '@/features/compare/localCompare';
 import { clearCustomerToken } from '@/api/apiCustomer';
 import {  useQueryClient } from '@tanstack/react-query';
 
@@ -26,6 +27,8 @@ const Dashboard = () => {
   try {
     await logout();
     clearCustomerToken();
+    // the compare picks belong to the account, not to this browser
+    clearLocalCompare();
     queryClient.setQueryData(['me'], null)
     queryClient.removeQueries({ queryKey: ['me'] });
     navigate("/account/login", { replace: true });

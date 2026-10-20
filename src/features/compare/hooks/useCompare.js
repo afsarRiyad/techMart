@@ -1,9 +1,18 @@
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { getCompare } from "@/features/compare/services/compareService"
-import { useAuth } from "@/hooks/useAuth"
-import { readLocalCompare } from "@/features/compare/localCompare"
+import { readLocalCompare, writeLocalCompare } from "@/features/compare/localCompare"
 
-// guest picks the api has not confirmed yet, shown without their image
+// the list arrives under `data`; anything else means the call went wrong and an
+// empty list is the honest answer rather than `undefined.length`
+const listOf = (body) => {
+    const list = body?.data
+    if (Array.isArray(list)) return list
+    if (Array.isArray(list?.items)) return list.items
+    return []
+}
+
+
 const withLocal = (serverItems) => {
     const items = Array.isArray(serverItems) ? serverItems : []
     const known = new Set(items.map((item) => item._id))
@@ -12,8 +21,6 @@ const withLocal = (serverItems) => {
 }
 
 export const useCompare = ()=>{
-    const { data: me } = useAuth()
-    const signedIn = Boolean(me?.data?._id)
 
     const query = useQuery({
         queryKey:["compare"],
@@ -21,18 +28,29 @@ export const useCompare = ()=>{
         // the api sleeps when idle, a failed load should not leave the count empty
         retry: 2,
         retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 4000),
-        staleTime: 1000 * 60
+        staleTime: 1000 * 60,
+        placeholderData: keepPreviousData
     })
 
-    // signed in the account owns the list, as a guest localstorage is the record
-    const items = signedIn ? (query.data?.data ?? []) : withLocal(query.data?.data)
-    const data = signedIn ? query.data : {...query.data, data: items}
+    const serverItems = listOf(query.data)
+
+    // once the api returns a pick it is the record of it, so the local copy can go;
+    // only picks it has not confirmed stay behind for the next load
+    useEffect(() => {
+        const confirmed = new Set(listOf(query.data).map((item) => item._id))
+        if (confirmed.size === 0) return
+        const stored = readLocalCompare()
+        const kept = stored.filter((id) => !confirmed.has(id))
+        if (kept.length !== stored.length) writeLocalCompare(kept)
+    }, [query.data])
+
+    const items = withLocal(serverItems)
 
     return {
         ...query,
-        data,
+        data: {...query.data, data: items},
         items,
-        // a guest with local picks has something to show, no need to wait
+        // nothing on screen yet: no api list and no local picks to show instead
         isPending: query.isPending && items.length === 0
     }
 }

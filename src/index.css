@@ -352,15 +352,7 @@
 .cardActions{
     @apply flex items-center justify-center gap-1 bg-white text-gray-500 dark:bg-[#212121] dark:text-gray-400
 }
-/* ------------------------------------------------------------------
-   Touch screens: a tap stands in for the mouse hover.
-   Tailwind wraps every hover: / group-hover: rule in @media (hover:hover),
-   so on a phone nothing that the desktop reveals on hover is ever shown and
-   nothing can be clicked. useTouchHover puts .touch-open on the card you
-   touched (and takes it off the previous one), these rules reveal the same
-   things hover does: the compare / wishlist row, the cart tooltip, the gold
-   cart button and the photo zoom.
-   ------------------------------------------------------------------ */
+
 @media (hover: none){
     [data-touch-hover]{
         -webkit-tap-highlight-color: transparent;
@@ -492,7 +484,7 @@
   display: block;
   height: 3px;
   background: var(--color-primary);
-  animation: toastDrain 5s linear forwards;
+  animation: toastDrain 1s linear forwards;
 }
 @keyframes toastDrain{
   from { width: 100%; }

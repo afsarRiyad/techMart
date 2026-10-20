@@ -58,13 +58,14 @@ const ProductCard = ({ data, loading = false, errs = '', type = '', discount, ti
                             <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-0 gap-x-1 lg:w-[60%]'>
                                 {data?.products && data.products.slice(0, 6).map((pro, index) => (
                                     <div
+                                        key={pro._id || pro.id || index}
                                         data-touch-hover
                                         className={`relative cardSurface py-3 group/card hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] border-r border-r-gray-300 dark:border-r-[#333333] mb-2 cursor-pointer`}
                                     >
                                         <div className='px-5'>
                                             <div className='flex items-center pt-1'>
                                                 {pro?.categories?.map((tag, index) => (
-                                                    <p key={index} className='truncate text-[12px] block text-gray-500 dark:text-gray-400 font-inter cursor-pointer hover:text-gray-500 hover:font-semibold'>{tag}{index < pro.categories.length - 1 && ','}</p>
+                                                    <p key={`${pro._id}-${tag}-${index}`} className='truncate text-[12px] block text-gray-500 dark:text-gray-400 font-inter cursor-pointer hover:text-gray-500 hover:font-semibold'>{tag}{index < pro.categories.length - 1 && ','}</p>
                                                 ))}
                                             </div>
                                             <div className='min-h-12'>

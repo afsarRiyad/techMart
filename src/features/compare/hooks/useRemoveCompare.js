@@ -18,21 +18,20 @@ export const useRemoveCompare = ()=>{
             const items = Array.isArray(previous?.data) ? previous.data : []
             const listed = items.some((item) => item._id === productId)
 
-            if (!signedIn) {
-                // the guest list is localstorage, it records the removal even if the call fails
-                removeLocalCompare(productId)
-                if (listed) {
-                    queryClient.setQueryData(['compare'], {...previous, data: items.filter((item) => item._id !== productId)})
-                }
-                return {previous, changed: false}
-            }
+            // the device's own record goes either way, so a pick that was added but
+            // never confirmed is dropped from the count too
+            removeLocalCompare(productId)
 
-            // signed in: only guess when the list is known, a guess has to be undoable
             if (!Array.isArray(previous?.data) || !listed) return {previous, changed: false}
             queryClient.setQueryData(['compare'], {...previous, data: items.filter((item) => item._id !== productId)})
             return {previous, changed: true}
         },
-        onSuccess:()=>{
+        onSuccess:(response, productId)=>{
+            // drop it from the cache too, so the header badge falls with the row
+            queryClient.setQueryData(['compare'], (old) => ({
+                ...old,
+                data: (Array.isArray(old?.data) ? old.data : []).filter((item) => item._id !== productId),
+            }))
             toast.success("Item removed from compare!", {id: 'compare-remove'})
         },
         onError:(error, productId, context)=>{

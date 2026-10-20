@@ -7,6 +7,7 @@ import ProfileImageUpload from '@/components/ui/ProfileImageUpload';
 import { apiCustomer, clearCustomerToken } from '@/api/apiCustomer';
 import { useAuth } from '@/hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
+import { clearLocalCompare } from '@/features/compare/localCompare';
 
 
 const MyAccount = () => {
@@ -27,6 +28,8 @@ const MyAccount = () => {
     try {
       await apiCustomer.post('/api/auth/logout')
       clearCustomerToken()
+      // the compare picks belong to the account, not to this browser
+      clearLocalCompare()
        queryClient.setQueryData(['me'], null);
     queryClient.removeQueries({ queryKey: ['me'] });
       navigate("/account/login");

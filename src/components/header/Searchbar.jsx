@@ -18,15 +18,18 @@ import { logout } from '@/hooks/useFetchData'
 import { clearCustomerToken } from '@/api/apiCustomer'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCompare } from '@/features/compare/hooks/useCompare'
+import { clearLocalCompare } from '@/features/compare/localCompare'
 import { setSearch, setActiveCategory } from '@/features/product/productPageSlice'
 
 const Searchbar = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {data} = useCart()
-  // same hook the tray and the product cards use, so the badge always matches them
-  const { items: compareItems, isPending: comparePending } = useCompare()
-  const compareCount = compareItems.length
+  const { data: compareData, isPending: comparePending } = useCompare()
+  const compareCount = compareData?.data?.length ?? 0
+  console.log('Searchbar - compareData:', compareData)
+  console.log('Searchbar - compareCount:', compareCount)
+  console.log('Searchbar - compareData?.data:', compareData?.data)
   const [category, setCategory] = useState('All Categories')
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([])
@@ -40,11 +43,15 @@ const Searchbar = () => {
   const isLoggedIn = !!authData?.data
   const [accountOpen, setAccountOpen] = useState(false)
   const accountRef = useRef(null)
+  const [cartNotice, setCartNotice] = useState(false)
+  const cartRef = useRef(null)
 
   const handleLogout = async () => {
     try {
       await logout()
       clearCustomerToken()
+      // the compare picks belong to the account, not to this browser
+      clearLocalCompare()
       queryClient.setQueryData(['me'], null)
       queryClient.removeQueries({ queryKey: ['me'] })
       setAccountOpen(false)
@@ -68,6 +75,7 @@ const Searchbar = () => {
   useOutsideClick(mobileSearchRef, () => setMobileSearch(false), mobileSearch)
   useOutsideClick(searchBoxRefs, () => setSuggestOpen(false), suggestOpen)
   useOutsideClick(accountRef, () => setAccountOpen(false), accountOpen)
+  useOutsideClick(cartRef, () => setCartNotice(false), cartNotice)
   // Anything that opens over the page holds the page still: the phone's search
 
   useScrollBlocker(mobileSearch || catOpen || showSuggestions)
@@ -95,6 +103,18 @@ const Searchbar = () => {
   }
   let totalItem = data?.data?.totalItems
   let totalAmount = data?.data?.totalAmount
+  // totalItems is the api's own count, the array is only a fallback while it loads
+  const cartCount = totalItem ?? data?.data?.items?.length ?? 0
+  const cartEmpty = Boolean(data?.data) && cartCount === 0
+  const handleCartClick = (event) => {
+    if (!cartEmpty) {
+      setCartNotice(false)
+      return
+    }
+    // the cart page would be blank, so say it here instead of navigating
+    event.preventDefault()
+    setCartNotice((open) => !open)
+  }
  const baseURL = import.meta.env.VITE_API_URL;
   
   useEffect(() => {
@@ -198,7 +218,7 @@ const Searchbar = () => {
                 )}
               </div>
              <div className='relative flex lg:gap-9.5 lg:w-auto w-full justify-end gap-8 lg:pr-0 pr-2 shrink-0'>
-                <Link aria-label='compare products' to='/compare' className='searchbarIconhover hidden lg:block relative group' >
+                <Link aria-label={compareCount ? `compare products, ${compareCount} item${compareCount === 1 ? '' : 's'}` : 'compare products'} to='/compare' className=' hidden lg:block relative group' >
                 <div className='relative'>
                 <GitCompareArrows size={22} className='text-tcolor lg:dark:text-gray-200' />
                 {!comparePending ? (
@@ -212,7 +232,7 @@ const Searchbar = () => {
                  {/* Compare Tooltip  */}
                      <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
                       <div className='relative bg-black text-white dark:bg-[#2f2f2f] dark:text-gray-100 px-3 py-1.5 text-[14px] rounded-md font-roboto'>
-                        Compare
+                        {'Compare'}
                       </div>
                       <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8' />
                      </div>
@@ -286,23 +306,34 @@ const Searchbar = () => {
                     </div>
                   </div>
                 )}
-                <Link aria-label='go to Cart' to='/cart' className='flex gap-2 group relative'>
-                  <div className={`relative`}>
-                    <Handbag size={22} className='text-tcolor lg:dark:text-gray-200' />
-                    {/* same rule as the compare badge, wait for the cart before showing a count */}
-                    <span className={`absolute -bottom-2 -right-1 text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center ${data ?'bg-primary text-black' : 'bg-gray-300 animate-pulse'}`}>
-                      {data ? totalItem ?? 0 : ''}
-                    </span>
-                  </div>
-                  <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>${totalAmount?.toFixed(2) || '0.00'}</span>
-                   {/*Cart Tooltip  */}
-                     <div className='absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap'>
+                <div ref={cartRef} className='relative'>
+                  <Link aria-label='go to Cart' to='/cart' onClick={handleCartClick} className='flex gap-2 group relative'>
+                    <div className={`relative`}>
+                      <Handbag size={22} className='text-tcolor lg:dark:text-gray-200' />
+                      {/* same rule as the compare badge, wait for the cart before showing a count */}
+                      <span className={`absolute -bottom-2 -right-1 text-[12px] rounded-full w-5 h-5 font-semibold flex items-center justify-center ${data ?'bg-primary text-black' : 'bg-gray-300 animate-pulse'}`}>
+                        {data ? totalItem ?? 0 : ''}
+                      </span>
+                    </div>
+                    <span className='text-[16px] font-inter font-bold text-[#333E48] lg:dark:text-gray-200 hidden lg:block'>${totalAmount?.toFixed(2) || '0.00'}</span>
+                    {/*Cart Tooltip  */}
+                    <div className={`absolute left-1/2 -translate-x-1/2 top-full mt-5 opacity-0 invisible translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible pointer-events-none transition-all duration-300 whitespace-nowrap ${cartNotice ? 'hidden' : ''}`}>
                       <div className='relative bg-black text-white dark:bg-[#2f2f2f] dark:text-gray-100 px-3 py-1.5 text-[14px] rounded-md font-roboto'>
                         Cart
                       </div>
                       <span className='absolute border-b-black border-[10px] border-transparent -translate-x-1/2 left-1/2 bottom-8' />
-                     </div>
-                </Link>
+                    </div>
+                  </Link>
+                  {/* clicking an empty bag says so, the cart page would have nothing on it */}
+                  {cartNotice && cartEmpty && (
+                    <div
+                      role='status'
+                      className='absolute right-0 top-full z-50 mt-3 whitespace-nowrap rounded-md border-t-4 border-primary bg-white px-5 py-4 text-[15px] font-inter text-tcolor shadow-lg dark:border-gray-600 dark:bg-[#181818] dark:text-gray-100'
+                    >
+                      No products in the cart.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

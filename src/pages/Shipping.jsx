@@ -54,7 +54,9 @@ const FormSelect = ({
   </div>
 );
 
-const Shipping = ({ setShow , className = '' }) => {
+// `stayOnPage` is for checkout: the address is saved in place so the order can be
+// placed without a detour through /account/addresses
+const Shipping = ({ setShow , className = '', stayOnPage = false }) => {
   const navigate = useNavigate();
   const { data: userData } = useAuth();
 
@@ -161,6 +163,7 @@ const Shipping = ({ setShow , className = '' }) => {
       { shippingAddress },
       {
         onSuccess: () => {
+          if (stayOnPage) return
           navigate('/account/addresses', { state: { success: 'Shipping address updated successfully!' } })
         }
       }

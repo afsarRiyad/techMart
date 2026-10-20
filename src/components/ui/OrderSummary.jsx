@@ -4,6 +4,7 @@ import { useCart } from '@/features/cart/hooks/useCart';
 import { Link } from 'react-router';
 import { useCreateOrder } from '@/features/user/hooks/useCreateOrder';
 import { useAddresses } from '@/features/user/hooks/useGetAddresses';
+import toast from 'react-hot-toast';
 
 const paymentMethods = [
   {
@@ -41,14 +42,48 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
   const shippingFee = 50;
   const total = (subtotal + shippingFee) - discountAmount;
   const orderAddress = shipToDifferent ? address?.data?.shippingAddress : address?.data?.billingAddress
-  
+  // the api takes an order without an address and then nothing can be delivered,
+  // so a complete one is required here before the order can be placed
+  const addressReady = Boolean(
+    orderAddress?.firstName &&
+    orderAddress?.lastName &&
+    orderAddress?.streetAddress &&
+    orderAddress?.townCity &&
+    orderAddress?.state &&
+    orderAddress?.zipCode &&
+    orderAddress?.phone
+  )
+  const addressLabel = shipToDifferent ? 'shipping' : 'billing'
+  // while the addresses are still loading the form must not claim there is none
+  const addressLoading = address?.isPending || address?.isLoading
+
   const [selectedPayment, setSelectedPayment] = useState( "cash_on_delivery");
   const [agreed, setAgreed] = useState(false);
-  const [isPlacing, setIsPlacing] = useState(false);
+  // the button stays clickable and the click says what is missing, which is
+  // kinder than a dead button with no reason next to it
+  const [showProblem, setShowProblem] = useState(false)
+
+  // worked out on every render, so the line clears itself the moment the missing
+  // piece is filled in instead of needing another click to find out
+  const problem = (() => {
+    if (cartData === undefined) return 'Your cart is still loading. Try again in a moment.'
+    if (!products?.length) return 'Your cart is empty.'
+    if (!addressReady) {
+      return addressLoading
+        ? 'Your saved address is still loading. Try again in a moment.'
+        : `Add a ${addressLabel} address before placing your order — fill in the form on the left and press Save address.`
+    }
+    if (!agreed) return 'Please agree to our terms and conditions before placing your order.'
+    return ''
+  })()
 
   const handlePlaceOrder = async () => {
-    if (!agreed) return;
-    const items = products.map((item)=> ({
+    if (problem) {
+      setShowProblem(true)
+      toast.error(problem, { id: 'order-check' })
+      return
+    }
+    const items = (products ?? []).map((item)=> ({
           product: item?.product?._id,
           quantity: item.quantity
     })) 
@@ -178,17 +213,26 @@ const OrderSummary = ({ onPlaceOrder = () => {}, discount = 0, shipToDifferent, 
         </span>
       </label>
 
+      {showProblem && problem && (
+        <p
+          role="alert"
+          className="mt-4 rounded-md bg-red-50 px-4 py-3 text-[14px] text-red-600 dark:bg-red-500/10 dark:text-red-400"
+        >
+          {problem}
+        </p>
+      )}
+
       <button
         type="button"
         onClick={handlePlaceOrder}
-        disabled={!agreed || isPlacing}
+        disabled={placeOrderMutation.isPending}
         className={`mt-6 w-full rounded-full py-4 font-bold transition-colors duration-200 ${
-          agreed && !isPlacing
-            ? 'bg-primary text-tcolor dark:text-gray-100 hover:bg-black hover:text-white cursor-pointer'
-            : 'bg-gray-200 dark:bg-[#333333] text-gray-400 dark:text-gray-500 cursor-not-allowed'
+          placeOrderMutation.isPending
+            ? 'bg-gray-200 dark:bg-[#333333] text-gray-400 dark:text-gray-500 cursor-wait'
+            : 'bg-primary text-tcolor dark:text-gray-100 hover:bg-black hover:text-white cursor-pointer'
         }`}
       >
-        {isPlacing ? 'Placing order...' : 'Place order'}
+        {placeOrderMutation.isPending ? 'Placing order...' : 'Place order'}
       </button>
     </div>
   );

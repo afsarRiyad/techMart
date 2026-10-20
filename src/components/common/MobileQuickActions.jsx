@@ -6,9 +6,9 @@ import { useWishlist } from '@/features/wishlist/hooks/useWishlist'
 // the header icons are lg only, so touch screens get these two instead,
 // stacked bottom right and clear of the compare bar
 const MobileQuickActions = () => {
-  const { data: compareData } = useCompare()
+  const { items: compareItems } = useCompare()
   const { data: wishlistData } = useWishlist()
-  const compareCount = compareData?.data?.length ?? 0
+  const compareCount = compareItems?.length ?? 0
   const wishlistCount = wishlistData?.data?.length ?? 0
 
   const actions = [
